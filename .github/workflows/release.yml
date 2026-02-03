@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: macos-14
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.2'
+      
+      - name: Build
+        run: swift build -c release
+      
+      - name: Run Tests
+        run: swift test
+      
+      - name: Generate Release Notes
+        id: notes
+        run: |
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          body: |
+            ## What's Changed
+            ${{ steps.notes.outputs.notes }}
+            
+            ## Installation
+            
+            ### Swift Package Manager
+            ```swift
+            .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "${{ github.ref_name }}")
+            ```
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
