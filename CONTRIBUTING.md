@@ -1,43 +1,51 @@
-# Contributing to LiquidGlassKit
+# Contributing to SwiftRouter
 
-Thank you for your interest in contributing! This document provides guidelines and instructions for contributing.
+First off, thank you for considering contributing to SwiftRouter! It's people like you that make SwiftRouter such a great tool.
 
 ## Code of Conduct
 
-This project adheres to a code of conduct. By participating, you are expected to uphold this code. Please be respectful and constructive in all interactions.
+This project and everyone participating in it is governed by our Code of Conduct. By participating, you are expected to uphold this code.
 
-## How to Contribute
+## How Can I Contribute?
 
 ### Reporting Bugs
 
-1. Check existing issues to avoid duplicates
-2. Use the bug report template
-3. Include reproduction steps
-4. Provide environment details (Xcode version, iOS version, device)
+Before creating bug reports, please check the existing issues as you might find out that you don't need to create one. When you are creating a bug report, please include as many details as possible:
 
-### Suggesting Features
+- **Use a clear and descriptive title**
+- **Describe the exact steps which reproduce the problem**
+- **Provide specific examples to demonstrate the steps**
+- **Describe the behavior you observed after following the steps**
+- **Explain which behavior you expected to see instead and why**
+- **Include Swift version and OS version**
 
-1. Check existing feature requests
-2. Use the feature request template
-3. Explain the use case and benefits
-4. Consider implementation complexity
+### Suggesting Enhancements
+
+Enhancement suggestions are tracked as GitHub issues. When creating an enhancement suggestion, please include:
+
+- **Use a clear and descriptive title**
+- **Provide a step-by-step description of the suggested enhancement**
+- **Provide specific examples to demonstrate the steps**
+- **Describe the current behavior and explain which behavior you expected to see instead**
+- **Explain why this enhancement would be useful**
 
 ### Pull Requests
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Write clean, documented code
-4. Add tests for new functionality
-5. Ensure all tests pass (`swift test`)
-6. Commit with conventional commits (`feat:`, `fix:`, `docs:`, etc.)
-7. Push and open a Pull Request
+1. Fork the repo and create your branch from `main`
+2. If you've added code that should be tested, add tests
+3. If you've changed APIs, update the documentation
+4. Ensure the test suite passes
+5. Make sure your code follows the existing style (SwiftLint)
+6. Issue that pull request!
 
 ## Development Setup
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/LiquidGlassKit.git
-cd LiquidGlassKit
+git clone https://github.com/YOUR_USERNAME/SwiftRouter.git
+
+# Navigate to the project
+cd SwiftRouter
 
 # Open in Xcode
 open Package.swift
@@ -46,36 +54,27 @@ open Package.swift
 swift test
 ```
 
-## Code Style
+## Style Guide
 
-- Follow Swift API Design Guidelines
-- Use SwiftLint for consistency
-- Write descriptive variable/function names
-- Document public APIs with DocC comments
+- Follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)
+- Use SwiftLint for code style consistency
+- Write meaningful commit messages following [Conventional Commits](https://www.conventionalcommits.org/)
+- Document public APIs with DocC-compatible comments
 
 ## Commit Messages
 
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
 
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation only
-- `style:` Formatting, no code change
-- `refactor:` Code restructuring
-- `test:` Adding tests
-- `chore:` Maintenance tasks
+- `feat:` A new feature
+- `fix:` A bug fix
+- `docs:` Documentation only changes
+- `style:` Code style changes (formatting, semicolons, etc)
+- `refactor:` Code change that neither fixes a bug nor adds a feature
+- `test:` Adding missing tests
+- `chore:` Changes to the build process or auxiliary tools
 
-## Testing
+Example: `feat(deeplink): add universal link support`
 
-- Write unit tests for new features
-- Maintain existing test coverage
-- Test on multiple iOS versions when possible
-- Test backward compatibility (iOS 15-25 fallbacks)
+## License
 
-## Questions?
-
-Open a discussion or reach out via issues. We're happy to help!
-
----
-
-Thank you for contributing! 🎉
+By contributing, you agree that your contributions will be licensed under the MIT License.

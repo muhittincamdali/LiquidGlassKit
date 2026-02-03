@@ -8,31 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- VisionOS 2.0 optimizations
+- visionOS navigation support
 
-## [1.0.0] - 2025-01-15
+## [1.0.0] - 2024-01-15
 
 ### Added
-- GlassCard component with configurable materials
-- GlassButton with press animations
-- GlassTextField with glass background
-- GlassNavigationBar replacement
-- GlassTabBar with full tab support
-- GlassSheet modal component
-- GlassSearchBar component
-- Four built-in materials (clear, frosted, tinted, dark)
-- GlassEffectContainer for iOS 26+ native support
-- Graceful fallback for iOS 15-25
-- Glass transition animations
-- Glass morph animations
-- Centralized theming system
-- Built-in themes (standard, minimal, vibrant, dark)
+- Type-safe navigation with compile-time checks
+- SwiftUI NavigationStack integration
+- Deep linking support with URL parsing
+- Tab bar coordination
+- Modal presentation handling
+- Navigation state persistence
+- Route parameters with type safety
+- Navigation interceptors (guards)
+- Animated transitions
+- Back stack management
+- Child router support (coordinator pattern)
 
-### Changed
-- Optimized GPU rendering for stacked glass layers
+### Features
+- Zero dependencies
+- Protocol-oriented design
+- Full async/await support
 
-### Fixed
-- Memory leak in glass blur calculations
-
-[Unreleased]: https://github.com/muhittincamdali/LiquidGlassKit/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/muhittincamdali/LiquidGlassKit/releases/tag/v1.0.0
+[Unreleased]: https://github.com/muhittincamdali/SwiftRouter/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/muhittincamdali/SwiftRouter/releases/tag/v1.0.0
