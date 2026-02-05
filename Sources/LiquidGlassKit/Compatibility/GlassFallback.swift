@@ -5,9 +5,26 @@ import UIKit
 
 // MARK: - GlassFallback
 
-/// Provides backward-compatible glass rendering for iOS 15–25.
+/// Provides backward-compatible glass rendering for iOS 13–25.
 /// Uses `UIVisualEffectView` blur, tint overlays, and shadow composition
 /// to approximate the iOS 26 Liquid Glass appearance.
+///
+/// ## Platform Support
+/// - **iOS 26+**: Native Liquid Glass API
+/// - **iOS 15–25**: SwiftUI Materials + UIVisualEffectView
+/// - **iOS 13–14**: UIVisualEffectView with blur styles
+/// - **macOS 11+**: NSVisualEffectView
+/// - **watchOS**: Solid color fallback
+/// - **tvOS**: UIBlurEffect
+///
+/// ## Usage
+/// ```swift
+/// if GlassFallback.isNativeGlassAvailable {
+///     // Use native iOS 26 API
+/// } else {
+///     // Use LiquidGlassKit fallback
+/// }
+/// ```
 public struct GlassFallback {
 
     // MARK: - Availability Check
@@ -24,19 +41,47 @@ public struct GlassFallback {
     public static var isFallbackMode: Bool {
         !isNativeGlassAvailable
     }
+    
+    /// Returns `true` if SwiftUI Materials are available (iOS 15+).
+    public static var isMaterialsAvailable: Bool {
+        if #available(iOS 15, macOS 12, *) {
+            return true
+        }
+        return false
+    }
+    
+    /// The minimum iOS version supported by this framework.
+    public static let minimumIOSVersion = "13.0"
+    
+    /// The iOS version where native Liquid Glass was introduced.
+    public static let nativeGlassIOSVersion = "26.0"
 
     // MARK: - Rendering Strategy
 
     /// The rendering strategy used on the current platform.
-    public enum RenderingStrategy: String, Sendable {
+    public enum RenderingStrategy: String, Sendable, CaseIterable {
         /// Native iOS 26 Liquid Glass.
         case native
-        /// UIVisualEffectView-based blur fallback.
-        case blurEffect
-        /// SwiftUI Material-based fallback.
+        /// SwiftUI Material-based (iOS 15+).
         case swiftUIMaterial
+        /// UIVisualEffectView-based blur (iOS 13–14).
+        case blurEffect
         /// Solid color with opacity (watchOS fallback).
         case solidColor
+        
+        /// Human-readable description of the strategy.
+        public var description: String {
+            switch self {
+            case .native:
+                return "Native Liquid Glass (iOS 26+)"
+            case .swiftUIMaterial:
+                return "SwiftUI Materials (iOS 15+)"
+            case .blurEffect:
+                return "UIBlurEffect (iOS 13–14)"
+            case .solidColor:
+                return "Solid Color Fallback"
+            }
+        }
     }
 
     /// Determines the best rendering strategy for the current platform.
@@ -47,10 +92,49 @@ public struct GlassFallback {
         #if os(watchOS)
         return .solidColor
         #elseif canImport(UIKit)
+        if #available(iOS 15, *) {
+            return .swiftUIMaterial
+        }
         return .blurEffect
         #else
-        return .swiftUIMaterial
+        if #available(macOS 12, *) {
+            return .swiftUIMaterial
+        }
+        return .solidColor
         #endif
+    }
+    
+    // MARK: - Capability Detection
+    
+    /// Returns the recommended blur radius for the current platform.
+    public static var recommendedBlurRadius: CGFloat {
+        switch currentStrategy {
+        case .native:
+            return 25
+        case .swiftUIMaterial:
+            return 20
+        case .blurEffect:
+            return 15  // Lower for performance on older devices
+        case .solidColor:
+            return 0
+        }
+    }
+    
+    /// Returns whether specular highlights are supported.
+    public static var supportsSpecularHighlights: Bool {
+        if #available(iOS 26, *) {
+            return true
+        }
+        return false
+    }
+    
+    /// Returns whether morphing animations are natively supported.
+    public static var supportsMorphingAnimations: Bool {
+        if #available(iOS 26, *) {
+            return true
+        }
+        // We provide fallback morphing using matchedGeometryEffect
+        return true
     }
 }
 
