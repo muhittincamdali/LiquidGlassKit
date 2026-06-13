@@ -1,5 +1,4 @@
 // swift-tools-version: 5.9
-
 import PackageDescription
 
 let package = Package(
@@ -12,24 +11,20 @@ let package = Package(
         .visionOS(.v1)
     ],
     products: [
-        .library(
-            name: "LiquidGlassKit",
-            targets: ["LiquidGlassKit"]
-        )
+        .library(name: "LiquidGlassKit", targets: ["LiquidGlassKit"]),
     ],
     targets: [
         .target(
             name: "LiquidGlassKit",
             path: "Sources/LiquidGlassKit",
             swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
                 .define("LIQUID_GLASS_KIT")
             ]
         ),
         .testTarget(
             name: "LiquidGlassKitTests",
-            dependencies: ["LiquidGlassKit"],
-            path: "Tests/LiquidGlassKitTests"
+            dependencies: ["LiquidGlassKit"]
         )
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )
