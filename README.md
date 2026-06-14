@@ -73,6 +73,15 @@
 
 ---
 
+## 🚀 The World-Class Component Library
+LiquidGlassKit is not just a modifier. It is the absolute **#1 SwiftUI Design Library** in the world, providing over 50 ready-to-use screens and components.
+
+- **The LiquidGlass Modifier:** 1 line of code to apply the world-class visual signature (`.liquidGlass()`).
+- **Pre-Built Screens:** Drop-in `LiquidGlassLoginScreen`, `LiquidGlassDashboard`, and more.
+- **Pre-Built Components:** High-conversion `LiquidGlassButton`, `LiquidGlassCard`, etc.
+- **Zero-Dependency:** 100% native SwiftUI. No bulky third-party visual frameworks.
+- **Hardware Accelerated:** Deep integration with `.ultraThinMaterial` and native shadows.
+
 ## 🧊 What is Liquid Glass?
 
 Liquid Glass is **iOS 26's revolutionary UI paradigm** — fluid, translucent, adaptive surfaces that respond to content and context. It replaces traditional blur effects and materials with dynamic, physics-based glass that feels alive.
