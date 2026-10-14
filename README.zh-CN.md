@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-light.svg" alt="LiquidGlassKit: 适用于 SwiftUI 的 Liquid Glass 表面与控件：OS 26 上使用原生玻璃效果，低至 iOS 17 的系统使用 Material 回退。"></picture></p>
@@ -268,9 +268,9 @@ xcodebuild test -scheme LiquidGlassKit \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-Swift Testing 测试套件覆盖材质和形状逻辑、主题数值的限制、渲染模式的判定、标签 builder 以及底部面板的关闭阈值。回退路径上的离屏渲染会检查：每个组件都用主题的材质绘制玻璃，显式指定的材质优先于主题，深色玻璃上的标签为白色，底部面板只在显示时让背景变暗，以及“降低透明度”时绘制不透明背景。CI 在 macOS、iOS 26 模拟器和只有回退路径的 iOS 18.6 模拟器上运行测试，并为 `Package.swift` 中的每个平台构建该库。
+Swift Testing 测试套件覆盖材质和形状逻辑、主题数值的限制、渲染模式的判定、标签 builder 以及底部面板的关闭阈值。回退路径上的离屏渲染会检查：每个组件都用主题的材质绘制玻璃，显式指定的材质优先于主题，深色玻璃上的标签为白色，破坏性操作的标签为红色，底部面板只在显示时让背景变暗，以及“降低透明度”时绘制不透明背景。CI 在 macOS、iOS 26 模拟器和只有回退路径的 iOS 18.6 模拟器上运行测试，并为 `Package.swift` 中的每个平台构建该库。
 
-`ImageRenderer` 既无法捕获模糊效果，也无法捕获原生玻璃，因此测试检查的是回退方案的色调和覆盖范围，以及原生路径的视图能够构建；不检查玻璃的最终外观。
+`ImageRenderer` 无法捕获模糊效果，也只能部分捕获原生玻璃，因此测试检查的是回退方案的色调和覆盖范围，以及每个组件在原生路径上的渲染结果与回退路径不同；不检查玻璃的最终外观。
 
 ## 路线图
 

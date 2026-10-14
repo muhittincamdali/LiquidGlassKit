@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-light.svg" alt="LiquidGlassKit: SwiftUI용 Liquid Glass 표면과 컨트롤: OS 26에서는 네이티브 글래스, iOS 17까지는 Material 대체 렌더링."></picture></p>
@@ -309,15 +309,15 @@ xcodebuild test -scheme LiquidGlassKit \
 ```
 
 Swift Testing 테스트 스위트는 머티리얼과 모양 로직, 테마 값 제한, 렌더링 모드 결정, 탭 빌더,
-시트가 닫히는 임곗값을 다룹니다. 대체 경로의 오프스크린 렌더링은 모든 컴포넌트가 테마의
-머티리얼로 글래스를 그리는지, 명시한 머티리얼이 테마보다 우선하는지, 어두운 글래스 위의 레이블이
-흰색인지, 시트가 표시되는 동안에만 배경을 어둡게 하는지, '투명도 줄이기'에서 불투명한 배경을
-그리는지 확인합니다. CI는 macOS, iOS 26 시뮬레이터, 대체 경로만 있는 iOS 18.6 시뮬레이터에서
-테스트를 실행하고, `Package.swift`의 모든 플랫폼용으로 라이브러리를 빌드합니다.
+시트가 닫히는 임곗값을 다룹니다. 대체 경로의 오프스크린 렌더링은 모든 컴포넌트가 테마의 머티리얼로 글래스를
+그리는지, 명시한 머티리얼이 테마보다 우선하는지, 어두운 글래스 위의 레이블이 흰색이고 파괴적 동작의 레이블이
+빨간색인지, 시트가 표시되는 동안에만 배경을 어둡게 하는지, '투명도 줄이기'에서 불투명한 배경을 그리는지
+확인합니다. CI는 macOS, iOS 26 시뮬레이터, 대체 경로만 있는 iOS 18.6 시뮬레이터에서 테스트를
+실행하고, `Package.swift`의 모든 플랫폼용으로 라이브러리를 빌드합니다.
 
-`ImageRenderer`는 블러와 네이티브 글래스를 캡처하지 못하므로, 테스트는 대체 렌더링의 색조와
-그려진 영역, 네이티브 경로 뷰가 만들어지는지를 확인합니다. 글래스의 최종 모습은 확인하지
-않습니다.
+`ImageRenderer`는 블러를 캡처하지 못하고 네이티브 글래스도 일부만 캡처하므로, 테스트는 대체
+렌더링의 색조와 그려진 영역, 그리고 각 컴포넌트가 네이티브 경로에서 대체 경로와 다르게 그려지는지를
+확인합니다. 글래스의 최종 모습은 확인하지 않습니다.
 
 ## 로드맵
 

@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-light.svg" alt="LiquidGlassKit: Superficies y controles Liquid Glass para SwiftUI: vidrio nativo en OS 26 y una alternativa con Material hasta iOS 17."></picture></p>
@@ -314,14 +314,15 @@ Las suites de Swift Testing cubren la lógica de materiales y formas, la limitac
 valores del tema, la resolución del modo de renderizado, el builder de pestañas y los umbrales
 de cierre de la hoja. Los renderizados fuera de pantalla en el camino alternativo comprueban que
 cada componente dibuja su vidrio con el material del tema, que un material explícito tiene
-prioridad sobre el tema, que las etiquetas sobre vidrio oscuro son blancas, que la hoja oscurece
-el fondo solo mientras se muestra y que «Reducir transparencia» dibuja un fondo opaco. La CI
-ejecuta la suite en macOS, en un simulador de iOS 26 y en un simulador de iOS 18.6, donde solo
-existe la alternativa, y compila la biblioteca para cada plataforma de `Package.swift`.
+prioridad sobre el tema, que las etiquetas sobre vidrio oscuro son blancas y las destructivas,
+rojas, que la hoja oscurece el fondo solo mientras se muestra y que «Reducir transparencia»
+dibuja un fondo opaco. La CI ejecuta la suite en macOS, en un simulador de iOS 26 y en un
+simulador de iOS 18.6, donde solo existe la alternativa, y compila la biblioteca para cada
+plataforma de `Package.swift`.
 
-`ImageRenderer` no captura ni el desenfoque ni el vidrio nativo, así que las pruebas comprueban
-el tinte y la cobertura de la alternativa y que las vistas del camino nativo se construyen; no
-comprueban el aspecto final del vidrio.
+`ImageRenderer` no captura el desenfoque y el vidrio nativo solo en parte, así que las pruebas
+comprueban el tinte y la cobertura de la alternativa y que cada componente se renderiza de forma
+distinta en el camino nativo que en el alternativo; no comprueban el aspecto final del vidrio.
 
 ## Hoja de ruta
 

@@ -26,12 +26,14 @@ versions as a reference, so that they build with Swift 6 and do what their docum
 - `LiquidGlassButtonStyle` (`.buttonStyle(.liquidGlass)`) and `GlassButtonSize`. Labels on
   `.dark` glass are white.
 - `GlassSheetDismissal`, the extracted drag-to-dismiss rule.
-- Swift Testing suites (39 tests in 9 suites): material equality, fallback `Material` and
+- Swift Testing suites (40 tests in 9 suites): material equality, fallback `Material` and
   native `Glass` mapping, shape geometry, theme clamping, rendering-mode resolution, tab
   builder, sheet dismissal, and compiled README/DocC examples. Offscreen renders on the
   fallback path check the pixels: every component draws its glass in the theme's tint, an
-  explicit material overrides the theme, labels on dark glass are white, the sheet dims the
-  background only while presented, and Reduce Transparency draws an opaque background.
+  explicit material overrides the theme, labels on dark glass are white and destructive
+  labels red, the sheet dims the background only while presented, and Reduce Transparency
+  draws an opaque background. On OS 26 every component must render differently on the
+  native path than on the fallback path.
 - DocC catalog with Getting Started, Building a Screen with a Floating Tab Bar, Rendering
   Paths and Theming articles.
 - iOS demo app (`Examples/LiquidGlassDemo`) and `scripts/screenshots.sh`, which captures the

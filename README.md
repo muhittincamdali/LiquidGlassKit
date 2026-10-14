@@ -304,13 +304,15 @@ xcodebuild test -scheme LiquidGlassKit \
 The Swift Testing suites cover material and shape logic, theme clamping, rendering mode
 resolution, the tab builder and the sheet's dismissal thresholds. Offscreen renders on the
 fallback path check that every component draws its glass in the theme's material, that an
-explicit material overrides the theme, that labels on dark glass are white, that the sheet dims
-the background only while presented, and that Reduce Transparency draws an opaque background.
-CI runs the suite on macOS, on an iOS 26 simulator and on an iOS 18.6 simulator, where only the
-fallback path exists, and builds the library for every platform in `Package.swift`.
+explicit material overrides the theme, that labels on dark glass are white and destructive
+labels red, that the sheet dims the background only while presented, and that Reduce
+Transparency draws an opaque background. CI runs the suite on macOS, on an iOS 26 simulator and
+on an iOS 18.6 simulator, where only the fallback path exists, and builds the library for every
+platform in `Package.swift`.
 
-`ImageRenderer` captures neither blur nor native glass, so the tests check the fallback's tint
-and coverage, and that the native-path views build; they do not check the final glass look.
+`ImageRenderer` does not capture the blur, and native glass only in part, so the tests check the
+fallback's tint and coverage, and that each component renders differently on the native path
+than on the fallback path; they do not check the final glass look.
 
 ## Roadmap
 

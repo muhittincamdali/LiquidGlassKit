@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ru-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ru-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ru-light.svg" alt="LiquidGlassKit: Поверхности и элементы управления Liquid Glass для SwiftUI: нативное стекло на OS 26, Material до iOS 17."></picture></p>
@@ -311,17 +311,17 @@ xcodebuild test -scheme LiquidGlassKit \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-Наборы тестов Swift Testing покрывают логику материалов и форм, ограничение значений темы,
-выбор режима отрисовки, builder вкладок и пороги закрытия листа. Закадровая отрисовка на запасном
-пути проверяет, что каждый компонент рисует стекло материалом темы, что явно заданный материал
-важнее темы, что подписи на тёмном стекле белые, что лист затемняет фон только пока показан и
-что при «Понижении прозрачности» рисуется непрозрачный фон. CI запускает тесты на macOS, в
-симуляторе iOS 26 и в симуляторе iOS 18.6, где есть только запасной путь, и собирает библиотеку
-для каждой платформы из `Package.swift`.
+Наборы тестов Swift Testing покрывают логику материалов и форм, ограничение значений темы, выбор
+режима отрисовки, builder вкладок и пороги закрытия листа. Закадровая отрисовка на запасном пути
+проверяет, что каждый компонент рисует стекло материалом темы, что явно заданный материал важнее
+темы, что подписи на тёмном стекле белые, а у деструктивных кнопок красные, что лист затемняет
+фон только пока показан и что при «Понижении прозрачности» рисуется непрозрачный фон. CI
+запускает тесты на macOS, в симуляторе iOS 26 и в симуляторе iOS 18.6, где есть только запасной
+путь, и собирает библиотеку для каждой платформы из `Package.swift`.
 
-`ImageRenderer` не захватывает ни размытие, ни нативное стекло, поэтому тесты проверяют оттенок
-и площадь запасного варианта и то, что представления нативного пути строятся; итоговый вид
-стекла они не проверяют.
+`ImageRenderer` не захватывает размытие, а нативное стекло захватывает лишь частично, поэтому
+тесты проверяют оттенок и площадь запасного варианта и то, что на нативном пути каждый компонент
+отрисовывается иначе, чем на запасном; итоговый вид стекла они не проверяют.
 
 ## План развития
 

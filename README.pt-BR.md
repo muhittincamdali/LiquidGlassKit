@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-pt-BR-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-pt-BR-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-pt-BR-light.svg" alt="LiquidGlassKit: Superfícies e controles Liquid Glass para SwiftUI: vidro nativo no OS 26 e alternativa com Material até o iOS 17."></picture></p>
@@ -311,17 +311,17 @@ xcodebuild test -scheme LiquidGlassKit \
 ```
 
 As suítes do Swift Testing cobrem a lógica de materiais e formas, a limitação dos valores do
-tema, a resolução do modo de renderização, o builder de abas e os limites de fechamento da folha.
-Renderizações fora da tela no caminho alternativo verificam que cada componente desenha o vidro
-com o material do tema, que um material explícito tem prioridade sobre o tema, que os rótulos
-sobre vidro escuro são brancos, que a folha escurece o fundo só enquanto está aberta e que
-"Reduzir Transparência" desenha um fundo opaco. A CI roda a suíte no macOS, em um simulador do
-iOS 26 e em um simulador do iOS 18.6, onde só existe a alternativa, e compila a biblioteca para
-cada plataforma de `Package.swift`.
+tema, a resolução do modo de renderização, o builder de abas e os limites de fechamento da
+folha. Renderizações fora da tela no caminho alternativo verificam que cada componente desenha o
+vidro com o material do tema, que um material explícito tem prioridade sobre o tema, que os
+rótulos sobre vidro escuro são brancos e os destrutivos, vermelhos, que a folha escurece o fundo
+só enquanto está aberta e que "Reduzir Transparência" desenha um fundo opaco. A CI roda a suíte
+no macOS, em um simulador do iOS 26 e em um simulador do iOS 18.6, onde só existe a alternativa,
+e compila a biblioteca para cada plataforma de `Package.swift`.
 
-`ImageRenderer` não captura o desfoque nem o vidro nativo, então os testes verificam a
-tonalidade e a cobertura da alternativa e se as views do caminho nativo são construídas; eles
-não verificam a aparência final do vidro.
+`ImageRenderer` não captura o desfoque e captura o vidro nativo só em parte, então os testes
+verificam a tonalidade e a cobertura da alternativa e se cada componente é renderizado de forma
+diferente no caminho nativo e no alternativo; eles não verificam a aparência final do vidro.
 
 ## Roteiro
 

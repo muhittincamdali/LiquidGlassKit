@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-fr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-fr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-fr-light.svg" alt="LiquidGlassKit: Surfaces et contrôles Liquid Glass pour SwiftUI : verre natif sur OS 26, repli sur Material jusqu'à iOS 17."></picture></p>
@@ -312,17 +312,19 @@ xcodebuild test -scheme LiquidGlassKit \
 ```
 
 Les suites Swift Testing couvrent la logique des matériaux et des formes, la limitation des
-valeurs du thème, la résolution du mode de rendu, le builder d'onglets et les seuils de fermeture
-de la feuille. Des rendus hors écran sur le chemin de repli vérifient que chaque composant
-dessine son verre avec le matériau du thème, qu'un matériau explicite l'emporte sur le thème, que
-les libellés sur verre sombre sont blancs, que la feuille n'assombrit le fond que lorsqu'elle est
-affichée et que « Réduire la transparence » dessine un fond opaque. La CI exécute la suite sur
-macOS, sur un simulateur iOS 26 et sur un simulateur iOS 18.6, où seul le repli existe, et
-compile la bibliothèque pour chaque plateforme de `Package.swift`.
+valeurs du thème, la résolution du mode de rendu, le builder d'onglets et les seuils de
+fermeture de la feuille. Des rendus hors écran sur le chemin de repli vérifient que chaque
+composant dessine son verre avec le matériau du thème, qu'un matériau explicite l'emporte sur le
+thème, que les libellés sur verre sombre sont blancs et les libellés destructifs rouges, que la
+feuille n'assombrit le fond que lorsqu'elle est affichée et que « Réduire la transparence »
+dessine un fond opaque. La CI exécute la suite sur macOS, sur un simulateur iOS 26 et sur un
+simulateur iOS 18.6, où seul le repli existe, et compile la bibliothèque pour chaque plateforme
+de `Package.swift`.
 
-`ImageRenderer` ne capture ni le flou ni le verre natif : les tests vérifient donc la teinte et
-la couverture du repli, ainsi que la construction des vues du chemin natif ; ils ne vérifient
-pas l'aspect final du verre.
+`ImageRenderer` ne capture pas le flou et ne capture le verre natif qu'en partie : les tests
+vérifient donc la teinte et la couverture du repli, ainsi que le fait que chaque composant est
+rendu différemment sur le chemin natif et sur le chemin de repli ; ils ne vérifient pas l'aspect
+final du verre.
 
 ## Feuille de route
 

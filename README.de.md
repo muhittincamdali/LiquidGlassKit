@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-light.svg" alt="LiquidGlassKit: Liquid-Glass-Oberflächen und -Steuerelemente für SwiftUI: natives Glas ab OS 26, Material-Fallback bis iOS 17."></picture></p>
@@ -315,15 +315,16 @@ Die Swift-Testing-Suites decken die Logik von Materialien und Formen ab, das Beg
 Theme-Werte, die Auflösung des Rendering-Modus, den Tab-Builder und die Schließschwellen des
 Sheets. Offscreen-Renderings auf dem Fallback-Weg prüfen, dass jede Komponente ihr Glas im
 Material des Themes zeichnet, dass ein explizit angegebenes Material Vorrang vor dem Theme hat,
-dass Beschriftungen auf dunklem Glas weiß sind, dass das Sheet den Hintergrund nur abdunkelt,
-solange es angezeigt wird, und dass „Transparenz reduzieren“ einen deckenden Hintergrund
-zeichnet. Die CI führt die Suite unter macOS, in einem iOS-26-Simulator und in einem
-iOS-18.6-Simulator aus, wo es nur den Fallback gibt, und baut die Bibliothek für jede Plattform
-aus `Package.swift`.
+dass Beschriftungen auf dunklem Glas weiß und destruktive Beschriftungen rot sind, dass das
+Sheet den Hintergrund nur abdunkelt, solange es angezeigt wird, und dass „Transparenz
+reduzieren“ einen deckenden Hintergrund zeichnet. Die CI führt die Suite unter macOS, in einem
+iOS-26-Simulator und in einem iOS-18.6-Simulator aus, wo es nur den Fallback gibt, und baut die
+Bibliothek für jede Plattform aus `Package.swift`.
 
-`ImageRenderer` erfasst weder Weichzeichner noch natives Glas. Die Tests prüfen deshalb Tönung
-und Abdeckung des Fallbacks sowie, dass sich die Views des nativen Wegs aufbauen lassen; das
-endgültige Aussehen des Glases prüfen sie nicht.
+`ImageRenderer` erfasst den Weichzeichner nicht und natives Glas nur teilweise. Die Tests prüfen
+deshalb Tönung und Abdeckung des Fallbacks sowie, dass jede Komponente auf dem nativen Weg
+anders gerendert wird als auf dem Fallback-Weg; das endgültige Aussehen des Glases prüfen sie
+nicht.
 
 ## Roadmap
 

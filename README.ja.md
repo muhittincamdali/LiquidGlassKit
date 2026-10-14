@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-light.svg" alt="LiquidGlassKit: SwiftUI 用 Liquid Glass サーフェスとコントロール。OS 26 はネイティブ、iOS 17 以降の旧 OS は Material で描画。"></picture></p>
@@ -268,9 +268,9 @@ xcodebuild test -scheme LiquidGlassKit \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-Swift Testing のテストスイートは、マテリアルと形状のロジック、テーマの値の制限、描画モードの解決、タブのビルダー、シートを閉じるしきい値をカバーしています。フォールバックでのオフスクリーン描画では、各コンポーネントがテーマのマテリアルでガラスを描くこと、明示したマテリアルがテーマより優先されること、ダークなガラス上のラベルが白いこと、シートが表示中だけ背景を暗くすること、「透明度を下げる」で不透明な背景になることを確認します。CI はテストを macOS、iOS 26 シミュレータ、フォールバックしかない iOS 18.6 シミュレータで実行し、`Package.swift` にあるすべてのプラットフォーム向けにライブラリをビルドします。
+Swift Testing のテストスイートは、マテリアルと形状のロジック、テーマの値の制限、描画モードの解決、タブのビルダー、シートを閉じるしきい値をカバーしています。フォールバックでのオフスクリーン描画では、各コンポーネントがテーマのマテリアルでガラスを描くこと、明示したマテリアルがテーマより優先されること、ダークなガラス上のラベルが白く、破壊的な操作のラベルが赤いこと、シートが表示中だけ背景を暗くすること、「透明度を下げる」で不透明な背景になることを確認します。CI はテストを macOS、iOS 26 シミュレータ、フォールバックしかない iOS 18.6 シミュレータで実行し、`Package.swift` にあるすべてのプラットフォーム向けにライブラリをビルドします。
 
-`ImageRenderer` はぼかしもネイティブのガラスもキャプチャしないため、テストではフォールバックの色合いと描画範囲、そしてネイティブ側のビューが構築できることを確認しています。ガラスの最終的な見た目は確認していません。
+`ImageRenderer` はぼかしをキャプチャせず、ネイティブのガラスも一部しかキャプチャしないため、テストではフォールバックの色合いと描画範囲、そして各コンポーネントのネイティブ側の描画がフォールバック側の描画と異なることを確認しています。ガラスの最終的な見た目は確認していません。
 
 ## ロードマップ
 

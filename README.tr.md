@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
+<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-light.svg" alt="LiquidGlassKit: SwiftUI için Liquid Glass yüzeyler ve kontroller: OS 26'da yerel cam, iOS 17'ye kadar Material ile yedek görünüm."></picture></p>
@@ -313,14 +313,15 @@ xcodebuild test -scheme LiquidGlassKit \
 Swift Testing paketleri materyal ve şekil mantığını, tema değerlerinin sınırlandırılmasını,
 çizim modunun çözümlenmesini, sekme builder'ını ve alt sayfanın kapanma eşiklerini kapsar. Yedek
 yoldaki ekran dışı çizimler şunları kontrol eder: her bileşen camını temanın materyaliyle çizer,
-açıkça verilen bir materyal temanın önüne geçer, koyu cam üzerindeki etiketler beyazdır, alt sayfa
-arka planı yalnızca açıkken karartır ve Şeffaflığı Azalt açıkken opak bir arka plan çizilir. CI
-test paketini macOS'ta, bir iOS 26 simülatöründe ve yalnızca yedek yolun bulunduğu bir iOS 18.6
-simülatöründe çalıştırır; kütüphaneyi de `Package.swift` içindeki her platform için derler.
+açıkça verilen bir materyal temanın önüne geçer, koyu cam üzerindeki etiketler beyaz, yıkıcı
+işlem etiketleri kırmızıdır, alt sayfa arka planı yalnızca açıkken karartır ve Şeffaflığı Azalt
+açıkken opak bir arka plan çizilir. CI test paketini macOS'ta, bir iOS 26 simülatöründe ve
+yalnızca yedek yolun bulunduğu bir iOS 18.6 simülatöründe çalıştırır; kütüphaneyi de
+`Package.swift` içindeki her platform için derler.
 
-`ImageRenderer` ne bulanıklığı ne de yerel camı yakalayabildiği için testler yedek yolun renk
-tonunu ve kapladığı alanı, bir de yerel yol görünümlerinin oluşturulabildiğini kontrol eder;
-camın son görünümünü kontrol etmez.
+`ImageRenderer` bulanıklığı yakalayamadığı ve yerel camı yalnızca kısmen yakalayabildiği için
+testler yedek yolun renk tonunu ve kapladığı alanı, bir de her bileşenin yerel yolda yedek
+yoldakinden farklı çizildiğini kontrol eder; camın son görünümünü kontrol etmez.
 
 ## Yol haritası
 
