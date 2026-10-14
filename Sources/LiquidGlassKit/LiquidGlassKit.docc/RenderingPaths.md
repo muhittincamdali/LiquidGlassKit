@@ -38,8 +38,9 @@ ContentView()
 ```
 
 Use ``GlassRenderingMode/fallback`` to keep the same look on every OS version, or to
-compare both paths side by side as the demo app's _Compare_ screen does. Requesting
-``GlassRenderingMode/native`` on an OS without native glass falls back automatically.
+compare both paths side by side as the demo app's _Compare_ screen does. There is no mode
+that forces native glass: ``GlassRenderingMode/automatic`` already uses it wherever the OS
+provides it.
 
 ## Grouping
 

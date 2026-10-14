@@ -45,7 +45,7 @@ struct RenderingTests {
         ]
     }
 
-    @Test(arguments: [GlassRenderingMode.fallback, .native])
+    @Test(arguments: [GlassRenderingMode.fallback, .automatic])
     func everyComponentRenders(mode: GlassRenderingMode) throws {
         for (name, view) in components {
             let image = try #require(render(view, mode: mode), "\(name) did not render")

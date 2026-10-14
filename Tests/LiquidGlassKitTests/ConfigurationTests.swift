@@ -9,8 +9,6 @@ struct GlassRenderingModeTests {
     @Test(arguments: [
         (GlassRenderingMode.automatic, true, GlassRenderingMode.Path.native),
         (.automatic, false, .fallback),
-        (.native, true, .native),
-        (.native, false, .fallback),
         (.fallback, true, .fallback),
         (.fallback, false, .fallback)
     ])

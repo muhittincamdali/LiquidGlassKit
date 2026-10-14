@@ -132,7 +132,7 @@ struct CompareScreen: View {
         VStack(spacing: 16) {
             GlassNavigationBar(title: "Rendering paths", subtitle: nativeSubtitle)
             HStack(alignment: .top, spacing: 12) {
-                column(title: "Native", mode: .native)
+                column(title: "Native", mode: .automatic)
                 column(title: "Fallback", mode: .fallback)
             }
             Spacer()

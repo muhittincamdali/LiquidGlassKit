@@ -12,9 +12,6 @@ public enum GlassRenderingMode: String, Sendable, Hashable, CaseIterable {
     /// Native glass when available, otherwise the fallback.
     case automatic
 
-    /// Prefer native glass. Behaves like ``automatic`` when native glass is unavailable.
-    case native
-
     /// Always draw the `Material` based fallback.
     case fallback
 
@@ -28,7 +25,7 @@ public enum GlassRenderingMode: String, Sendable, Hashable, CaseIterable {
     /// - Parameter nativeAvailable: Whether the OS provides native glass.
     public func resolved(nativeAvailable: Bool) -> Path {
         switch self {
-        case .automatic, .native:
+        case .automatic:
             nativeAvailable ? .native : .fallback
         case .fallback:
             .fallback

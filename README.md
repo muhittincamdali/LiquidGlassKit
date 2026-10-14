@@ -29,7 +29,7 @@ same on every OS.
 | `GlassTabBar`                               | Floating tab bar, generic over any `Hashable` selection; builder supports `if` and `for`.             |
 | `GlassNavigationBar`                        | Floating title bar with leading and trailing items.                                                   |
 | `glassSheet(isPresented:content:)`          | Floating bottom sheet; dismiss by drag, tap outside or the accessibility escape gesture. Not on tvOS. |
-| `GlassTheme`, `GlassRenderingMode`          | Environment values for default material/shape/shadow, and for forcing the native or fallback path.    |
+| `GlassTheme`, `GlassRenderingMode`          | Environment values for default material/shape/shadow, and for forcing the fallback path.              |
 
 Materials: `.clear`, `.frosted`, `.tinted(Color)`, `.dark`. Shapes: rounded rectangle,
 capsule, circle, per-corner radii.
