@@ -4,7 +4,24 @@ import LiquidGlassKit
 import SwiftUI
 import Testing
 
-// MARK: - README: Any view on glass
+// MARK: - README: Quick start
+
+private struct ContentView: View {
+    var body: some View {
+        ZStack {
+            LinearGradient(colors: [.indigo, .pink], startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+            VStack(spacing: 16) {
+                GlassCard {
+                    Label("Hello, glass", systemImage: "sparkles")
+                }
+                GlassButton("Tap me", systemImage: "hand.tap") {}
+            }
+        }
+    }
+}
+
+// MARK: - README: Put any view on glass
 
 private struct NowPlayingBadge: View {
     var body: some View {
@@ -14,7 +31,7 @@ private struct NowPlayingBadge: View {
     }
 }
 
-// MARK: - README: Controls
+// MARK: - README: Build a form from controls
 
 private struct SignInForm: View {
     @State private var email = ""
@@ -37,7 +54,7 @@ private struct SignInForm: View {
     }
 }
 
-// MARK: - README: Tab bar and sheet
+// MARK: - README: Float a tab bar and open a sheet
 
 private enum Screen: Hashable { case home, search, profile }
 
@@ -62,7 +79,7 @@ private struct RootView: View {
     }
 }
 
-// MARK: - README: Theme and rendering path
+// MARK: - README: Theme every view and choose the rendering path
 
 private struct ThemedApp: View {
     var body: some View {
@@ -218,6 +235,7 @@ private struct LibraryScreenSnippets: View {
 struct ReadmeExamplesTests {
     private var examples: [AnyView] {
         var views: [AnyView] = [
+            AnyView(ContentView()),
             AnyView(NowPlayingBadge()),
             AnyView(SignInForm()),
             AnyView(NowPlaying()),
