@@ -51,9 +51,12 @@ versions as a reference, so that they build with Swift 6 and do what their docum
   and `padding:`. The `GlassButtonStyle` enum is replaced by `GlassButtonSize`.
 - Minimum platforms raised to iOS 17, macOS 14, tvOS 17, watchOS 10 (visionOS 1 unchanged);
   manifest moved to swift-tools-version 6.0. Building requires Xcode 26 or later.
-- CI: one workflow that tests on macOS and on iOS 26.5 and iOS 18.6 simulators, builds the
-  demo app and builds for tvOS, watchOS and visionOS, with pinned actions and no
-  `continue-on-error`.
+- CI uses the shared workflows from `muhittincamdali/.github`: SwiftPM build and test on
+  macOS and an `xcodebuild` build for iOS, macOS, tvOS, watchOS and visionOS (`ci.yml`), DocC
+  published to GitHub Pages (`docs.yml`), and link, wording and README translation checks
+  (`quality.yml`). `ios.yml` runs the tests on an iOS 26 simulator and on an iOS 18.6
+  simulator, which has no native glass, and builds the demo app. Every action is pinned to a
+  commit SHA and no step uses `continue-on-error`.
 
 ### Fixed
 
