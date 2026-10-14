@@ -1,7 +1,11 @@
-<!-- i18n-source: README.md@812a24dad3e35f6f6a2c1cf8a53f6fae5bfe6c1a status=reviewed -->
+<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-light.svg" alt="LiquidGlassKit: 适用于 SwiftUI 的 Liquid Glass 表面与控件：OS 26 上使用原生玻璃效果，低至 iOS 17 的系统使用 Material 回退。"></picture></p>
+
+<!-- lang-selector:start -->
+<p align="center"><a href="README.md">English</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.ru.md">Русский</a></p>
+<!-- lang-selector:end -->
 
 <p align="center">
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml/badge.svg" alt="CI 状态"></a>
