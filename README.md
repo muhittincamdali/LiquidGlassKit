@@ -38,8 +38,8 @@ write the same code for every OS.
     run time, and `glassRenderingMode(.fallback)` forces the fallback when you want one look
     everywhere.
 -   **Ready-made controls** — buttons, a switch style, a slider, cards, text fields, a search bar, a
-    floating tab bar with an optional action button, a navigation bar and a bottom sheet, all drawn
-    through `glassSurface`.
+    floating tab bar with an optional action button and tab badges, a navigation bar and a bottom
+    sheet, all drawn through `glassSurface`.
 -   **Effects** — gradient-tinted glass and animated shimmer, pulse and breathe highlights that
     work on both paths.
 -   **Themes and presets** — `GlassTheme` sets the material, shape, shadow and edge highlight for a
@@ -282,9 +282,9 @@ let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
 
 [`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) is an iOS app with a component gallery,
 tab bars, a sheet, a native-vs-fallback comparison and a playground that tunes a theme and shows
-its code. Open `LiquidGlassDemo.xcodeproj`, choose
-an iPhone simulator and run; the [demo's README](Examples/LiquidGlassDemo/README.md) lists its
-screens and launch arguments. CI builds it for every pull request and every push to main.
+its code. Open `LiquidGlassDemo.xcodeproj`, choose an iPhone simulator and run; the
+[demo's README](Examples/LiquidGlassDemo/README.md) lists its screens and launch arguments. CI
+builds it for every pull request and every push to main.
 
 | Sheet (light)                                      | Tab bars (dark)                              | Playground (light)                                     | Native vs fallback (dark)                                  |
 | -------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------- |
@@ -364,7 +364,7 @@ xcodebuild test -scheme LiquidGlassKit \
 The Swift Testing suites cover material and shape logic, theme and gradient clamping (including
 NaN), rendering mode resolution, the tab builder, the sheet's dismissal thresholds, slider
 snapping for unusual steps and ranges, highlight timing, preset lookup, and the exporter's
-output, two samples of which are compiled in the test target. Offscreen renders on the
+output, three samples of which are compiled in the test target. Offscreen renders on the
 fallback path check that every component draws its glass in the theme's material, that an
 explicit material overrides the theme, that labels on dark glass are white and destructive
 labels red, that the sheet dims the background only while presented, and that Reduce
