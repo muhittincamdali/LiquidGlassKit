@@ -35,19 +35,22 @@ public enum GlassGradientDirection: String, Sendable, Hashable, CaseIterable {
 /// A multi-color tint laid over a glass surface.
 ///
 /// Use it through ``SwiftUICore/View/glassGradient(_:direction:intensity:material:in:interactive:)``.
-/// `intensity` is the opacity of the colors over the glass and is clamped to `0...1`.
+/// `intensity` is the opacity of the colors over the glass. It is clamped to `0...1`
+/// in the initializer and on assignment, and NaN becomes 0.
 public struct GlassGradient: Sendable, Hashable {
     /// The gradient's colors, from ``GlassGradientDirection/startPoint`` to ``GlassGradientDirection/endPoint``.
     public var colors: [Color]
     /// The direction the colors run in.
     public var direction: GlassGradientDirection
     /// The opacity of the colors over the glass, from 0 (glass only) to 1 (opaque colors).
-    public var intensity: Double
+    public var intensity: Double {
+        didSet { intensity = intensity.clampedReplacingNaN(to: 0...1) }
+    }
 
     public init(_ colors: [Color], direction: GlassGradientDirection = .diagonal, intensity: Double = 0.35) {
         self.colors = colors
         self.direction = direction
-        self.intensity = intensity.isFinite ? intensity.clamped(to: 0...1) : 0
+        self.intensity = intensity.clampedReplacingNaN(to: 0...1)
     }
 
     /// The colors at ``intensity`` as a SwiftUI gradient. Empty when there are no colors.
