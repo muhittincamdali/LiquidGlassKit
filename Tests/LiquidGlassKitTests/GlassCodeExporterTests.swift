@@ -1,0 +1,140 @@
+import SwiftUI
+import Testing
+@testable import LiquidGlassKit
+
+@Suite("GlassCodeExporter")
+struct GlassCodeExporterTests {
+    private let exporter = GlassCodeExporter()
+
+    @Test func standardColorsAreWrittenByName() {
+        #expect(exporter.code(for: Color.blue) == ".blue")
+        #expect(exporter.code(for: Color.accentColor) == ".accentColor")
+        #expect(exporter.code(for: Color.white) == ".white")
+    }
+
+    @Test func otherColorsAreWrittenAsComponents() {
+        #expect(exporter.code(for: Color(red: 0.2, green: 0.4, blue: 1)) == "Color(red: 0.2, green: 0.4, blue: 1)")
+        #expect(exporter.code(for: Color(red: 0, green: 0.6, blue: 1)) == "Color(red: 0, green: 0.6, blue: 1)")
+        #expect(
+            exporter.code(for: Color(red: 1, green: 0, blue: 0).opacity(0.5))
+                == "Color(red: 1, green: 0, blue: 0).opacity(0.5)"
+        )
+    }
+
+    @Test func materials() {
+        #expect(exporter.code(for: GlassMaterial.clear) == ".clear")
+        #expect(exporter.code(for: GlassMaterial.frosted) == ".frosted")
+        #expect(exporter.code(for: GlassMaterial.dark) == ".dark")
+        #expect(exporter.code(for: GlassMaterial.tinted(.purple)) == ".tinted(.purple)")
+    }
+
+    @Test func shapes() {
+        #expect(exporter.code(for: GlassShape.capsule) == ".capsule")
+        #expect(exporter.code(for: GlassShape.circle) == ".circle")
+        #expect(exporter.code(for: GlassShape.roundedRectangle(cornerRadius: 12.5)) == ".roundedRectangle(cornerRadius: 12.5)")
+        #expect(exporter.code(for: GlassShape.roundedRectangle(cornerRadius: -4)) == ".roundedRectangle(cornerRadius: 0)")
+        #expect(exporter.code(for: GlassShape.topRounded(28)) == ".topRounded(28)")
+        #expect(
+            exporter.code(for: GlassShape.unevenRoundedRectangle(topLeading: 1, bottomLeading: 2, bottomTrailing: 3, topTrailing: 4))
+                == ".unevenRoundedRectangle(topLeading: 1, bottomLeading: 2, bottomTrailing: 3, topTrailing: 4)"
+        )
+    }
+
+    @Test func themesLeaveOutDefaultArguments() {
+        #expect(exporter.code(for: GlassTheme()) == "GlassTheme()")
+        #expect(exporter.code(for: GlassTheme(shadowRadius: 4)) == "GlassTheme(shadowRadius: 4)")
+        #expect(
+            exporter.code(for: .subtle)
+                == "GlassTheme(material: .clear, shape: .roundedRectangle(cornerRadius: 14), "
+                + "shadowRadius: 4, shadowOpacity: 0.06, strokeOpacity: 0.2)"
+        )
+    }
+
+    @Test func themeArgumentsPreferBuiltInThemes() {
+        #expect(exporter.themeArgument(for: .aqua) == ".aqua")
+        #expect(exporter.themeArgument(for: GlassTheme()) == ".standard")
+        #expect(exporter.themeArgument(for: GlassTheme(material: .dark, shadowRadius: 3)) == "GlassTheme(material: .dark, shadowRadius: 3)")
+        for preset in GlassPreset.all {
+            #expect(exporter.themeArgument(for: preset.theme).hasPrefix("."), "\(preset.name) is not written by name")
+        }
+    }
+
+    @Test(arguments: [(1.0, "1"), (0.12, "0.12"), (0.1234, "0.123"), (-0.0001, "0"), (Double.nan, "0"), (-2.5, "-2.5")])
+    func numbers(value: Double, expected: String) {
+        #expect(GlassCodeExporter.number(value) == expected)
+    }
+
+    @Test(arguments: [("Badge", "Badge"), ("My Card!", "MyCard"), ("3D", "Glass3D"), ("", "GlassPreview"), ("é_1", "é_1")])
+    func viewNamesBecomeIdentifiers(name: String, expected: String) {
+        #expect(GlassCodeExporter.identifier(from: name) == expected)
+    }
+
+    /// The expected text is also compiled below as `ExportedBadge` and
+    /// `ExportedCard`, so the exporter's output is known to build.
+    @Test func viewCodeMatchesTheCompiledSamples() {
+        #expect(exporter.viewCode(named: "ExportedBadge", theme: .aqua, renderingMode: .fallback) == Self.badgeSource)
+        let card = GlassTheme(material: .tinted(.blue), shape: .capsule, shadowRadius: 4)
+        #expect(GlassCodeExporter(indentWidth: 2).viewCode(named: "ExportedCard", theme: card) == Self.cardSource)
+    }
+
+    /// Guards the samples against drifting apart from the compiled copies in this file.
+    @Test func compiledSamplesMatchTheExpectedText() throws {
+        let file = try String(contentsOfFile: #filePath, encoding: .utf8)
+        for source in [Self.badgeSource, Self.cardSource] {
+            let body = source.components(separatedBy: "import SwiftUI\n\n")[1]
+            #expect(file.contains("private " + body), "compiled copy differs from:\n\(body)")
+        }
+    }
+
+    static let badgeSource = """
+        import LiquidGlassKit
+        import SwiftUI
+
+        struct ExportedBadge: View {
+            var body: some View {
+                Text("Hello, glass")
+                    .padding()
+                    .glassSurface()
+                    .glassTheme(.aqua)
+                    .glassRenderingMode(.fallback)
+            }
+        }
+
+        """
+
+    static let cardSource = """
+        import LiquidGlassKit
+        import SwiftUI
+
+        struct ExportedCard: View {
+          var body: some View {
+            Text("Hello, glass")
+              .padding()
+              .glassSurface()
+              .glassTheme(GlassTheme(material: .tinted(.blue), shape: .capsule, shadowRadius: 4))
+          }
+        }
+
+        """
+}
+
+// MARK: - Exporter output, compiled
+
+private struct ExportedBadge: View {
+    var body: some View {
+        Text("Hello, glass")
+            .padding()
+            .glassSurface()
+            .glassTheme(.aqua)
+            .glassRenderingMode(.fallback)
+    }
+}
+
+private struct ExportedCard: View {
+  var body: some View {
+    Text("Hello, glass")
+      .padding()
+      .glassSurface()
+      .glassTheme(GlassTheme(material: .tinted(.blue), shape: .capsule, shadowRadius: 4))
+  }
+}
