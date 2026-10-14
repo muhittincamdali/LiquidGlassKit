@@ -29,6 +29,8 @@ the same author. All changes are additive; code written for 2.0.0 builds unchang
   light over glass that is not drawn when Reduce Motion is on.
 - `GlassTabBarAction` and a `GlassTabBar` initializer that takes an `action:`: a round button
   after the tabs for the screen's primary action. The 2.0.0 initializer is unchanged.
+- `GlassTab.badge(_:)` with a count or a label: a red capsule over the tab's icon, read by
+  VoiceOver as the tab's value. A count of zero or less shows no badge.
 - `GlassPreset` with 14 named themes, and the matching `GlassTheme` members (`vapor`, `neon`,
   `aqua`, `ice`, `ocean`, `forest`, `amber`, `sunset`, `rose`, `lavender`, `midnight`).
 - `GlassCodeExporter`, which writes colors, materials, shapes, themes and complete views as Swift

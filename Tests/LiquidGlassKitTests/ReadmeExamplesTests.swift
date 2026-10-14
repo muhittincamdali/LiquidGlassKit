@@ -322,6 +322,7 @@ private struct UpgradeButton: View {
 private struct InboxTabs: View {
     enum Section: Hashable { case inbox, archive }
     @State private var section = Section.inbox
+    @State private var unreadCount = 3
 
     var body: some View {
         GlassTabBar(
@@ -329,6 +330,7 @@ private struct InboxTabs: View {
             action: GlassTabBarAction("New Message", systemImage: "square.and.pencil") {}
         ) {
             GlassTab("Inbox", systemImage: "tray", value: Section.inbox)
+                .badge(unreadCount)
             GlassTab("Archive", systemImage: "archivebox", value: Section.archive)
         }
     }

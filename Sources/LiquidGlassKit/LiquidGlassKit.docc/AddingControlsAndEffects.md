@@ -96,16 +96,21 @@ struct UpgradeButton: View {
 The highlight ignores touches and is hidden from VoiceOver. When _Reduce Motion_ is on, or the
 highlight is `nil`, nothing is drawn, so you can bind it to state without extra checks.
 
-## Add a primary action to the tab bar
+## Add a primary action and badges to the tab bar
 
 Pass a ``GlassTabBarAction`` to ``GlassTabBar`` to place a round button after the tabs, for
 the screen's main action such as composing a message. The button is as tall as the tab bar
 and is tinted with the accent color unless you give it a material.
 
+Call `badge(_:)` on a ``GlassTab`` to show a count or a short label in a red capsule over its
+icon. A count of zero shows no badge, as with SwiftUI's `badge(_:)`, and VoiceOver reads the
+badge as the tab's value.
+
 ```swift
 struct InboxTabs: View {
     enum Section: Hashable { case inbox, archive }
     @State private var section = Section.inbox
+    @State private var unreadCount = 3
 
     var body: some View {
         GlassTabBar(
@@ -113,6 +118,7 @@ struct InboxTabs: View {
             action: GlassTabBarAction("New Message", systemImage: "square.and.pencil") {}
         ) {
             GlassTab("Inbox", systemImage: "tray", value: Section.inbox)
+                .badge(unreadCount)
             GlassTab("Archive", systemImage: "archivebox", value: Section.archive)
         }
     }

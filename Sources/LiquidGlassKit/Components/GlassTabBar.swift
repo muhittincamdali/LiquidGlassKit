@@ -5,6 +5,9 @@ public struct GlassTab<Value: Hashable>: Identifiable {
     public let title: String
     public let systemImage: String
     public let value: Value
+    /// Text shown in a small capsule over the icon, such as an unread count,
+    /// or `nil` for none. Set it with ``badge(_:)-(Int)`` or ``badge(_:)-(String?)``.
+    public private(set) var badge: String?
 
     public var id: Value { value }
 
@@ -16,6 +19,26 @@ public struct GlassTab<Value: Hashable>: Identifiable {
         self.title = title
         self.systemImage = systemImage
         self.value = value
+    }
+
+    /// This tab with `count` in a badge over its icon, or without a badge when
+    /// `count` is zero or less, as with SwiftUI's `badge(_:)`.
+    ///
+    /// ```swift
+    /// GlassTab("Inbox", systemImage: "tray", value: Screen.inbox)
+    ///     .badge(unreadCount)
+    /// ```
+    public func badge(_ count: Int) -> GlassTab {
+        badge(count > 0 ? count.formatted() : nil)
+    }
+
+    /// This tab with `label` in a badge over its icon, such as "New", or without
+    /// a badge when `label` is `nil` or empty. VoiceOver reads the label as the
+    /// tab's value.
+    public func badge(_ label: String?) -> GlassTab {
+        var tab = self
+        tab.badge = label?.isEmpty == false ? label : nil
+        return tab
     }
 }
 
@@ -70,6 +93,13 @@ public enum GlassTabBuilder<Value: Hashable> {
 /// ```
 ///
 /// Tabs with duplicate values are shown once (the first occurrence wins).
+///
+/// A tab can show a count or a short label over its icon:
+///
+/// ```swift
+/// GlassTab("Inbox", systemImage: "tray", value: Screen.inbox)
+///     .badge(unreadCount)
+/// ```
 ///
 /// Pass an ``GlassTabBarAction`` to show a round glass button for the screen's
 /// primary action, such as composing or adding, after the tabs:
@@ -181,6 +211,11 @@ public struct GlassTabBar<Value: Hashable>: View {
                 Image(systemName: tab.systemImage)
                     .font(.system(size: 18, weight: .medium))
                     .symbolVariant(isSelected ? .fill : .none)
+                    .overlay(alignment: .topTrailing) {
+                        if let badge = tab.badge {
+                            TabBadge(label: badge)
+                        }
+                    }
                 if showsLabels {
                     Text(tab.title)
                         .font(.caption2.weight(.medium))
@@ -201,6 +236,7 @@ public struct GlassTabBar<Value: Hashable>: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(tab.title)
+        .accessibilityValue(tab.badge ?? "")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
@@ -208,6 +244,30 @@ public struct GlassTabBar<Value: Hashable>: View {
         var seen = Set<Value>()
         return tabs.filter { seen.insert($0.value).inserted }
     }
+}
+
+/// A red capsule with white text over a tab's icon, like the system tab bar's badges.
+///
+/// It is centered on the icon's top-trailing corner, grows with its text and is
+/// never narrower than it is tall, so a single digit reads as a circle.
+struct TabBadge: View {
+    let label: String
+
+    var body: some View {
+        Text(label)
+            .font(.caption2.weight(.semibold).monospacedDigit())
+            .foregroundStyle(.white)
+            .lineLimit(1)
+            .padding(.horizontal, 4)
+            .frame(minWidth: Self.minimumSide, minHeight: Self.minimumSide)
+            .background(.red, in: Capsule())
+            .fixedSize()
+            .alignmentGuide(.top) { $0.height / 2 }
+            .alignmentGuide(.trailing) { $0.width / 2 }
+            .accessibilityHidden(true)
+    }
+
+    static let minimumSide: CGFloat = 16
 }
 
 /// Lays out the tab capsule and, after it, a square as tall as the capsule.

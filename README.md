@@ -197,9 +197,11 @@ struct RootView: View {
 }
 ```
 
-`GlassTabBar` works with any `Hashable` selection, and its builder supports `if` and `for`. The
-sheet closes when dragged down, when the dimmed background is tapped, or with the accessibility
-escape gesture. It is not available on tvOS.
+`GlassTabBar` works with any `Hashable` selection, and its builder supports `if` and `for`. A
+tab shows a count or a short label over its icon with `.badge(_:)`, for example
+`GlassTab("Profile", systemImage: "person", value: Screen.profile).badge(2)`. The sheet closes
+when dragged down, when the dimmed background is tapped, or with the accessibility escape
+gesture. It is not available on tvOS.
 
 ### Add a switch, a slider and effects
 
@@ -267,6 +269,7 @@ let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
 | `GlassSearchBar`                                                | Capsule search field with clear and Cancel buttons.                                                   |
 | `GlassTabBar`                                                   | Floating tab bar, generic over any `Hashable` selection; builder supports `if` and `for`.             |
 | `GlassTabBarAction`                                             | Round button after the tabs for the screen's primary action.                                          |
+| `GlassTab.badge(_:)`                                            | Count or short label in a red capsule over a tab's icon; a count of zero hides it.                    |
 | `GlassNavigationBar`                                            | Floating title bar with leading and trailing items.                                                   |
 | `glassSheet(isPresented:material:content:)`                     | Floating bottom sheet; dismiss by drag, tap outside or the accessibility escape gesture. Not on tvOS. |
 | `glassGradient(_:direction:intensity:material:in:interactive:)` | Glass with a gradient tint, on both rendering paths.                                                  |
