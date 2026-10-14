@@ -73,7 +73,6 @@ capture compare dark -screen compare
 capture sheet light -screen sheet -presentSheet
 capture tabs dark -screen tabs
 capture playground light -screen playground
-capture playground dark -screen playground
 
 xcrun simctl status_bar "$udid" clear
 xcrun simctl ui "$udid" appearance light
