@@ -71,7 +71,9 @@ struct RenderingTests {
         ]
         #if !os(tvOS)
         components.append(
-            ("sheet", AnyView(Color.clear.glassSheet(isPresented: .constant(true), material: material) { Text("Sheet") }))
+            ("sheet", AnyView(Color.clear.glassSheet(isPresented: .constant(true), material: material) {
+                Text("Sheet")
+            }))
         )
         #endif
         return components
@@ -92,7 +94,10 @@ struct RenderingTests {
             }
             let fallback = try #require(render(view, mode: .fallback), "\(name) did not render on the fallback path")
             let changed = bitmap.countDifferences(from: fallback)
-            #expect(changed > Self.minimumGlassArea, "\(name) drew the fallback on the native path (\(changed) pixels differ)")
+            #expect(
+                changed > Self.minimumGlassArea,
+                "\(name) drew the fallback on the native path (\(changed) pixels differ)"
+            )
         }
     }
 

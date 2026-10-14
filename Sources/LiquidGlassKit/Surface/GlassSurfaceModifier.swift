@@ -78,7 +78,10 @@ struct GlassSurfaceModifier: ViewModifier {
     @ViewBuilder
     private func edge(_ outline: AnyShape) -> some View {
         if contrast == .increased {
-            outline.stroke(.primary.opacity(Self.increasedContrastEdgeOpacity), lineWidth: Self.increasedContrastEdgeWidth)
+            outline.stroke(
+                .primary.opacity(Self.increasedContrastEdgeOpacity),
+                lineWidth: Self.increasedContrastEdgeWidth
+            )
         } else {
             outline.stroke(
                 LinearGradient(

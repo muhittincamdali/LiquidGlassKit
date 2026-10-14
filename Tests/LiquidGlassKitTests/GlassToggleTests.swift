@@ -11,7 +11,10 @@ struct GlassToggleTests {
     @Test func thumbStaysInsideTheTrack() {
         for isOn in [false, true] {
             let center = Metrics.trackWidth / 2 + Metrics.thumbOffset(isOn: isOn)
-            #expect(center - Metrics.thumbDiameter / 2 == (isOn ? Metrics.trackWidth - Metrics.thumbDiameter - Metrics.thumbInset : Metrics.thumbInset))
+            let expectedLeadingEdge = isOn
+                ? Metrics.trackWidth - Metrics.thumbDiameter - Metrics.thumbInset
+                : Metrics.thumbInset
+            #expect(center - Metrics.thumbDiameter / 2 == expectedLeadingEdge)
         }
         #expect(Metrics.thumbOffset(isOn: true) == -Metrics.thumbOffset(isOn: false))
         #expect(Metrics.thumbDiameter + 2 * Metrics.thumbInset == Metrics.trackHeight)
@@ -43,8 +46,9 @@ struct GlassToggleTests {
         let bitmap = try #require(Bitmap.render(toggle, size: Self.size))
         let trackStart = Int(Self.size.width - Metrics.trackWidth)
         let middle = trackStart + Int(Metrics.trackWidth / 2)
-        let leading = (trackStart..<middle).reduce(0) { sum, x in sum + (Bitmap.isGreen(bitmap.pixel(x: x, y: 24)) ? 1 : 0) }
-        let trailing = (middle..<Int(Self.size.width)).reduce(0) { sum, x in sum + (Bitmap.isGreen(bitmap.pixel(x: x, y: 24)) ? 1 : 0) }
+        let greenInRow = { (columns: Range<Int>) in columns.count { Bitmap.isGreen(bitmap.pixel(x: $0, y: 24)) } }
+        let leading = greenInRow(trackStart..<middle)
+        let trailing = greenInRow(middle..<Int(Self.size.width))
         #expect(leading > trailing, "green (uncovered track) should be on the leading half: \(leading) vs \(trailing)")
     }
 

@@ -4,7 +4,9 @@ import Testing
 
 @Suite("GlassGradient")
 struct GlassGradientTests {
-    @Test(arguments: [(-0.5, 0.0), (0.4, 0.4), (3.0, 1.0), (Double.nan, 0.0), (Double.infinity, 1.0), (-Double.infinity, 0.0)])
+    @Test(arguments: [
+        (-0.5, 0.0), (0.4, 0.4), (3.0, 1.0), (Double.nan, 0.0), (Double.infinity, 1.0), (-Double.infinity, 0.0)
+    ])
     func intensityIsClamped(input: Double, expected: Double) {
         #expect(GlassGradient([.red], intensity: input).intensity == expected)
         var assigned = GlassGradient([.red])

@@ -69,8 +69,10 @@ struct GlassHighlightRenderingTests {
         let third = Int(Self.size.width) / 3
         let leading = 0..<third
         let trailing = (Int(Self.size.width) - third)..<Int(Self.size.width)
-        #expect(early.count(columns: leading, where: Bitmap.isGreen) > early.count(columns: trailing, where: Bitmap.isGreen))
-        #expect(late.count(columns: trailing, where: Bitmap.isGreen) > late.count(columns: leading, where: Bitmap.isGreen))
+        let earlyLeading = early.count(columns: leading, where: Bitmap.isGreen)
+        let lateLeading = late.count(columns: leading, where: Bitmap.isGreen)
+        #expect(earlyLeading > early.count(columns: trailing, where: Bitmap.isGreen))
+        #expect(late.count(columns: trailing, where: Bitmap.isGreen) > lateLeading)
     }
 
     @Test(arguments: [false, true])

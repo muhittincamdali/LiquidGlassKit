@@ -31,11 +31,15 @@ struct GlassCodeExporterTests {
     @Test func shapes() {
         #expect(exporter.code(for: GlassShape.capsule) == ".capsule")
         #expect(exporter.code(for: GlassShape.circle) == ".circle")
-        #expect(exporter.code(for: GlassShape.roundedRectangle(cornerRadius: 12.5)) == ".roundedRectangle(cornerRadius: 12.5)")
-        #expect(exporter.code(for: GlassShape.roundedRectangle(cornerRadius: -4)) == ".roundedRectangle(cornerRadius: 0)")
+        let rounded = { (radius: CGFloat) in exporter.code(for: GlassShape.roundedRectangle(cornerRadius: radius)) }
+        #expect(rounded(12.5) == ".roundedRectangle(cornerRadius: 12.5)")
+        #expect(rounded(-4) == ".roundedRectangle(cornerRadius: 0)")
         #expect(exporter.code(for: GlassShape.topRounded(28)) == ".topRounded(28)")
+        let uneven = GlassShape.unevenRoundedRectangle(
+            topLeading: 1, bottomLeading: 2, bottomTrailing: 3, topTrailing: 4
+        )
         #expect(
-            exporter.code(for: GlassShape.unevenRoundedRectangle(topLeading: 1, bottomLeading: 2, bottomTrailing: 3, topTrailing: 4))
+            exporter.code(for: uneven)
                 == ".unevenRoundedRectangle(topLeading: 1, bottomLeading: 2, bottomTrailing: 3, topTrailing: 4)"
         )
     }
@@ -53,7 +57,8 @@ struct GlassCodeExporterTests {
     @Test func themeArgumentsPreferBuiltInThemes() {
         #expect(exporter.themeArgument(for: .aqua) == ".aqua")
         #expect(exporter.themeArgument(for: GlassTheme()) == ".standard")
-        #expect(exporter.themeArgument(for: GlassTheme(material: .dark, shadowRadius: 3)) == "GlassTheme(material: .dark, shadowRadius: 3)")
+        let custom = GlassTheme(material: .dark, shadowRadius: 3)
+        #expect(exporter.themeArgument(for: custom) == "GlassTheme(material: .dark, shadowRadius: 3)")
         for preset in GlassPreset.all {
             #expect(exporter.themeArgument(for: preset.theme).hasPrefix("."), "\(preset.name) is not written by name")
         }
@@ -64,7 +69,8 @@ struct GlassCodeExporterTests {
         #expect(GlassCodeExporter.number(value) == expected)
     }
 
-    @Test(arguments: [("Badge", "Badge"), ("My Card!", "MyCard"), ("3D", "Glass3D"), ("", "GlassPreview"), ("é_1", "é_1"),
+    @Test(arguments: [
+        ("Badge", "Badge"), ("My Card!", "MyCard"), ("3D", "Glass3D"), ("", "GlassPreview"), ("é_1", "é_1"),
         ("class", "GlassClass"), ("Self", "GlassSelf"), ("_", "GlassPreview"), ("__", "GlassPreview"),
         ("_private", "_private"), ("\u{301}Accent", "Glass\u{301}Accent"), ("٣Arabic", "Glass٣Arabic"),
         ("a-b c", "abc"), ("🙂Smile", "Smile")])
