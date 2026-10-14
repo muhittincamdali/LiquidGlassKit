@@ -172,15 +172,14 @@ xcodebuild test -scheme LiquidGlassKit \
 ```
 
 The suite uses Swift Testing and covers material and shape logic, theme clamping, rendering
-mode resolution, the tab builder, sheet dismissal thresholds, and an offscreen render of every
-component on both paths. CI runs it on macOS and the iOS Simulator and builds the library for
-tvOS, watchOS and visionOS.
+mode resolution, the tab builder, sheet dismissal thresholds, the Reduce Transparency
+background, and an offscreen render of every component on both paths. CI runs it on macOS, on
+an iOS 26.5 simulator and on an iOS 18.6 simulator, where only the fallback path exists, and
+builds the library for tvOS, watchOS and visionOS.
 
-Limitations: `ImageRenderer` captures neither blur nor native glass, so the render tests
-check that each component draws on the fallback path, that the native-path views build, and
-the fallback tint; they do not check the final glass look. CI runs on OS 26 or later; the fallback path is
-exercised there by forcing `.fallback` (as in the comparison screenshot), not on an iOS 17–25
-runtime.
+Limitations: `ImageRenderer` captures neither blur nor native glass, so the render tests check
+that each component draws on the fallback path, that the native-path views build, and the
+fallback tint; they do not check the final glass look.
 
 ## Demo app
 
