@@ -38,6 +38,8 @@ struct NowPlaying: View {
 - <doc:BuildingAFloatingTabBarScreen>
 - <doc:RenderingPaths>
 - <doc:Theming>
+- <doc:AddingControlsAndEffects>
+- <doc:TuningAndExportingALook>
 
 ### Surfaces
 
@@ -45,6 +47,11 @@ struct NowPlaying: View {
 - ``GlassGroup``
 - ``GlassMaterial``
 - ``GlassShape``
+- ``SwiftUICore/View/glassGradient(_:direction:intensity:material:in:interactive:)``
+- ``GlassGradient``
+- ``GlassGradientDirection``
+- ``SwiftUICore/View/glassHighlight(_:color:in:)``
+- ``GlassHighlight``
 
 ### Controls
 
@@ -53,6 +60,8 @@ struct NowPlaying: View {
 - ``GlassButtonSize``
 - ``GlassTextField``
 - ``GlassSearchBar``
+- ``LiquidGlassToggleStyle``
+- ``GlassSlider``
 
 ### Containers and navigation
 
@@ -60,6 +69,7 @@ struct NowPlaying: View {
 - ``GlassTabBar``
 - ``GlassTab``
 - ``GlassTabBuilder``
+- ``GlassTabBarAction``
 - ``GlassNavigationBar``
 - ``GlassSheet``
 - ``GlassSheetDismissal``
@@ -68,3 +78,5 @@ struct NowPlaying: View {
 
 - ``GlassTheme``
 - ``GlassRenderingMode``
+- ``GlassPreset``
+- ``GlassCodeExporter``

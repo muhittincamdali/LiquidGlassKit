@@ -13,11 +13,15 @@ ContentView()
     .glassTheme(.subtle)
 ```
 
-The package includes three presets:
+The basic presets are:
 
 - ``GlassTheme/standard``: frosted glass, 20 pt corners, soft shadow (the default).
 - ``GlassTheme/subtle``: clear glass, 14 pt corners, small shadow and faint edge.
 - ``GlassTheme/dark``: dark glass with a deeper shadow.
+
+``GlassPreset/all`` lists these and eleven more, such as ``GlassTheme/aqua``,
+``GlassTheme/forest`` and ``GlassTheme/midnight``, each with a display name for pickers. See
+<doc:TuningAndExportingALook>.
 
 ## Custom themes
 
