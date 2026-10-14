@@ -16,7 +16,10 @@ struct GlassTabBarActionTests {
     }
 
     /// Columns and rows that hold at least one pixel matching `predicate`.
-    private func bounds(_ bitmap: Bitmap, where predicate: (Bitmap.Pixel) -> Bool) -> (x: ClosedRange<Int>, y: ClosedRange<Int>)? {
+    private func bounds(
+        _ bitmap: Bitmap,
+        where predicate: (Bitmap.Pixel) -> Bool
+    ) -> (x: ClosedRange<Int>, y: ClosedRange<Int>)? {
         var xs: [Int] = []
         var ys: [Int] = []
         for y in 0..<bitmap.height {
@@ -32,13 +35,14 @@ struct GlassTabBarActionTests {
     @Test func actionIsARoundButtonAfterTheTabsAsTallAsTheBar() throws {
         let action = GlassTabBarAction("Add", systemImage: "plus", material: .tinted(.green)) {}
         let bitmap = try #require(Bitmap.render(tabBar(action: action), size: Self.size))
-        let bar = try #require(bounds(bitmap, where: { Bitmap.isBlue($0) && !Bitmap.isGreen($0) }), "no blue tab capsule")
+        let bar = try #require(bounds(bitmap, where: { Bitmap.isBlue($0) && !Bitmap.isGreen($0) }), "no blue capsule")
         let button = try #require(bounds(bitmap, where: Bitmap.isGreen), "no green action button")
 
         #expect(button.x.lowerBound > bar.x.upperBound, "the button should follow the tabs")
         let barHeight = bar.y.count
         #expect(abs(button.y.count - barHeight) <= 3, "button height \(button.y.count) vs bar height \(barHeight)")
-        #expect(abs(button.x.count - button.y.count) <= 2, "the button should be round: \(button.x.count)×\(button.y.count)")
+        let roundness = "\(button.x.count)×\(button.y.count)"
+        #expect(abs(button.x.count - button.y.count) <= 2, "the button should be round: \(roundness)")
     }
 
     @Test func withoutAnActionTheBarIsUnchanged() throws {
@@ -53,10 +57,21 @@ struct GlassTabBarActionTests {
         #expect(withNil.count(where: Bitmap.isGreen) == 0)
     }
 
+    /// The selected tab's icon is drawn in the tint color too, so only the
+    /// columns after the tab capsule are counted, and the default is also
+    /// compared with an explicitly accent-tinted button.
     @Test func actionDefaultsToAccentTintedGlass() throws {
-        let action = GlassTabBarAction("Add", systemImage: "plus") {}
-        let view = tabBar(action: action).tint(.green).accentColor(.green)
-        let bitmap = try #require(Bitmap.render(view, size: Self.size))
-        #expect(bitmap.count(where: Bitmap.isGreen) > 300)
+        func render(_ action: GlassTabBarAction) throws -> Bitmap {
+            try #require(Bitmap.render(tabBar(action: action).tint(.green).accentColor(.green), size: Self.size))
+        }
+        let byDefault = try render(GlassTabBarAction("Add", systemImage: "plus") {})
+        let explicit = try render(GlassTabBarAction("Add", systemImage: "plus", material: .tinted(.accentColor)) {})
+        let differences = byDefault.countDifferences(from: explicit)
+        #expect(differences == 0, "\(differences) pixels differ from an accent-tinted button")
+
+        let isCapsule: (Bitmap.Pixel) -> Bool = { Bitmap.isBlue($0) && !Bitmap.isGreen($0) }
+        let bar = try #require(bounds(byDefault, where: isCapsule), "no blue capsule")
+        let buttonColumns = (bar.x.upperBound + 1)..<byDefault.width
+        #expect(byDefault.count(columns: buttonColumns, where: Bitmap.isGreen) > 300)
     }
 }
