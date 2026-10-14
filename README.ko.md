@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
+<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-light.svg" alt="LiquidGlassKit: SwiftUI용 Liquid Glass 표면과 컨트롤: OS 26에서는 네이티브 글래스, iOS 17까지는 Material 대체 렌더링."></picture></p>
@@ -232,7 +232,7 @@ struct ThemedApp: View {
 [`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo)는 컴포넌트 갤러리, 탭 막대, 시트,
 네이티브와 대체 렌더링 비교 화면이 있는 iOS 앱입니다. `LiquidGlassDemo.xcodeproj`를 열고 iPhone
 시뮬레이터를 선택한 뒤 실행하세요. 화면 구성과 실행 인수는
-[데모 README](Examples/LiquidGlassDemo/README.md)에 정리되어 있습니다. CI는 push할 때마다 이 앱을
+[데모 README](Examples/LiquidGlassDemo/README.md)에 정리되어 있습니다. CI는 pull request마다, 그리고 main에 push할 때마다 이 앱을
 빌드합니다.
 
 | 시트(라이트) | 탭 막대(다크) | 네이티브와 대체 렌더링(다크) |

@@ -28,7 +28,8 @@ xcodebuild build \
   -destination 'generic/platform=iOS Simulator'
 ```
 
-CI builds the app the same way on every push (`.github/workflows/ios.yml`).
+CI builds the app the same way for every pull request and every push to main
+(`.github/workflows/ios.yml`).
 
 ## Launch arguments
 

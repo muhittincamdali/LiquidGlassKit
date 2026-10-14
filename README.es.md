@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
+<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-light.svg" alt="LiquidGlassKit: Superficies y controles Liquid Glass para SwiftUI: vidrio nativo en OS 26 y una alternativa con Material hasta iOS 17."></picture></p>
@@ -235,7 +235,7 @@ struct ThemedApp: View {
 componentes, barras de pestañas, una hoja y una comparación entre vidrio nativo y alternativa.
 Abre `LiquidGlassDemo.xcodeproj`, elige un simulador de iPhone y ejecútala; el
 [README de la demo](Examples/LiquidGlassDemo/README.md) describe sus pantallas y argumentos de
-arranque. La CI la compila en cada push.
+arranque. La CI la compila en cada pull request y en cada push a main.
 
 | Hoja (claro) | Barras de pestañas (oscuro) | Vidrio nativo y alternativa (oscuro) |
 | --- | --- | --- |

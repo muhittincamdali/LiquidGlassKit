@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
+<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-light.svg" alt="LiquidGlassKit: SwiftUI için Liquid Glass yüzeyler ve kontroller: OS 26'da yerel cam, iOS 17'ye kadar Material ile yedek görünüm."></picture></p>
@@ -234,7 +234,7 @@ struct ThemedApp: View {
 alt sayfa ve yerel cam ile yedek görünümün karşılaştırmasını içeren bir iOS uygulamasıdır.
 `LiquidGlassDemo.xcodeproj` dosyasını açın, bir iPhone simülatörü seçin ve çalıştırın;
 ekranlar ve başlatma argümanları [demonun README dosyasında](Examples/LiquidGlassDemo/README.md)
-listelenir. CI uygulamayı her push'ta derler.
+listelenir. CI uygulamayı her pull request'te ve main'e yapılan her push'ta derler.
 
 | Alt sayfa (açık) | Sekme çubukları (koyu) | Yerel cam ve yedek görünüm (koyu) |
 | --- | --- | --- |

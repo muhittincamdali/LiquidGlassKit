@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
+<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-light.svg" alt="LiquidGlassKit: 适用于 SwiftUI 的 Liquid Glass 表面与控件：OS 26 上使用原生玻璃效果，低至 iOS 17 的系统使用 Material 回退。"></picture></p>
@@ -208,7 +208,7 @@ struct ThemedApp: View {
 
 ## 演示
 
-[`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) 是一个 iOS App，包含组件库、标签栏、底部面板以及原生与回退的对比。打开 `LiquidGlassDemo.xcodeproj`，选择一个 iPhone 模拟器并运行；[演示 App 的 README](Examples/LiquidGlassDemo/README.md) 列出了各个页面和启动参数。CI 会在每次 push 时构建它。
+[`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) 是一个 iOS App，包含组件库、标签栏、底部面板以及原生与回退的对比。打开 `LiquidGlassDemo.xcodeproj`，选择一个 iPhone 模拟器并运行；[演示 App 的 README](Examples/LiquidGlassDemo/README.md) 列出了各个页面和启动参数。CI 会在每个 pull request 以及每次 push 到 main 时构建它。
 
 | 底部面板（浅色） | 标签栏（深色） | 原生与回退（深色） |
 | --- | --- | --- |

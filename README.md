@@ -228,7 +228,7 @@ struct ThemedApp: View {
 [`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) is an iOS app with a component gallery,
 tab bars, a sheet and a native-vs-fallback comparison. Open `LiquidGlassDemo.xcodeproj`, choose
 an iPhone simulator and run; the [demo's README](Examples/LiquidGlassDemo/README.md) lists its
-screens and launch arguments. CI builds it on every push.
+screens and launch arguments. CI builds it for every pull request and every push to main.
 
 | Sheet (light)                                      | Tab bars (dark)                              | Native vs fallback (dark)                                  |
 | -------------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------- |

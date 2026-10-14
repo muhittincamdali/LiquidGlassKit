@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
+<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-light.svg" alt="LiquidGlassKit: SwiftUI 用 Liquid Glass サーフェスとコントロール。OS 26 はネイティブ、iOS 17 以降の旧 OS は Material で描画。"></picture></p>
@@ -208,7 +208,7 @@ struct ThemedApp: View {
 
 ## デモ
 
-[`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) は、コンポーネントギャラリー、タブバー、シート、ネイティブとフォールバックの比較を備えた iOS アプリです。`LiquidGlassDemo.xcodeproj` を開き、iPhone シミュレータを選んで実行してください。画面と起動引数は [デモの README](Examples/LiquidGlassDemo/README.md) に記載しています。CI は push のたびにこのアプリをビルドします。
+[`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) は、コンポーネントギャラリー、タブバー、シート、ネイティブとフォールバックの比較を備えた iOS アプリです。`LiquidGlassDemo.xcodeproj` を開き、iPhone シミュレータを選んで実行してください。画面と起動引数は [デモの README](Examples/LiquidGlassDemo/README.md) に記載しています。CI は pull request ごと、および main への push ごとにこのアプリをビルドします。
 
 | シート（ライト） | タブバー（ダーク） | ネイティブとフォールバック（ダーク） |
 | --- | --- | --- |

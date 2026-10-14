@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
+<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-light.svg" alt="LiquidGlassKit: Liquid-Glass-Oberflächen und -Steuerelemente für SwiftUI: natives Glas ab OS 26, Material-Fallback bis iOS 17."></picture></p>
@@ -236,7 +236,7 @@ struct ThemedApp: View {
 Komponenten-Galerie, Tab-Leisten, einem Sheet und einem Vergleich von nativem Glas und Fallback.
 Öffne `LiquidGlassDemo.xcodeproj`, wähle einen iPhone-Simulator und starte die App; das
 [README der Demo](Examples/LiquidGlassDemo/README.md) beschreibt die Bildschirme und
-Startargumente. Die CI baut die App bei jedem Push.
+Startargumente. Die CI baut die App für jeden Pull Request und jeden Push auf main.
 
 | Sheet (hell) | Tab-Leisten (dunkel) | Natives Glas und Fallback (dunkel) |
 | --- | --- | --- |

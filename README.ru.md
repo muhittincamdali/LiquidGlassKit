@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
+<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ru-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ru-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ru-light.svg" alt="LiquidGlassKit: Поверхности и элементы управления Liquid Glass для SwiftUI: нативное стекло на OS 26, Material до iOS 17."></picture></p>
@@ -236,7 +236,7 @@ struct ThemedApp: View {
 компонентов, панелями вкладок, нижним листом и сравнением нативного стекла с запасным вариантом.
 Откройте `LiquidGlassDemo.xcodeproj`, выберите симулятор iPhone и запустите приложение; экраны и
 аргументы запуска описаны в [README демо](Examples/LiquidGlassDemo/README.md). CI собирает
-приложение при каждом push.
+приложение для каждого pull request и каждого push в main.
 
 | Нижний лист (светлая тема) | Панели вкладок (тёмная тема) | Нативное стекло и запасной вариант (тёмная тема) |
 | --- | --- | --- |

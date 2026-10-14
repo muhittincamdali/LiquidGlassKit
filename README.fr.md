@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7cce3643716d2135c5f1fac4eaec80ab3238198d status=reviewed -->
+<!-- i18n-source: README.md@8ba8c05eac41803ed15d3f73d0e62ac899437b98 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-fr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-fr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-fr-light.svg" alt="LiquidGlassKit: Surfaces et contrôles Liquid Glass pour SwiftUI : verre natif sur OS 26, repli sur Material jusqu'à iOS 17."></picture></p>
@@ -236,7 +236,7 @@ struct ThemedApp: View {
 composants, des barres d'onglets, une feuille et une comparaison entre verre natif et repli.
 Ouvrez `LiquidGlassDemo.xcodeproj`, choisissez un simulateur d'iPhone et lancez l'app ; le
 [README de la démo](Examples/LiquidGlassDemo/README.md) décrit ses écrans et ses arguments de
-lancement. La CI la compile à chaque push.
+lancement. La CI la compile pour chaque pull request et chaque push sur main.
 
 | Feuille (clair) | Barres d'onglets (sombre) | Verre natif et repli (sombre) |
 | --- | --- | --- |
