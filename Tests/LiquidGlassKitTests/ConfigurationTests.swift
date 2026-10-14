@@ -50,6 +50,36 @@ struct GlassThemeTests {
         #expect(theme.strokeOpacity == 0)
     }
 
+    @Test func nonFiniteValuesBecomeSafeNumbers() {
+        let theme = GlassTheme(shadowRadius: .nan, shadowOpacity: .nan, strokeOpacity: .infinity)
+        #expect(theme.shadowRadius == 0)
+        #expect(theme.shadowOpacity == 0)
+        #expect(theme.strokeOpacity == 1)
+        #expect(GlassTheme(shadowRadius: .infinity).shadowRadius == GlassTheme.maximumShadowRadius)
+        #expect(GlassTheme(shadowRadius: 1e9).shadowRadius == GlassTheme.maximumShadowRadius)
+    }
+
+    /// Assigning a property must not skip the range checks the initializer applies.
+    @Test func assignedValuesAreClampedLikeInitializerArguments() {
+        var theme = GlassTheme()
+        theme.shadowRadius = -3
+        theme.shadowOpacity = .nan
+        theme.strokeOpacity = 7
+        #expect(theme.shadowRadius == 0)
+        #expect(theme.shadowOpacity == 0)
+        #expect(theme.strokeOpacity == 1)
+        theme.shadowRadius = .infinity
+        #expect(theme.shadowRadius == GlassTheme.maximumShadowRadius)
+        theme.shadowOpacity = 0.4
+        #expect(theme.shadowOpacity == 0.4)
+    }
+
+    /// NaN never equals itself, so an unsanitized theme would break `==` and hashing.
+    @Test func sanitizedThemesStayEquatable() {
+        #expect(GlassTheme(shadowOpacity: .nan) == GlassTheme(shadowOpacity: 0))
+        #expect(Set([GlassTheme(strokeOpacity: .nan), GlassTheme(strokeOpacity: .nan)]).count == 1)
+    }
+
     @Test func presetsDiffer() {
         #expect(Set([GlassTheme.standard, .subtle, .dark]).count == 3)
         #expect(GlassTheme.subtle.material == .clear)

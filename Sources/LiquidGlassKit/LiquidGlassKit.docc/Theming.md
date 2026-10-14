@@ -34,8 +34,9 @@ ContentView()
     .glassTheme(.brand)
 ```
 
-Out-of-range values are clamped: negative shadow radii become zero and opacities are
-limited to `0...1`. Shapes with negative corner radii are drawn with square corners.
+Out-of-range values are clamped, both in the initializer and when you assign a property
+later: shadow radii stay between 0 and ``GlassTheme/maximumShadowRadius`` (100 pt),
+opacities are limited to `0...1`, and NaN becomes zero. Shapes with negative corner radii are drawn with square corners.
 
 Controls with a fixed outline keep it regardless of the theme shape: buttons, the search
 bar, the tab bar and the navigation bar are capsules, and text fields use their own corner
