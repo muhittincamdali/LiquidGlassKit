@@ -68,17 +68,26 @@ public struct LiquidGlassButtonStyle: ButtonStyle {
         let size: GlassButtonSize
 
         @Environment(\.isEnabled) private var isEnabled
+        @Environment(\.glassTheme) private var theme
 
         var body: some View {
             configuration.label
                 .font(size.font)
                 .padding(.horizontal, size.horizontalPadding)
                 .padding(.vertical, size.verticalPadding)
-                .foregroundStyle(configuration.role == .destructive ? AnyShapeStyle(.red) : AnyShapeStyle(.primary))
+                .foregroundStyle(labelStyle)
                 .glassSurface(material, in: .capsule, interactive: true)
                 .scaleEffect(configuration.isPressed ? Self.pressedScale : 1)
                 .opacity(isEnabled ? 1 : Self.disabledOpacity)
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: configuration.isPressed)
+        }
+
+        /// Red for destructive buttons; white on dark glass, where the primary
+        /// color is black in light mode and would be hard to read.
+        private var labelStyle: AnyShapeStyle {
+            if configuration.role == .destructive { return AnyShapeStyle(.red) }
+            if (material ?? theme.material) == .dark { return AnyShapeStyle(.white) }
+            return AnyShapeStyle(.primary)
         }
 
         static let pressedScale = 0.96
