@@ -83,3 +83,14 @@ public enum GlassMaterial: Sendable, Hashable {
     static let nativeTintOpacity = 0.35
     static let nativeDarkTintOpacity = 0.4
 }
+
+#if !os(visionOS)
+@available(iOS 26, macOS 26, tvOS 26, watchOS 26, *)
+extension GlassMaterial {
+    /// The SwiftUI `Glass` value drawn on the native rendering path.
+    func nativeGlass(interactive: Bool) -> Glass {
+        let base: Glass = usesClearNativeGlass ? .clear : .regular
+        return base.tint(nativeTint).interactive(interactive)
+    }
+}
+#endif

@@ -93,18 +93,10 @@ private struct NativeGlass<Content: View, Fallback: View>: View {
         fallback()
         #else
         if #available(iOS 26, macOS 26, tvOS 26, watchOS 26, *) {
-            content.glassEffect(nativeGlass, in: outline)
+            content.glassEffect(material.nativeGlass(interactive: isInteractive), in: outline)
         } else {
             fallback()
         }
         #endif
     }
-
-    #if !os(visionOS)
-    @available(iOS 26, macOS 26, tvOS 26, watchOS 26, *)
-    private var nativeGlass: Glass {
-        let base: Glass = material.usesClearNativeGlass ? .clear : .regular
-        return base.tint(material.nativeTint).interactive(isInteractive)
-    }
-    #endif
 }
