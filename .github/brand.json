@@ -1,0 +1,108 @@
+{
+  "name": "LiquidGlassKit",
+  "repository": "muhittincamdali/LiquidGlassKit",
+  "tagline": {
+    "en": "Liquid Glass surfaces and controls for SwiftUI: native glass on OS 26, a Material fallback down to iOS 17.",
+    "tr": "SwiftUI için Liquid Glass yüzeyler ve kontroller: OS 26'da yerel cam, iOS 17'ye kadar Material ile yedek görünüm.",
+    "zh-CN": "适用于 SwiftUI 的 Liquid Glass 表面与控件：OS 26 上使用原生玻璃效果，低至 iOS 17 的系统使用 Material 回退。",
+    "ja": "SwiftUI 用 Liquid Glass サーフェスとコントロール。OS 26 はネイティブ、iOS 17 以降の旧 OS は Material で描画。",
+    "ko": "SwiftUI용 Liquid Glass 표면과 컨트롤: OS 26에서는 네이티브 글래스, iOS 17까지는 Material 대체 렌더링.",
+    "es": "Superficies y controles Liquid Glass para SwiftUI: vidrio nativo en OS 26 y una alternativa con Material hasta iOS 17.",
+    "de": "Liquid-Glass-Oberflächen und -Steuerelemente für SwiftUI: natives Glas ab OS 26, Material-Fallback bis iOS 17.",
+    "fr": "Surfaces et contrôles Liquid Glass pour SwiftUI : verre natif sur OS 26, repli sur Material jusqu'à iOS 17.",
+    "pt-BR": "Superfícies e controles Liquid Glass para SwiftUI: vidro nativo no OS 26 e alternativa com Material até o iOS 17.",
+    "ru": "Поверхности и элементы управления Liquid Glass для SwiftUI: нативное стекло на OS 26, Material до iOS 17."
+  },
+  "tags": {
+    "en": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "Reduce Transparency"
+    ],
+    "tr": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "Şeffaflığı Azalt"
+    ],
+    "zh-CN": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "降低透明度"
+    ],
+    "ja": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "透明度を下げる"
+    ],
+    "ko": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "투명도 줄이기"
+    ],
+    "es": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "Reducir transparencia"
+    ],
+    "de": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "Transparenz reduzieren"
+    ],
+    "fr": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "Réduire la transparence"
+    ],
+    "pt-BR": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "Reduzir Transparência"
+    ],
+    "ru": [
+      "SwiftUI",
+      "Liquid Glass",
+      "iOS 17+",
+      "Понижение прозрачности"
+    ]
+  },
+  "motif": "components",
+  "buttons": [
+    "start",
+    "docs",
+    "examples"
+  ],
+  "links": {
+    "docs": "https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/",
+    "examples": "Examples/LiquidGlassDemo/"
+  },
+  "languages": [
+    "en",
+    "tr",
+    "zh-CN",
+    "ja",
+    "ko",
+    "es",
+    "de",
+    "fr",
+    "pt-BR",
+    "ru"
+  ],
+  "docc": {
+    "targets": [
+      "LiquidGlassKit"
+    ]
+  },
+  "socialTheme": "dark",
+  "badgeOverrides": {},
+  "extraBadges": []
+}
