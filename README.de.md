@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
+<!-- i18n-source: README.md@1fdc5fa59b8a5bbcccee03211df035b12b5c5f6f status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-de-light.svg" alt="LiquidGlassKit: Liquid-Glass-Oberflächen und -Steuerelemente für SwiftUI: natives Glas ab OS 26, Material-Fallback bis iOS 17."></picture></p>
@@ -9,7 +9,7 @@
 
 <p align="center">
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml/badge.svg" alt="CI-Status"></a>
-<a href="https://github.com/muhittincamdali/LiquidGlassKit/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg" alt="Aktuelle Version: v2.0.0"></picture></a>
+<a href="https://github.com/muhittincamdali/LiquidGlassKit/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg" alt="Aktuelle Version: v2.1.0"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-light.svg" alt="Unterstützte Plattformen: iOS 17+ · macOS 14+ · tvOS 17+ · watchOS 10+ · visionOS 1+"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-light.svg" alt="Sprachversion: Swift 6.0+"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-light.svg" alt="Lizenz: MIT"></picture></a>
@@ -41,13 +41,19 @@ jedes Betriebssystem.
 - **Ein Modifier, zwei Wege** — `glassSurface` wählt zur Laufzeit natives Glas oder den
   `Material`-Fallback; `glassRenderingMode(.fallback)` erzwingt den Fallback, wenn du überall
   denselben Look willst.
-- **Fertige Steuerelemente** — Buttons, Karten, Textfelder, eine Suchleiste, eine schwebende
-  Tab-Leiste, eine Navigationsleiste und ein Bottom Sheet, alle über `glassSurface` gezeichnet.
-- **Themes** — `GlassTheme` legt Material, Form, Schatten und Kantenlicht für eine ganze
-  View-Hierarchie fest; jede Komponente kann trotzdem ein eigenes Material bekommen.
+- **Fertige Steuerelemente** — Buttons, ein Schalter-Stil, ein Schieberegler, Karten, Textfelder,
+  eine Suchleiste, eine schwebende Tab-Leiste mit optionalem Aktions-Button und Tab-Badges, eine
+  Navigationsleiste und ein Bottom Sheet, alle über `glassSurface` gezeichnet.
+- **Effekte** — Glas mit Farbverlauf und animierte Shimmer-, Pulse- und Breathe-Highlights, die
+  auf beiden Wegen funktionieren.
+- **Themes und Presets** — `GlassTheme` legt Material, Form, Schatten und Kantenlicht für eine
+  ganze View-Hierarchie fest, `GlassPreset` benennt 14 fertige Themes, und `GlassCodeExporter`
+  macht aus einem zur Laufzeit angepassten Theme wieder Swift-Code.
 - **Bedienungshilfen** — ist „Transparenz reduzieren“ (Reduce Transparency) aktiv, zeichnet der
-  Fallback einen deckenden Hintergrund; dekorative Symbole sind vor VoiceOver verborgen, die
-  Tab-Leiste meldet den ausgewählten Tab, und das Sheet schließt sich mit der Escape-Geste.
+  Fallback einen deckenden Hintergrund, bei „Kontrast erhöhen“ (Increase Contrast) eine stärkere
+  Kante; Highlights stoppen bei „Bewegung reduzieren“ (Reduce Motion), Schalter und Schieberegler
+  behalten das VoiceOver-Verhalten von SwiftUI, die Tab-Leiste meldet den ausgewählten Tab, und
+  das Sheet schließt sich mit der Escape-Geste.
 - **Keine Namenskonflikte** — die API meidet SwiftUIs eigene Namen (`glassEffect`,
   `GlassEffectContainer`, `GlassButtonStyle`), sodass sich beide Module in einer Datei
   importieren lassen.
@@ -65,7 +71,7 @@ Wähle in Xcode **File › Add Package Dependencies…** und gib die Repository-
 https://github.com/muhittincamdali/LiquidGlassKit.git
 ```
 
-Lass die Abhängigkeitsregel auf **Up to Next Major Version** ab 2.0.0 stehen und klicke auf
+Lass die Abhängigkeitsregel auf **Up to Next Major Version** ab 2.1.0 stehen und klicke auf
 **Add Package**. Wähle im nächsten Dialog dein App-Target für `LiquidGlassKit` aus und klicke
 noch einmal auf **Add Package**.
 
@@ -114,7 +120,7 @@ Oder füge es zu den `dependencies` in deiner `Package.swift` hinzu:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.1.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
@@ -199,9 +205,41 @@ struct RootView: View {
 ```
 
 `GlassTabBar` funktioniert mit jeder `Hashable`-Auswahl, und sein Builder unterstützt `if`
-und `for`. Das Sheet schließt sich, wenn man es nach unten zieht, auf den abgedunkelten
-Hintergrund tippt oder die Escape-Geste der Bedienungshilfen nutzt. Unter tvOS gibt es das Sheet
-nicht.
+und `for`. Ein Tab zeigt mit `.badge(_:)` eine Zahl oder ein kurzes Label über seinem Symbol,
+zum Beispiel `GlassTab("Profile", systemImage: "person", value: Screen.profile).badge(2)`. Das
+Sheet schließt sich, wenn man es nach unten zieht, auf den abgedunkelten Hintergrund tippt oder
+die Escape-Geste der Bedienungshilfen nutzt. Unter tvOS gibt es das Sheet nicht.
+
+### Einen Schalter, einen Schieberegler und Effekte hinzufügen
+
+```swift
+struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+```
+
+Der Schalter-Stil behält die Bedienungshilfen von `Toggle`, und VoiceOver-Nutzer verstellen den
+Schieberegler Schritt für Schritt. Bei „Bewegung reduzieren“ werden keine Highlights gezeichnet.
+`GlassSlider` gibt es unter tvOS nicht.
 
 ### Alle Views mit einem Theme versehen und den Rendering-Weg wählen
 
@@ -215,6 +253,15 @@ struct ThemedApp: View {
 }
 ```
 
+Starte mit einem der 14 Presets aus `GlassPreset.all`, passe es an und mach daraus eine View,
+die du in dein Projekt einfügen kannst:
+
+```swift
+var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+theme.shadowRadius = 4
+let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+```
+
 ### API-Überblick
 
 | API | Was es tut |
@@ -222,25 +269,34 @@ struct ThemedApp: View {
 | `glassSurface(_:in:interactive:)` | Legt Glas hinter eine beliebige View. Natives `glassEffect` unter OS 26, sonst der `Material`-Fallback. |
 | `GlassGroup` | Umschließt unter OS 26 `GlassEffectContainer`, damit benachbarte Glasformen ineinanderfließen; sonst wird der Inhalt unverändert durchgereicht. |
 | `GlassButton`, `.buttonStyle(.liquidGlass)` | Kapselförmige Glas-Buttons in drei Größen, mit gedrücktem, deaktiviertem und destruktivem Zustand. |
+| `.toggleStyle(.liquidGlass)` | Schalter mit Glasspur, die sich im eingeschalteten Zustand mit der Tint-Farbe füllt; behält die Bedienungshilfen von `Toggle`. |
+| `GlassSlider` | Schieberegler auf einer Glasspur mit Schritten ab der Untergrenze und beliebigem `FormatStyle`. Nicht unter tvOS. |
 | `GlassCard` | Container mit Innenabstand auf Glas. |
 | `GlassTextField` | Textfeld mit optionalem SF Symbol und Fokusring. |
 | `GlassSearchBar` | Kapselförmiges Suchfeld mit Lösch- und Cancel-Button. |
 | `GlassTabBar` | Schwebende Tab-Leiste, generisch über jede `Hashable`-Auswahl; der Builder unterstützt `if` und `for`. |
+| `GlassTabBarAction` | Runder Button nach den Tabs für die Hauptaktion des Bildschirms. |
+| `GlassTab.badge(_:)` | Zahl oder kurzes Label in einer roten Kapsel über dem Tab-Symbol; die Zahl 0 blendet es aus. |
 | `GlassNavigationBar` | Schwebende Titelleiste mit Elementen links und rechts. |
 | `glassSheet(isPresented:material:content:)` | Schwebendes Bottom Sheet; schließt durch Ziehen, Tippen daneben oder die Escape-Geste der Bedienungshilfen. Nicht unter tvOS. |
+| `glassGradient(_:direction:intensity:material:in:interactive:)` | Glas mit Farbverlauf, auf beiden Rendering-Wegen. |
+| `glassHighlight(_:color:in:)` | Animiertes Shimmer-, Pulse- oder Breathe-Licht über Glas; aus bei „Bewegung reduzieren“. |
 | `GlassTheme`, `GlassRenderingMode` | Environment-Werte für Standard-Material, -Form und -Schatten sowie zum Erzwingen des Fallbacks. |
+| `GlassPreset` | 14 benannte Themes mit Anzeigenamen, für Auswahllisten und Einstellungsbildschirme. |
+| `GlassCodeExporter` | Schreibt Themes, Materialien, Formen und Farben als Swift-Code, der dieses Paket nutzt. |
 
 ## Demo
 
 [`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) ist eine iOS-App mit einer
-Komponenten-Galerie, Tab-Leisten, einem Sheet und einem Vergleich von nativem Glas und Fallback.
-Öffne `LiquidGlassDemo.xcodeproj`, wähle einen iPhone-Simulator und starte die App; das
+Komponenten-Galerie, Tab-Leisten, einem Sheet, einem Vergleich von nativem Glas und Fallback und
+einem Playground, der ein Theme anpasst und seinen Code zeigt. Öffne `LiquidGlassDemo.xcodeproj`,
+wähle einen iPhone-Simulator und starte die App; das
 [README der Demo](Examples/LiquidGlassDemo/README.md) beschreibt die Bildschirme und
 Startargumente. Die CI baut die App für jeden Pull Request und jeden Push auf main.
 
-| Sheet (hell) | Tab-Leisten (dunkel) | Natives Glas und Fallback (dunkel) |
-| --- | --- | --- |
-| ![Glas-Sheet, hell](docs/images/sheet-light.png) | ![Tab-Leisten, dunkel](docs/images/tabs-dark.png) | ![Natives Glas und Fallback, dunkel](docs/images/compare-dark.png) |
+| Sheet (hell) | Tab-Leisten (dunkel) | Playground (hell) | Natives Glas und Fallback (dunkel) |
+| --- | --- | --- | --- |
+| ![Glas-Sheet, hell](docs/images/sheet-light.png) | ![Tab-Leisten, dunkel](docs/images/tabs-dark.png) | ![Playground, hell](docs/images/playground-light.png) | ![Natives Glas und Fallback, dunkel](docs/images/compare-dark.png) |
 
 <sub>Screenshots der Demo-App im iOS-27-Simulator, aufgenommen mit
 [`scripts/screenshots.sh`](scripts/screenshots.sh).</sub>
@@ -266,6 +322,11 @@ Die Anleitungen sind auf Englisch.
   — was Nutzer auf welchem Betriebssystem sehen und wie du den Fallback erzwingst.
 - [Theming](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/theming)
   — Vorlagen, eigene Themes und Materialien pro Komponente.
+- [Adding Controls and Effects](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/addingcontrolsandeffects)
+  — der Glas-Schalter und -Schieberegler, Glas mit Farbverlauf, Highlights und der Aktions-Button
+  der Tab-Leiste.
+- [Tuning and Exporting a Look](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/tuningandexportingalook)
+  — ein Preset wählen, ein Theme zur Laufzeit anpassen und es als Swift-Code kopieren.
 
 ## Voraussetzungen
 
@@ -283,10 +344,11 @@ gegen das OS-26-SDK kompiliert wird.
 
 ## Architektur
 
-- `Sources/LiquidGlassKit/Core` enthält die Werttypen: `GlassMaterial`, `GlassShape`,
-  `GlassTheme` und `GlassRenderingMode`.
+- `Sources/LiquidGlassKit/Core` enthält die Werttypen `GlassMaterial`, `GlassShape`,
+  `GlassTheme`, `GlassPreset` und `GlassRenderingMode` sowie `GlassCodeExporter`.
 - `Sources/LiquidGlassKit/Surface` enthält `glassSurface` und `GlassGroup`, die einzigen Stellen,
-  die SwiftUIs Glas-API aufrufen.
+  die SwiftUIs Glas-API aufrufen, und die auf `glassSurface` aufbauenden Modifier für
+  Farbverläufe und Highlights.
 - `Sources/LiquidGlassKit/Components` baut jedes Steuerelement auf `glassSurface` auf, daher
   gelten Theme und Rendering-Modus für alle.
 
@@ -312,14 +374,16 @@ xcodebuild test -scheme LiquidGlassKit \
 ```
 
 Die Swift-Testing-Suites decken die Logik von Materialien und Formen ab, das Begrenzen der
-Theme-Werte, die Auflösung des Rendering-Modus, den Tab-Builder und die Schließschwellen des
-Sheets. Offscreen-Renderings auf dem Fallback-Weg prüfen, dass jede Komponente ihr Glas im
-Material des Themes zeichnet, dass ein explizit angegebenes Material Vorrang vor dem Theme hat,
-dass Beschriftungen auf dunklem Glas weiß und destruktive Beschriftungen rot sind, dass das
-Sheet den Hintergrund nur abdunkelt, solange es angezeigt wird, und dass „Transparenz
-reduzieren“ einen deckenden Hintergrund zeichnet. Die CI führt die Suite unter macOS, in einem
-iOS-26-Simulator und in einem iOS-18.6-Simulator aus, wo es nur den Fallback gibt, und baut die
-Bibliothek für jede Plattform aus `Package.swift`.
+Theme- und Verlaufswerte (auch bei NaN), die Auflösung des Rendering-Modus, den Tab-Builder, die
+Schließschwellen des Sheets, das Einrasten des Schiebereglers bei ungewöhnlichen Schritten und
+Bereichen, das Timing der Highlights, die Preset-Suche und die Ausgabe des Exporters, von der
+drei Beispiele im Test-Target kompiliert werden. Offscreen-Renderings auf dem Fallback-Weg
+prüfen, dass jede Komponente ihr Glas im Material des Themes zeichnet, dass ein explizit
+angegebenes Material Vorrang vor dem Theme hat, dass Beschriftungen auf dunklem Glas weiß und
+destruktive Beschriftungen rot sind, dass das Sheet den Hintergrund nur abdunkelt, solange es
+angezeigt wird, und dass „Transparenz reduzieren“ einen deckenden Hintergrund zeichnet. Die CI
+führt die Suite unter macOS, in einem iOS-26-Simulator und in einem iOS-18.6-Simulator aus, wo
+es nur den Fallback gibt, und baut die Bibliothek für jede Plattform aus `Package.swift`.
 
 `ImageRenderer` erfasst den Weichzeichner nicht und natives Glas nur teilweise. Die Tests prüfen
 deshalb Tönung und Abdeckung des Fallbacks sowie, dass jede Komponente auf dem nativen Weg
@@ -328,7 +392,7 @@ nicht.
 
 ## Roadmap
 
-Eine Version nach 2.0.0 ist noch nicht geplant. Fehlerberichte und Feature-Wünsche werden in
+Eine Version nach 2.1.0 ist noch nicht geplant. Fehlerberichte und Feature-Wünsche werden in
 den [Issues](https://github.com/muhittincamdali/LiquidGlassKit/issues) verfolgt.
 
 ## Mitwirken

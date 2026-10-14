@@ -9,6 +9,10 @@ import SwiftUI
 /// ContentView()
 ///     .glassTheme(.subtle)
 /// ```
+///
+/// Numeric values are kept in range whether they are passed to the initializer
+/// or assigned later: the shadow radius stays between 0 and ``maximumShadowRadius``,
+/// opacities in `0...1`, and NaN becomes zero.
 public struct GlassTheme: Sendable, Hashable {
 
     /// Material used when a component does not specify one.
@@ -19,13 +23,23 @@ public struct GlassTheme: Sendable, Hashable {
     public var shape: GlassShape
 
     /// Shadow blur radius on the fallback rendering path.
-    public var shadowRadius: CGFloat
+    public var shadowRadius: CGFloat {
+        didSet { shadowRadius = Self.sanitizedRadius(shadowRadius) }
+    }
 
     /// Shadow opacity on the fallback rendering path.
-    public var shadowOpacity: Double
+    public var shadowOpacity: Double {
+        didSet { shadowOpacity = Self.sanitizedOpacity(shadowOpacity) }
+    }
 
     /// Opacity of the highlight stroke drawn along the edge on the fallback rendering path.
-    public var strokeOpacity: Double
+    public var strokeOpacity: Double {
+        didSet { strokeOpacity = Self.sanitizedOpacity(strokeOpacity) }
+    }
+
+    /// The largest shadow radius a theme keeps, in points. A blur radius has no
+    /// visible effect past this size but still costs rendering time.
+    public static let maximumShadowRadius: CGFloat = 100
 
     public init(
         material: GlassMaterial = .frosted,
@@ -36,9 +50,17 @@ public struct GlassTheme: Sendable, Hashable {
     ) {
         self.material = material
         self.shape = shape
-        self.shadowRadius = max(0, shadowRadius)
-        self.shadowOpacity = shadowOpacity.clamped(to: 0...1)
-        self.strokeOpacity = strokeOpacity.clamped(to: 0...1)
+        self.shadowRadius = Self.sanitizedRadius(shadowRadius)
+        self.shadowOpacity = Self.sanitizedOpacity(shadowOpacity)
+        self.strokeOpacity = Self.sanitizedOpacity(strokeOpacity)
+    }
+
+    static func sanitizedRadius(_ radius: CGFloat) -> CGFloat {
+        radius.clampedReplacingNaN(to: 0...maximumShadowRadius)
+    }
+
+    static func sanitizedOpacity(_ opacity: Double) -> Double {
+        opacity.clampedReplacingNaN(to: 0...1)
     }
 
     /// Frosted glass, 20 pt corners, soft shadow.
@@ -75,7 +97,16 @@ extension View {
 }
 
 extension Comparable {
+    /// `self` limited to `range`. A floating-point NaN is returned unchanged,
+    /// so callers that accept arbitrary input check `isNaN` first.
     func clamped(to range: ClosedRange<Self>) -> Self {
         min(max(self, range.lowerBound), range.upperBound)
+    }
+}
+
+extension FloatingPoint {
+    /// `self` limited to `range`, with NaN replaced by the range's lower bound.
+    func clampedReplacingNaN(to range: ClosedRange<Self>) -> Self {
+        isNaN ? range.lowerBound : clamped(to: range)
     }
 }

@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
+<!-- i18n-source: README.md@1fdc5fa59b8a5bbcccee03211df035b12b5c5f6f status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-es-light.svg" alt="LiquidGlassKit: Superficies y controles Liquid Glass para SwiftUI: vidrio nativo en OS 26 y una alternativa con Material hasta iOS 17."></picture></p>
@@ -9,7 +9,7 @@
 
 <p align="center">
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml/badge.svg" alt="Estado de CI"></a>
-<a href="https://github.com/muhittincamdali/LiquidGlassKit/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg" alt="Última versión: v2.0.0"></picture></a>
+<a href="https://github.com/muhittincamdali/LiquidGlassKit/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg" alt="Última versión: v2.1.0"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-light.svg" alt="Plataformas compatibles: iOS 17+ · macOS 14+ · tvOS 17+ · watchOS 10+ · visionOS 1+"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-light.svg" alt="Versión del lenguaje: Swift 6.0+"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-light.svg" alt="Licencia: MIT"></picture></a>
@@ -40,14 +40,20 @@ los bordes y una sombra. Escribes el mismo código para todos los sistemas.
 - **Un modificador, dos caminos** — `glassSurface` elige en tiempo de ejecución el vidrio
   nativo o la alternativa con `Material` (fallback), y `glassRenderingMode(.fallback)` fuerza la
   alternativa cuando quieres el mismo aspecto en todas partes.
-- **Controles listos para usar** — botones, tarjetas, campos de texto, una barra de búsqueda,
-  una barra de pestañas flotante, una barra de navegación y una hoja inferior (bottom sheet),
-  todos dibujados con `glassSurface`.
-- **Temas** — `GlassTheme` define el material, la forma, la sombra y el brillo de los bordes
-  para toda una jerarquía de vistas; cada componente puede seguir usando su propio material.
+- **Controles listos para usar** — botones, un estilo de interruptor, un control deslizante,
+  tarjetas, campos de texto, una barra de búsqueda, una barra de pestañas flotante con un botón de
+  acción opcional e insignias en las pestañas, una barra de navegación y una hoja inferior (bottom
+  sheet), todos dibujados con `glassSurface`.
+- **Efectos** — vidrio con tinte degradado y destellos animados shimmer, pulse y breathe que
+  funcionan en los dos caminos.
+- **Temas y preajustes** — `GlassTheme` define el material, la forma, la sombra y el brillo de
+  los bordes para toda una jerarquía de vistas, `GlassPreset` da nombre a 14 temas listos para
+  usar y `GlassCodeExporter` convierte de nuevo en Swift un tema ajustado en tiempo de ejecución.
 - **Accesibilidad** — con «Reducir transparencia» (Reduce Transparency) activado, la
-  alternativa dibuja un fondo opaco; los iconos decorativos se ocultan a VoiceOver, la barra de
-  pestañas anuncia la pestaña seleccionada y la hoja se cierra con el gesto de escape.
+  alternativa dibuja un fondo opaco, y con «Aumentar contraste» (Increase Contrast), un borde más
+  marcado; los destellos se detienen con «Reducir movimiento» (Reduce Motion), el interruptor y el
+  control deslizante conservan el comportamiento de VoiceOver de SwiftUI, la barra de pestañas
+  anuncia la pestaña seleccionada y la hoja se cierra con el gesto de escape.
 - **Sin choques de nombres** — la API evita los nombres propios de SwiftUI (`glassEffect`,
   `GlassEffectContainer`, `GlassButtonStyle`), así que puedes importar ambos módulos en el mismo
   archivo.
@@ -65,7 +71,7 @@ En Xcode, elige **File › Add Package Dependencies…** e introduce la URL del 
 https://github.com/muhittincamdali/LiquidGlassKit.git
 ```
 
-Deja la regla de dependencia en **Up to Next Major Version** a partir de 2.0.0 y haz clic en
+Deja la regla de dependencia en **Up to Next Major Version** a partir de 2.1.0 y haz clic en
 **Add Package**. En el siguiente diálogo, elige el target de tu app para `LiquidGlassKit` y haz
 clic de nuevo en **Add Package**.
 
@@ -114,7 +120,7 @@ O añádelo a las `dependencies` de tu `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.1.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
@@ -199,8 +205,41 @@ struct RootView: View {
 ```
 
 `GlassTabBar` funciona con cualquier selección `Hashable`, y su builder admite `if` y `for`.
-La hoja se cierra al arrastrarla hacia abajo, al tocar el fondo oscurecido o con el gesto de
-escape de accesibilidad. No está disponible en tvOS.
+Una pestaña muestra un número o una etiqueta corta sobre su icono con `.badge(_:)`, por ejemplo
+`GlassTab("Profile", systemImage: "person", value: Screen.profile).badge(2)`. La hoja se cierra
+al arrastrarla hacia abajo, al tocar el fondo oscurecido o con el gesto de escape de
+accesibilidad. No está disponible en tvOS.
+
+### Añade un interruptor, un control deslizante y efectos
+
+```swift
+struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+```
+
+El estilo de interruptor conserva la accesibilidad de `Toggle`, y quienes usan VoiceOver ajustan
+el control deslizante paso a paso. Con «Reducir movimiento» activado no se dibujan destellos.
+`GlassSlider` no está disponible en tvOS.
 
 ### Aplica un tema a todas las vistas y elige el camino de renderizado
 
@@ -214,6 +253,15 @@ struct ThemedApp: View {
 }
 ```
 
+Parte de uno de los 14 preajustes de `GlassPreset.all`, ajústalo y convierte el resultado en
+una vista que puedes pegar en tu proyecto:
+
+```swift
+var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+theme.shadowRadius = 4
+let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+```
+
 ### Resumen de la API
 
 | API | Qué hace |
@@ -221,25 +269,34 @@ struct ThemedApp: View {
 | `glassSurface(_:in:interactive:)` | Pone vidrio detrás de cualquier vista. `glassEffect` nativo en OS 26 y alternativa con `Material` en el resto. |
 | `GlassGroup` | En OS 26 envuelve `GlassEffectContainer` para que las formas de vidrio cercanas se fundan; en el resto, deja pasar el contenido sin cambios. |
 | `GlassButton`, `.buttonStyle(.liquidGlass)` | Botones de vidrio en forma de cápsula en tres tamaños, con estados pulsado, desactivado y destructivo. |
+| `.toggleStyle(.liquidGlass)` | Interruptor con un carril de vidrio que se llena con el color de tinte al activarse; conserva la accesibilidad de `Toggle`. |
+| `GlassSlider` | Control deslizante sobre un carril de vidrio, con pasos contados desde el límite inferior y cualquier `FormatStyle`. No disponible en tvOS. |
 | `GlassCard` | Contenedor con margen interior sobre vidrio. |
 | `GlassTextField` | Campo de texto con SF Symbol opcional y anillo de foco. |
 | `GlassSearchBar` | Campo de búsqueda en cápsula con botones para borrar y Cancel. |
 | `GlassTabBar` | Barra de pestañas flotante, genérica sobre cualquier selección `Hashable`; el builder admite `if` y `for`. |
+| `GlassTabBarAction` | Botón redondo después de las pestañas para la acción principal de la pantalla. |
+| `GlassTab.badge(_:)` | Número o etiqueta corta en una cápsula roja sobre el icono de una pestaña; un número 0 la oculta. |
 | `GlassNavigationBar` | Barra de título flotante con elementos a la izquierda y a la derecha. |
 | `glassSheet(isPresented:material:content:)` | Hoja inferior flotante; se cierra arrastrando, tocando fuera o con el gesto de escape de accesibilidad. No disponible en tvOS. |
+| `glassGradient(_:direction:intensity:material:in:interactive:)` | Vidrio con tinte degradado, en los dos caminos de renderizado. |
+| `glassHighlight(_:color:in:)` | Luz animada shimmer, pulse o breathe sobre el vidrio; desactivada con «Reducir movimiento». |
 | `GlassTheme`, `GlassRenderingMode` | Valores de entorno para el material, la forma y la sombra predeterminados, y para forzar la alternativa. |
+| `GlassPreset` | 14 temas con nombre visible, para selectores y pantallas de ajustes. |
+| `GlassCodeExporter` | Escribe temas, materiales, formas y colores como código Swift que usa este paquete. |
 
 ## Demo
 
 [`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) es una app de iOS con una galería de
-componentes, barras de pestañas, una hoja y una comparación entre vidrio nativo y alternativa.
-Abre `LiquidGlassDemo.xcodeproj`, elige un simulador de iPhone y ejecútala; el
-[README de la demo](Examples/LiquidGlassDemo/README.md) describe sus pantallas y argumentos de
-arranque. La CI la compila en cada pull request y en cada push a main.
+componentes, barras de pestañas, una hoja, una comparación entre vidrio nativo y alternativa, y
+un playground que ajusta un tema y muestra su código. Abre `LiquidGlassDemo.xcodeproj`, elige un
+simulador de iPhone y ejecútala; el [README de la demo](Examples/LiquidGlassDemo/README.md)
+describe sus pantallas y argumentos de arranque. La CI la compila en cada pull request y en cada
+push a main.
 
-| Hoja (claro) | Barras de pestañas (oscuro) | Vidrio nativo y alternativa (oscuro) |
-| --- | --- | --- |
-| ![Hoja de vidrio, claro](docs/images/sheet-light.png) | ![Barras de pestañas, oscuro](docs/images/tabs-dark.png) | ![Vidrio nativo y alternativa, oscuro](docs/images/compare-dark.png) |
+| Hoja (claro) | Barras de pestañas (oscuro) | Playground (claro) | Vidrio nativo y alternativa (oscuro) |
+| --- | --- | --- | --- |
+| ![Hoja de vidrio, claro](docs/images/sheet-light.png) | ![Barras de pestañas, oscuro](docs/images/tabs-dark.png) | ![Playground, claro](docs/images/playground-light.png) | ![Vidrio nativo y alternativa, oscuro](docs/images/compare-dark.png) |
 
 <sub>Capturas de la app de demo en el simulador de iOS 27, tomadas con
 [`scripts/screenshots.sh`](scripts/screenshots.sh).</sub>
@@ -265,6 +322,11 @@ Las guías están en inglés.
   — qué ven los usuarios en cada sistema y cómo forzar la alternativa.
 - [Theming](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/theming)
   — temas predefinidos, temas propios y materiales por componente.
+- [Adding Controls and Effects](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/addingcontrolsandeffects)
+  — el interruptor y el control deslizante de vidrio, el vidrio degradado, los destellos y el botón
+  de acción de la barra de pestañas.
+- [Tuning and Exporting a Look](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/tuningandexportingalook)
+  — elige un preajuste, ajusta un tema en tiempo de ejecución y cópialo como Swift.
 
 ## Requisitos
 
@@ -282,10 +344,11 @@ el camino nativo se compila con el SDK de OS 26.
 
 ## Arquitectura
 
-- `Sources/LiquidGlassKit/Core` contiene los tipos de valor: `GlassMaterial`, `GlassShape`,
-  `GlassTheme` y `GlassRenderingMode`.
+- `Sources/LiquidGlassKit/Core` contiene los tipos de valor `GlassMaterial`, `GlassShape`,
+  `GlassTheme`, `GlassPreset` y `GlassRenderingMode`, además de `GlassCodeExporter`.
 - `Sources/LiquidGlassKit/Surface` contiene `glassSurface` y `GlassGroup`, los únicos lugares
-  que llaman a la API de vidrio de SwiftUI.
+  que llaman a la API de vidrio de SwiftUI, y los modificadores de degradado y destello
+  construidos sobre `glassSurface`.
 - `Sources/LiquidGlassKit/Components` construye cada control sobre `glassSurface`, de modo que el
   tema y el modo de renderizado se aplican a todos.
 
@@ -311,14 +374,16 @@ xcodebuild test -scheme LiquidGlassKit \
 ```
 
 Las suites de Swift Testing cubren la lógica de materiales y formas, la limitación de los
-valores del tema, la resolución del modo de renderizado, el builder de pestañas y los umbrales
-de cierre de la hoja. Los renderizados fuera de pantalla en el camino alternativo comprueban que
-cada componente dibuja su vidrio con el material del tema, que un material explícito tiene
-prioridad sobre el tema, que las etiquetas sobre vidrio oscuro son blancas y las destructivas,
-rojas, que la hoja oscurece el fondo solo mientras se muestra y que «Reducir transparencia»
-dibuja un fondo opaco. La CI ejecuta la suite en macOS, en un simulador de iOS 26 y en un
-simulador de iOS 18.6, donde solo existe la alternativa, y compila la biblioteca para cada
-plataforma de `Package.swift`.
+valores del tema y del degradado (incluido NaN), la resolución del modo de renderizado, el
+builder de pestañas, los umbrales de cierre de la hoja, el ajuste del control deslizante con
+pasos y rangos inusuales, el ritmo de los destellos, la búsqueda de preajustes y la salida del
+exportador, de la que se compilan tres ejemplos en el target de pruebas. Los renderizados fuera
+de pantalla en el camino alternativo comprueban que cada componente dibuja su vidrio con el
+material del tema, que un material explícito tiene prioridad sobre el tema, que las etiquetas
+sobre vidrio oscuro son blancas y las destructivas, rojas, que la hoja oscurece el fondo solo
+mientras se muestra y que «Reducir transparencia» dibuja un fondo opaco. La CI ejecuta la suite
+en macOS, en un simulador de iOS 26 y en un simulador de iOS 18.6, donde solo existe la
+alternativa, y compila la biblioteca para cada plataforma de `Package.swift`.
 
 `ImageRenderer` no captura el desenfoque y el vidrio nativo solo en parte, así que las pruebas
 comprueban el tinte y la cobertura de la alternativa y que cada componente se renderiza de forma
@@ -326,7 +391,7 @@ distinta en el camino nativo que en el alternativo; no comprueban el aspecto fin
 
 ## Hoja de ruta
 
-Todavía no hay ninguna versión planificada después de 2.0.0. Los informes de errores y las
+Todavía no hay ninguna versión planificada después de 2.1.0. Los informes de errores y las
 solicitudes de funciones se gestionan en los [issues](https://github.com/muhittincamdali/LiquidGlassKit/issues).
 
 ## Contribuir

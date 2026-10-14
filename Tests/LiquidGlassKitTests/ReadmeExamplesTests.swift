@@ -90,6 +90,48 @@ private struct ThemedApp: View {
 }
 #endif
 
+// MARK: - README: Add a switch, a slider and effects
+
+#if !os(tvOS)
+private struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+#endif
+
+// MARK: - README: Presets and exporting
+
+@Suite("README exporter example")
+struct ReadmeExporterExampleTests {
+    @Test func exportedViewKeepsTheAdjustedTheme() {
+        var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+        theme.shadowRadius = 4
+        let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+        #expect(theme.material == GlassTheme.ocean.material)
+        #expect(source.contains("struct PromoCard: View {"))
+        #expect(source.contains("shadowRadius: 4"))
+        #expect(!source.contains(".glassTheme(.ocean)"), "an adjusted preset is written as an initializer")
+    }
+}
+
 // MARK: - DocC: LiquidGlassKit landing page
 
 private struct NowPlaying: View {
@@ -228,6 +270,143 @@ private struct LibraryScreenSnippets: View {
 }
 #endif
 
+// MARK: - DocC: Adding Controls and Effects
+
+#if !os(tvOS)
+private struct NotificationSettings: View {
+    @State private var isEnabled = true
+    @State private var showsPreviews = false
+
+    var body: some View {
+        GlassCard {
+            VStack(spacing: 14) {
+                Toggle("Notifications", isOn: $isEnabled)
+                    .toggleStyle(.liquidGlass)
+                Toggle("Show Previews", isOn: $showsPreviews)
+                    .toggleStyle(.liquidGlass(tint: .green))
+            }
+        }
+    }
+}
+
+private struct PlaybackSettings: View {
+    @State private var volume = 0.6
+    @State private var rate = 1.0
+
+    var body: some View {
+        GlassCard {
+            VStack(spacing: 14) {
+                GlassSlider("Volume", value: $volume, format: .percent)
+                GlassSlider("Speed", value: $rate, in: 0.5...2, step: 0.25)
+            }
+        }
+    }
+}
+#endif
+
+private struct SunsetBadge: View {
+    var body: some View {
+        Label("Golden hour", systemImage: "sun.horizon")
+            .padding()
+            .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+    }
+}
+
+private struct UpgradeButton: View {
+    var body: some View {
+        GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+            .glassHighlight(.shimmer, in: .capsule)
+    }
+}
+
+private struct InboxTabs: View {
+    enum Section: Hashable { case inbox, archive }
+    @State private var section = Section.inbox
+    @State private var unreadCount = 3
+
+    var body: some View {
+        GlassTabBar(
+            selection: $section,
+            action: GlassTabBarAction("New Message", systemImage: "square.and.pencil") {}
+        ) {
+            GlassTab("Inbox", systemImage: "tray", value: Section.inbox)
+                .badge(unreadCount)
+            GlassTab("Archive", systemImage: "archivebox", value: Section.archive)
+        }
+    }
+}
+
+// MARK: - DocC: Tuning and Exporting a Look
+
+private struct PresetSnippet: View {
+    var body: some View {
+        SettingsView()
+            .glassTheme(.aqua)
+    }
+}
+
+private struct AppearancePicker: View {
+    @AppStorage("glassStyle") private var styleName = "Standard"
+
+    var body: some View {
+        VStack {
+            Picker("Style", selection: $styleName) {
+                ForEach(GlassPreset.all) { preset in
+                    Text(preset.name).tag(preset.name)
+                }
+            }
+            GlassCard { Text("Preview") }
+        }
+        .glassTheme(GlassPreset.named(styleName)?.theme ?? .standard)
+    }
+}
+
+#if !os(tvOS)
+private struct ThemeTuner: View {
+    @State private var theme = GlassTheme.ocean
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard { Text("Preview") }
+            GlassSlider("Shadow", value: $theme.shadowRadius.asDouble, in: 0...30, step: 1)
+            GlassSlider("Edge", value: $theme.strokeOpacity, format: .percent)
+        }
+        .glassTheme(theme)
+    }
+}
+
+extension CGFloat {
+    /// Lets a `CGFloat` property drive a `Double` slider.
+    fileprivate var asDouble: Double {
+        get { Double(self) }
+        set { self = CGFloat(newValue) }
+    }
+}
+#endif
+
+@Suite("Exporter documentation")
+struct ExporterDocumentationTests {
+    /// The values quoted in the article and in GlassCodeExporter's documentation.
+    @Test func quotedOutputsMatch() {
+        let exporter = GlassCodeExporter()
+        #expect(exporter.themeArgument(for: .aqua) == ".aqua")
+        #expect(exporter.code(for: GlassTheme(material: .tinted(.teal))) == "GlassTheme(material: .tinted(.teal))")
+        #expect(exporter.code(for: GlassShape.topRounded(24)) == ".topRounded(24)")
+        #expect(exporter.code(for: GlassMaterial.tinted(.blue)) == ".tinted(.blue)")
+        #expect(exporter.code(for: GlassTheme(shadowRadius: 4)) == "GlassTheme(shadowRadius: 4)")
+    }
+
+    @Test func viewCodeSnippetNamesTheView() {
+        let theme = GlassTheme.ocean
+        let exporter = GlassCodeExporter(indentWidth: 2)
+        let source = exporter.viewCode(named: "Promo Card", theme: theme, renderingMode: .fallback)
+        #expect(source.contains("struct PromoCard: View {"))
+        #expect(source.contains("\n  var body: some View {"))
+        #expect(source.contains(".glassTheme(.ocean)"))
+        #expect(source.contains(".glassRenderingMode(.fallback)"))
+    }
+}
+
 // MARK: - Render each example once
 
 @MainActor
@@ -241,12 +420,21 @@ struct ReadmeExamplesTests {
             AnyView(NowPlaying()),
             AnyView(GettingStartedSnippets()),
             AnyView(SettingsView()),
-            AnyView(ThemingSnippets())
+            AnyView(ThemingSnippets()),
+            AnyView(SunsetBadge()),
+            AnyView(UpgradeButton()),
+            AnyView(InboxTabs()),
+            AnyView(PresetSnippet()),
+            AnyView(AppearancePicker())
         ]
         #if !os(tvOS)
         views.append(AnyView(ThemedApp()))
         views.append(AnyView(LibraryScreen()))
         views.append(AnyView(LibraryScreenSnippets()))
+        views.append(AnyView(PlayerSettings()))
+        views.append(AnyView(NotificationSettings()))
+        views.append(AnyView(PlaybackSettings()))
+        views.append(AnyView(ThemeTuner()))
         #endif
         return views
     }

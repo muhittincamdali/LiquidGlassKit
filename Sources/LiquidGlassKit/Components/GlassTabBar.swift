@@ -5,6 +5,9 @@ public struct GlassTab<Value: Hashable>: Identifiable {
     public let title: String
     public let systemImage: String
     public let value: Value
+    /// Text shown in a small capsule over the icon, such as an unread count,
+    /// or `nil` for none. Set it with ``badge(_:)-(Int)`` or ``badge(_:)-(String?)``.
+    public private(set) var badge: String?
 
     public var id: Value { value }
 
@@ -17,9 +20,53 @@ public struct GlassTab<Value: Hashable>: Identifiable {
         self.systemImage = systemImage
         self.value = value
     }
+
+    /// This tab with `count` in a badge over its icon, or without a badge when
+    /// `count` is zero or less, as with SwiftUI's `badge(_:)`.
+    ///
+    /// ```swift
+    /// GlassTab("Inbox", systemImage: "tray", value: Screen.inbox)
+    ///     .badge(unreadCount)
+    /// ```
+    public func badge(_ count: Int) -> GlassTab {
+        badge(count > 0 ? count.formatted() : nil)
+    }
+
+    /// This tab with `label` in a badge over its icon, such as "New", or without
+    /// a badge when `label` is `nil` or empty. VoiceOver reads the label as the
+    /// tab's value.
+    public func badge(_ label: String?) -> GlassTab {
+        var tab = self
+        tab.badge = label?.isEmpty == false ? label : nil
+        return tab
+    }
 }
 
 extension GlassTab: Sendable where Value: Sendable {}
+
+/// A round button shown after the tabs of a ``GlassTabBar`` for the screen's primary action.
+public struct GlassTabBarAction {
+    /// Read by VoiceOver; not shown on screen.
+    public let title: String
+    /// SF Symbol name.
+    public let systemImage: String
+    /// The button's glass material, or `nil` for glass tinted with the accent color.
+    public let material: GlassMaterial?
+    /// Runs when the button is tapped.
+    public let action: () -> Void
+
+    public init(
+        _ title: String,
+        systemImage: String,
+        material: GlassMaterial? = nil,
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.systemImage = systemImage
+        self.material = material
+        self.action = action
+    }
+}
 
 /// Collects ``GlassTab`` values, with support for `if`, `if`/`else` and `for` loops.
 @resultBuilder
@@ -46,27 +93,87 @@ public enum GlassTabBuilder<Value: Hashable> {
 /// ```
 ///
 /// Tabs with duplicate values are shown once (the first occurrence wins).
+///
+/// A tab can show a count or a short label over its icon:
+///
+/// ```swift
+/// GlassTab("Inbox", systemImage: "tray", value: Screen.inbox)
+///     .badge(unreadCount)
+/// ```
+///
+/// Pass an ``GlassTabBarAction`` to show a round glass button for the screen's
+/// primary action, such as composing or adding, after the tabs:
+///
+/// ```swift
+/// GlassTabBar(selection: $screen, action: GlassTabBarAction("New Post", systemImage: "plus") {
+///     isComposing = true
+/// }) {
+///     GlassTab("Home", systemImage: "house", value: Screen.home)
+///     GlassTab("Search", systemImage: "magnifyingglass", value: Screen.search)
+/// }
+/// ```
 public struct GlassTabBar<Value: Hashable>: View {
     @Binding private var selection: Value
     private let tabs: [GlassTab<Value>]
     private let material: GlassMaterial?
     private let showsLabels: Bool
+    private let action: GlassTabBarAction?
 
     @Namespace private var indicator
 
+    /// Creates a tab bar without an action button.
+    ///
+    /// - Parameters:
+    ///   - selection: The selected tab's value.
+    ///   - material: The glass material, or `nil` to use the theme's material.
+    ///   - showsLabels: Shows each tab's title under its icon.
+    ///   - tabs: The tabs, in order.
     public init(
         selection: Binding<Value>,
         material: GlassMaterial? = nil,
         showsLabels: Bool = true,
         @GlassTabBuilder<Value> tabs: () -> [GlassTab<Value>]
     ) {
+        self.init(selection: selection, material: material, showsLabels: showsLabels, action: nil, tabs: tabs)
+    }
+
+    /// Creates a tab bar with a round action button after the tabs.
+    ///
+    /// - Parameters:
+    ///   - selection: The selected tab's value.
+    ///   - material: The glass material, or `nil` to use the theme's material.
+    ///   - showsLabels: Shows each tab's title under its icon.
+    ///   - action: A round button after the tabs, or `nil` to hide it, for
+    ///     example while a search field is focused.
+    ///   - tabs: The tabs, in order.
+    public init(
+        selection: Binding<Value>,
+        material: GlassMaterial? = nil,
+        showsLabels: Bool = true,
+        action: GlassTabBarAction?,
+        @GlassTabBuilder<Value> tabs: () -> [GlassTab<Value>]
+    ) {
         self._selection = selection
         self.material = material
         self.showsLabels = showsLabels
+        self.action = action
         self.tabs = Self.uniqued(tabs())
     }
 
     public var body: some View {
+        if let action {
+            GlassGroup(spacing: Self.actionSpacing) {
+                TabBarActionLayout(spacing: Self.actionSpacing) {
+                    tabCapsule
+                    actionButton(action)
+                }
+            }
+        } else {
+            tabCapsule
+        }
+    }
+
+    private var tabCapsule: some View {
         HStack(spacing: 0) {
             ForEach(tabs) { tab in
                 item(for: tab)
@@ -75,6 +182,23 @@ public struct GlassTabBar<Value: Hashable>: View {
         .padding(6)
         .glassSurface(material, in: .capsule)
     }
+
+    /// A circle as tall as the tab capsule, so both read as one bar.
+    private func actionButton(_ action: GlassTabBarAction) -> some View {
+        let material = action.material ?? .tinted(.accentColor)
+        return Button(action: action.action) {
+            Image(systemName: action.systemImage)
+                .font(.system(size: 20, weight: .semibold))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .foregroundStyle(material == .dark ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
+                .glassSurface(material, in: .circle, interactive: true)
+                .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(action.title)
+    }
+
+    static var actionSpacing: CGFloat { 10 }
 
     private func item(for tab: GlassTab<Value>) -> some View {
         let isSelected = tab.value == selection
@@ -87,6 +211,11 @@ public struct GlassTabBar<Value: Hashable>: View {
                 Image(systemName: tab.systemImage)
                     .font(.system(size: 18, weight: .medium))
                     .symbolVariant(isSelected ? .fill : .none)
+                    .overlay(alignment: .topTrailing) {
+                        if let badge = tab.badge {
+                            TabBadge(label: badge)
+                        }
+                    }
                 if showsLabels {
                     Text(tab.title)
                         .font(.caption2.weight(.medium))
@@ -107,11 +236,73 @@ public struct GlassTabBar<Value: Hashable>: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(tab.title)
+        .accessibilityValue(tab.badge ?? "")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     nonisolated static func uniqued(_ tabs: [GlassTab<Value>]) -> [GlassTab<Value>] {
         var seen = Set<Value>()
         return tabs.filter { seen.insert($0.value).inserted }
+    }
+}
+
+/// A red capsule with white text over a tab's icon, like the system tab bar's badges.
+///
+/// It is centered on the icon's top-trailing corner, grows with its text and is
+/// never narrower than it is tall, so a single digit reads as a circle.
+struct TabBadge: View {
+    let label: String
+
+    var body: some View {
+        Text(label)
+            .font(.caption2.weight(.semibold).monospacedDigit())
+            .foregroundStyle(.white)
+            .lineLimit(1)
+            .padding(.horizontal, 4)
+            .frame(minWidth: Self.minimumSide, minHeight: Self.minimumSide)
+            .background(.red, in: Capsule())
+            .fixedSize()
+            .alignmentGuide(.top) { $0.height / 2 }
+            .alignmentGuide(.trailing) { $0.width / 2 }
+            .accessibilityHidden(true)
+    }
+
+    static let minimumSide: CGFloat = 16
+}
+
+/// Lays out the tab capsule and, after it, a square as tall as the capsule.
+///
+/// An `HStack` cannot do this: the capsule's height depends on Dynamic Type,
+/// and a flexible square in a stack takes its side from the width it is offered.
+struct TabBarActionLayout: Layout {
+    let spacing: CGFloat
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        guard let frames = frames(in: proposal, subviews: subviews) else { return .zero }
+        return CGSize(width: frames.action.maxX, height: frames.bar.height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard let frames = frames(in: ProposedViewSize(bounds.size), subviews: subviews) else { return }
+        for (subview, frame) in zip(subviews, [frames.bar, frames.action]) {
+            subview.place(
+                at: CGPoint(x: bounds.minX + frame.minX, y: bounds.minY + frame.minY),
+                proposal: ProposedViewSize(frame.size)
+            )
+        }
+    }
+
+    /// The capsule from the leading edge, then the square after `spacing`.
+    private func frames(in proposal: ProposedViewSize, subviews: Subviews) -> (bar: CGRect, action: CGRect)? {
+        guard subviews.count == 2 else { return nil }
+        let side = subviews[0].sizeThatFits(ProposedViewSize(width: proposal.width, height: nil)).height
+        let barWidth: CGFloat
+        if let width = proposal.width {
+            barWidth = max(0, width - spacing - side)
+        } else {
+            barWidth = subviews[0].sizeThatFits(.unspecified).width
+        }
+        let bar = CGRect(x: 0, y: 0, width: barWidth, height: side)
+        return (bar, CGRect(x: barWidth + spacing, y: 0, width: side, height: side))
     }
 }

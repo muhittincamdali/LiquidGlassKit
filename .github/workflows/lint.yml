@@ -1,0 +1,30 @@
+# SwiftLint with the rules in .swiftlint.yml. The shared Swift workflow (ci.yml) builds and
+# tests but does not lint, so warnings would otherwise only show up locally.
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  swiftlint:
+    name: SwiftLint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    container: ghcr.io/realm/swiftlint:0.63.2@sha256:8db376ff8a26e56fa506b56b8c70ea9c5583dc52d5746ce23b6c2c4d4ee00e31
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # --strict fails the job on warnings too, so new code stays at zero.
+      - run: swiftlint lint --strict --reporter github-actions-logging Sources Tests Examples

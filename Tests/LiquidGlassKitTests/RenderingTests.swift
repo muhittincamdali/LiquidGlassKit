@@ -27,9 +27,7 @@ import Testing
 struct RenderingTests {
     private static let size = CGSize(width: 320, height: 120)
 
-    /// Without the tint overlay the untinted blur renders almost neutral gray
-    /// (red and blue within a few units), so a clear margin is required.
-    private static let tintMargin = 20
+    private static let tintMargin = Bitmap.tintMargin
 
     /// Smallest glass area, in pixels, that counts as "the component drew its
     /// glass". The smallest surface here, the unpadded "Grouped" capsule, tints
@@ -37,15 +35,7 @@ struct RenderingTests {
     private static let minimumGlassArea = 250
 
     private func render(_ view: some View, mode: GlassRenderingMode, canvas: Color? = .white) -> Bitmap? {
-        let renderer = ImageRenderer(
-            content: view
-                .glassRenderingMode(mode)
-                .environment(\.colorScheme, .light)
-                .frame(width: Self.size.width, height: Self.size.height)
-                .background(canvas ?? .clear)
-        )
-        renderer.scale = 1
-        return renderer.cgImage.map(Bitmap.init)
+        Bitmap.render(view, size: Self.size, mode: mode, canvas: canvas)
     }
 
     /// Components that take their material from the theme.
@@ -81,7 +71,9 @@ struct RenderingTests {
         ]
         #if !os(tvOS)
         components.append(
-            ("sheet", AnyView(Color.clear.glassSheet(isPresented: .constant(true), material: material) { Text("Sheet") }))
+            ("sheet", AnyView(Color.clear.glassSheet(isPresented: .constant(true), material: material) {
+                Text("Sheet")
+            }))
         )
         #endif
         return components
@@ -102,7 +94,10 @@ struct RenderingTests {
             }
             let fallback = try #require(render(view, mode: .fallback), "\(name) did not render on the fallback path")
             let changed = bitmap.countDifferences(from: fallback)
-            #expect(changed > Self.minimumGlassArea, "\(name) drew the fallback on the native path (\(changed) pixels differ)")
+            #expect(
+                changed > Self.minimumGlassArea,
+                "\(name) drew the fallback on the native path (\(changed) pixels differ)"
+            )
         }
     }
 
@@ -193,6 +188,24 @@ struct RenderingTests {
         #expect(red != (try fallbackCenterPixel(.tinted(.red))), "should differ from the tinted blur")
     }
 
+    /// With Increase Contrast the fallback outlines the shape in the primary
+    /// color (black in light mode); the default white edge highlight draws no
+    /// dark pixels on a white canvas.
+    @Test(arguments: [ColorSchemeContrast.standard, .increased])
+    func increaseContrastOutlinesTheFallback(contrast: ColorSchemeContrast) throws {
+        let surface = Color.clear
+            .frame(width: 200, height: 60)
+            .glassSurface(.clear, in: .capsule)
+            .environment(\._colorSchemeContrast, contrast)
+        let bitmap = try #require(render(surface, mode: .fallback))
+        let dark = bitmap.count(where: { max($0.red, $0.green, $0.blue) < 160 })
+        if contrast == .increased {
+            #expect(dark > 300, "outline drew \(dark) dark pixels")
+        } else {
+            #expect(dark == 0, "standard contrast drew \(dark) dark pixels")
+        }
+    }
+
     /// A surface that fills the whole frame, rendered without a canvas so that
     /// its own opacity can be read.
     private func fallbackCenterPixel(
@@ -208,15 +221,10 @@ struct RenderingTests {
     }
 
     // Green and blue tints, because on macOS `ImageRenderer` draws text fields as a
-    // red and yellow placeholder. Measured on the white canvas: a green tint renders
-    // about (192, 224, 192), a blue one about (176, 208, 224), untinted glass is gray.
-    private static func isGreenGlass(_ pixel: Bitmap.Pixel) -> Bool {
-        Int(pixel.green) - Int(pixel.red) > tintMargin && Int(pixel.green) - Int(pixel.blue) > tintMargin
-    }
+    // red and yellow placeholder.
+    private static func isGreenGlass(_ pixel: Bitmap.Pixel) -> Bool { Bitmap.isGreen(pixel) }
 
-    private static func isBlueGlass(_ pixel: Bitmap.Pixel) -> Bool {
-        Int(pixel.blue) - Int(pixel.red) > tintMargin
-    }
+    private static func isBlueGlass(_ pixel: Bitmap.Pixel) -> Bool { Bitmap.isBlue(pixel) }
 
     private static func drawsNativeGlass(_ mode: GlassRenderingMode) -> Bool {
         mode.resolved(nativeAvailable: GlassRenderingMode.isNativeGlassAvailable) == .native

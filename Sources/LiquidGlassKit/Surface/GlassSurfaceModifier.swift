@@ -12,7 +12,8 @@ extension View {
     /// On OS 26 this calls SwiftUI's `glassEffect(_:in:)`; elsewhere it draws a
     /// `Material` blur with a tint, an edge highlight and a shadow taken from the
     /// current ``GlassTheme``. When the user turns on *Reduce Transparency*, the
-    /// fallback path draws an opaque background instead of a blur.
+    /// fallback path draws an opaque background instead of a blur; with
+    /// *Increase Contrast*, it outlines the shape in the primary color.
     ///
     /// - Parameters:
     ///   - material: The glass material, or `nil` to use the theme's material.
@@ -37,6 +38,7 @@ struct GlassSurfaceModifier: ViewModifier {
     @Environment(\.glassTheme) private var theme
     @Environment(\.glassRenderingMode) private var renderingMode
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.colorSchemeContrast) private var contrast
 
     func body(content: Content) -> some View {
         let material = material ?? theme.material
@@ -64,20 +66,36 @@ struct GlassSurfaceModifier: ViewModifier {
                 }
             }
             .overlay {
-                outline
-                    .stroke(
-                        LinearGradient(
-                            colors: [.white.opacity(theme.strokeOpacity), .white.opacity(theme.strokeOpacity * 0.2)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-                    .allowsHitTesting(false)
+                edge(outline).allowsHitTesting(false)
             }
             .contentShape(outline)
             .shadow(color: .black.opacity(theme.shadowOpacity), radius: theme.shadowRadius, y: theme.shadowRadius / 3)
     }
+
+    /// A white highlight that fades along the edge, or a solid outline in the
+    /// primary color when the user asks for more contrast, because the white
+    /// highlight all but disappears over light content.
+    @ViewBuilder
+    private func edge(_ outline: AnyShape) -> some View {
+        if contrast == .increased {
+            outline.stroke(
+                .primary.opacity(Self.increasedContrastEdgeOpacity),
+                lineWidth: Self.increasedContrastEdgeWidth
+            )
+        } else {
+            outline.stroke(
+                LinearGradient(
+                    colors: [.white.opacity(theme.strokeOpacity), .white.opacity(theme.strokeOpacity * 0.2)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                lineWidth: 1
+            )
+        }
+    }
+
+    static let increasedContrastEdgeOpacity = 0.5
+    static let increasedContrastEdgeWidth: CGFloat = 1.5
 }
 
 /// Applies SwiftUI's native glass when the OS provides it, otherwise `fallback`.

@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
+<!-- i18n-source: README.md@1fdc5fa59b8a5bbcccee03211df035b12b5c5f6f status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-tr-light.svg" alt="LiquidGlassKit: SwiftUI için Liquid Glass yüzeyler ve kontroller: OS 26'da yerel cam, iOS 17'ye kadar Material ile yedek görünüm."></picture></p>
@@ -9,7 +9,7 @@
 
 <p align="center">
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml/badge.svg" alt="CI durumu"></a>
-<a href="https://github.com/muhittincamdali/LiquidGlassKit/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg" alt="Son sürüm: v2.0.0"></picture></a>
+<a href="https://github.com/muhittincamdali/LiquidGlassKit/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg" alt="Son sürüm: v2.1.0"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-light.svg" alt="Desteklenen platformlar: iOS 17+ · macOS 14+ · tvOS 17+ · watchOS 10+ · visionOS 1+"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-light.svg" alt="Dil sürümü: Swift 6.0+"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-light.svg" alt="Lisans: MIT"></picture></a>
@@ -41,13 +41,19 @@ yazarsınız.
 - **Tek modifier, iki yol** — `glassSurface` çalışma anında yerel camı ya da `Material`
   tabanlı yedek yolu (fallback) seçer; her yerde aynı görünümü istediğinizde
   `glassRenderingMode(.fallback)` yedek yolu zorunlu kılar.
-- **Hazır kontroller** — düğmeler, kartlar, metin alanları, arama çubuğu, yüzen sekme çubuğu,
-  gezinme çubuğu ve alttan açılan sayfa (bottom sheet); hepsi `glassSurface` ile çizilir.
-- **Temalar** — `GlassTheme` bütün bir görünüm hiyerarşisinin materyalini, şeklini, gölgesini
-  ve kenar parlamasını belirler; her bileşen yine de kendi materyalini alabilir.
+- **Hazır kontroller** — düğmeler, bir anahtar (switch) stili, bir kaydırıcı (slider), kartlar,
+  metin alanları, arama çubuğu, isteğe bağlı eylem düğmesi ve sekme rozetleri olan yüzen sekme
+  çubuğu, gezinme çubuğu ve alttan açılan sayfa (bottom sheet); hepsi `glassSurface` ile çizilir.
+- **Efektler** — gradyan tonlu cam ile animasyonlu shimmer, pulse ve breathe parlamaları; iki
+  yolda da çalışır.
+- **Temalar ve hazır ayarlar** — `GlassTheme` bütün bir görünüm hiyerarşisinin materyalini,
+  şeklini, gölgesini ve kenar parlamasını belirler; `GlassPreset` 14 hazır temaya ad verir;
+  `GlassCodeExporter` çalışma anında ayarlanmış bir temayı yeniden Swift koduna çevirir.
 - **Erişilebilirlik** — Şeffaflığı Azalt (Reduce Transparency) açıkken yedek yol opak bir arka
-  plan çizer, dekoratif simgeler VoiceOver'dan gizlenir, sekme çubuğu seçili sekmeyi bildirir ve
-  alt sayfa erişilebilirlik kapatma (escape) hareketiyle kapanır.
+  plan, Kontrastı Artır (Increase Contrast) açıkken daha belirgin bir kenar çizer; Hareketi Azalt
+  (Reduce Motion) açıkken parlamalar durur; anahtar ve kaydırıcı SwiftUI'ın VoiceOver davranışını
+  korur; sekme çubuğu seçili sekmeyi bildirir ve alt sayfa erişilebilirlik kapatma (escape)
+  hareketiyle kapanır.
 - **Ad çakışması yok** — API, SwiftUI'ın kendi adlarını (`glassEffect`,
   `GlassEffectContainer`, `GlassButtonStyle`) kullanmaz; iki modül aynı dosyada içe aktarılabilir.
 - **Test edilen çizim** — Swift Testing paketleri CI'da macOS'ta ve iOS simülatörlerinde çalışır;
@@ -64,7 +70,7 @@ Xcode'da **File › Add Package Dependencies…** menüsünü seçin ve depo adr
 https://github.com/muhittincamdali/LiquidGlassKit.git
 ```
 
-Bağımlılık kuralını (**Dependency Rule**) 2.0.0'dan başlayan **Up to Next Major Version**
+Bağımlılık kuralını (**Dependency Rule**) 2.1.0'dan başlayan **Up to Next Major Version**
 olarak bırakın ve **Add Package** düğmesine tıklayın. Sonraki pencerede `LiquidGlassKit` için
 uygulamanızın hedefini (target) seçin ve yeniden **Add Package** düğmesine tıklayın.
 
@@ -113,7 +119,7 @@ Ya da `Package.swift` dosyanızdaki `dependencies` listesine ekleyin:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.1.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
@@ -198,8 +204,41 @@ struct RootView: View {
 ```
 
 `GlassTabBar` herhangi bir `Hashable` seçim türüyle çalışır; builder'ı `if` ve `for`
-destekler. Alt sayfa aşağı sürüklendiğinde, karartılmış arka plana dokunulduğunda ya da
-erişilebilirlik kapatma hareketiyle kapanır. tvOS'ta kullanılamaz.
+destekler. Bir sekme, `.badge(_:)` ile simgesinin üzerinde bir sayı ya da kısa bir etiket
+gösterir; örneğin `GlassTab("Profile", systemImage: "person", value: Screen.profile).badge(2)`.
+Alt sayfa aşağı sürüklendiğinde, karartılmış arka plana dokunulduğunda ya da erişilebilirlik
+kapatma hareketiyle kapanır. tvOS'ta kullanılamaz.
+
+### Anahtar, kaydırıcı ve efektler ekleyin
+
+```swift
+struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+```
+
+Anahtar stili `Toggle`'ın erişilebilirlik davranışını korur; VoiceOver kullanıcıları
+kaydırıcıyı her seferinde bir adım ayarlar. Hareketi Azalt açıkken parlamalar çizilmez.
+`GlassSlider` tvOS'ta kullanılamaz.
 
 ### Tüm görünümlere tema verin ve çizim yolunu seçin
 
@@ -213,6 +252,15 @@ struct ThemedApp: View {
 }
 ```
 
+`GlassPreset.all` içindeki 14 hazır ayardan biriyle başlayın, onu ayarlayın ve sonucu
+projenize yapıştırabileceğiniz bir görünüme dönüştürün:
+
+```swift
+var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+theme.shadowRadius = 4
+let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+```
+
 ### API'ye genel bakış
 
 | API | Ne yapar |
@@ -220,25 +268,34 @@ struct ThemedApp: View {
 | `glassSurface(_:in:interactive:)` | Herhangi bir görünümün arkasına cam koyar. OS 26'da yerel `glassEffect`, diğer sistemlerde `Material` yedek yolu. |
 | `GlassGroup` | OS 26'da yakındaki cam şekillerin birbirine karışması için `GlassEffectContainer` ile sarar; diğer sistemlerde içeriği olduğu gibi geçirir. |
 | `GlassButton`, `.buttonStyle(.liquidGlass)` | Üç boyutta kapsül biçimli cam düğmeler; basılı, devre dışı ve yıkıcı (destructive) durumlarıyla. |
+| `.toggleStyle(.liquidGlass)` | Açıkken tint rengiyle dolan cam izli anahtar; `Toggle`'ın erişilebilirliğini korur. |
+| `GlassSlider` | Adımları alt sınırdan sayılan ve herhangi bir `FormatStyle` alan, cam izli kaydırıcı. tvOS'ta yoktur. |
 | `GlassCard` | Cam üzerinde, iç boşluklu kapsayıcı. |
 | `GlassTextField` | İsteğe bağlı SF Symbol ve odak halkası olan metin alanı. |
 | `GlassSearchBar` | Temizleme ve Cancel düğmeleri olan kapsül biçimli arama alanı. |
 | `GlassTabBar` | Herhangi bir `Hashable` seçim türüyle çalışan yüzen sekme çubuğu; builder'ı `if` ve `for` destekler. |
+| `GlassTabBarAction` | Ekranın ana eylemi için sekmelerden sonra gelen yuvarlak düğme. |
+| `GlassTab.badge(_:)` | Sekme simgesinin üzerinde kırmızı kapsül içinde sayı ya da kısa etiket; sıfır sayı rozeti gizler. |
 | `GlassNavigationBar` | Sol ve sağ öğeleri olan yüzen başlık çubuğu. |
 | `glassSheet(isPresented:material:content:)` | Yüzen alt sayfa; sürükleyerek, dışına dokunarak ya da erişilebilirlik kapatma hareketiyle kapanır. tvOS'ta yoktur. |
+| `glassGradient(_:direction:intensity:material:in:interactive:)` | İki çizim yolunda da gradyan tonlu cam. |
+| `glassHighlight(_:color:in:)` | Cam üzerinde animasyonlu shimmer, pulse ya da breathe parlaması; Hareketi Azalt açıkken kapalıdır. |
 | `GlassTheme`, `GlassRenderingMode` | Varsayılan materyal/şekil/gölge ve yedek yolu zorunlu kılmak için environment değerleri. |
+| `GlassPreset` | Seçiciler ve ayar ekranları için görünen adlarıyla 14 hazır tema. |
+| `GlassCodeExporter` | Temaları, materyalleri, şekilleri ve renkleri bu paketi kullanan Swift koduna dönüştürür. |
 
 ## Demo
 
 [`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo); bileşen galerisi, sekme çubukları,
-alt sayfa ve yerel cam ile yedek görünümün karşılaştırmasını içeren bir iOS uygulamasıdır.
-`LiquidGlassDemo.xcodeproj` dosyasını açın, bir iPhone simülatörü seçin ve çalıştırın;
-ekranlar ve başlatma argümanları [demonun README dosyasında](Examples/LiquidGlassDemo/README.md)
-listelenir. CI uygulamayı her pull request'te ve main'e yapılan her push'ta derler.
+alt sayfa, yerel cam ile yedek görünümün karşılaştırması ve bir temayı ayarlayıp kodunu gösteren
+bir oyun alanı (playground) içeren bir iOS uygulamasıdır. `LiquidGlassDemo.xcodeproj` dosyasını
+açın, bir iPhone simülatörü seçin ve çalıştırın; ekranlar ve başlatma argümanları
+[demonun README dosyasında](Examples/LiquidGlassDemo/README.md) listelenir. CI uygulamayı her
+pull request'te ve main'e yapılan her push'ta derler.
 
-| Alt sayfa (açık) | Sekme çubukları (koyu) | Yerel cam ve yedek görünüm (koyu) |
-| --- | --- | --- |
-| ![Cam alt sayfa, açık](docs/images/sheet-light.png) | ![Sekme çubukları, koyu](docs/images/tabs-dark.png) | ![Yerel cam ve yedek görünüm, koyu](docs/images/compare-dark.png) |
+| Alt sayfa (açık) | Sekme çubukları (koyu) | Oyun alanı (açık) | Yerel cam ve yedek görünüm (koyu) |
+| --- | --- | --- | --- |
+| ![Cam alt sayfa, açık](docs/images/sheet-light.png) | ![Sekme çubukları, koyu](docs/images/tabs-dark.png) | ![Oyun alanı, açık](docs/images/playground-light.png) | ![Yerel cam ve yedek görünüm, koyu](docs/images/compare-dark.png) |
 
 <sub>Ekran görüntüleri iOS 27 simülatöründe çalışan demo uygulamasından
 [`scripts/screenshots.sh`](scripts/screenshots.sh) ile alındı.</sub>
@@ -265,6 +322,10 @@ Rehberler İngilizcedir.
   — her işletim sistemindeki kullanıcının ne gördüğü ve yedek yolun nasıl zorunlu kılınacağı.
 - [Theming](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/theming)
   — hazır temalar, özel temalar ve bileşen başına materyaller.
+- [Adding Controls and Effects](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/addingcontrolsandeffects)
+  — cam anahtar ve kaydırıcı, gradyan cam, parlamalar ve sekme çubuğunun eylem düğmesi.
+- [Tuning and Exporting a Look](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/tuningandexportingalook)
+  — bir hazır ayar seçin, temayı çalışma anında ayarlayın ve Swift kodu olarak kopyalayın.
 
 ## Gereksinimler
 
@@ -283,9 +344,10 @@ Paket, eski dağıtım hedefleri (deployment target) için bile Xcode 26 veya ü
 ## Mimari
 
 - `Sources/LiquidGlassKit/Core` değer tiplerini içerir: `GlassMaterial`, `GlassShape`,
-  `GlassTheme` ve `GlassRenderingMode`.
+  `GlassTheme`, `GlassPreset` ve `GlassRenderingMode`; ayrıca `GlassCodeExporter`.
 - `Sources/LiquidGlassKit/Surface`, SwiftUI'ın cam API'sini çağıran tek yerler olan
-  `glassSurface` ve `GlassGroup`'u içerir.
+  `glassSurface` ve `GlassGroup`'u, bir de `glassSurface` üzerine kurulan gradyan ve parlama
+  modifier'larını içerir.
 - `Sources/LiquidGlassKit/Components` her kontrolü `glassSurface` üzerine kurar; böylece tema ve
   çizim modu hepsine uygulanır.
 
@@ -310,14 +372,16 @@ xcodebuild test -scheme LiquidGlassKit \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-Swift Testing paketleri materyal ve şekil mantığını, tema değerlerinin sınırlandırılmasını,
-çizim modunun çözümlenmesini, sekme builder'ını ve alt sayfanın kapanma eşiklerini kapsar. Yedek
-yoldaki ekran dışı çizimler şunları kontrol eder: her bileşen camını temanın materyaliyle çizer,
-açıkça verilen bir materyal temanın önüne geçer, koyu cam üzerindeki etiketler beyaz, yıkıcı
-işlem etiketleri kırmızıdır, alt sayfa arka planı yalnızca açıkken karartır ve Şeffaflığı Azalt
-açıkken opak bir arka plan çizilir. CI test paketini macOS'ta, bir iOS 26 simülatöründe ve
-yalnızca yedek yolun bulunduğu bir iOS 18.6 simülatöründe çalıştırır; kütüphaneyi de
-`Package.swift` içindeki her platform için derler.
+Swift Testing paketleri materyal ve şekil mantığını, tema ve gradyan değerlerinin (NaN dahil)
+sınırlandırılmasını, çizim modunun çözümlenmesini, sekme builder'ını, alt sayfanın kapanma
+eşiklerini, sıra dışı adım ve aralıklarda kaydırıcının değere oturmasını, parlama zamanlamasını,
+hazır ayar aramasını ve dışa aktarıcının çıktısını kapsar; bu çıktının üç örneği test hedefinde
+derlenir. Yedek yoldaki ekran dışı çizimler şunları kontrol eder: her bileşen camını temanın
+materyaliyle çizer, açıkça verilen bir materyal temanın önüne geçer, koyu cam üzerindeki
+etiketler beyaz, yıkıcı işlem etiketleri kırmızıdır, alt sayfa arka planı yalnızca açıkken
+karartır ve Şeffaflığı Azalt açıkken opak bir arka plan çizilir. CI test paketini macOS'ta, bir
+iOS 26 simülatöründe ve yalnızca yedek yolun bulunduğu bir iOS 18.6 simülatöründe çalıştırır;
+kütüphaneyi de `Package.swift` içindeki her platform için derler.
 
 `ImageRenderer` bulanıklığı yakalayamadığı ve yerel camı yalnızca kısmen yakalayabildiği için
 testler yedek yolun renk tonunu ve kapladığı alanı, bir de her bileşenin yerel yolda yedek
@@ -325,7 +389,7 @@ yoldakinden farklı çizildiğini kontrol eder; camın son görünümünü kontr
 
 ## Yol haritası
 
-2.0.0'dan sonraki bir sürüm henüz planlanmadı. Hata bildirimleri ve özellik istekleri
+2.1.0'dan sonraki bir sürüm henüz planlanmadı. Hata bildirimleri ve özellik istekleri
 [issues](https://github.com/muhittincamdali/LiquidGlassKit/issues) bölümünde takip edilir.
 
 ## Katkıda bulunma

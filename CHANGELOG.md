@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-14
+
+This release merges the useful parts of two earlier repositories,
+[LiquidGlass-Playground](https://github.com/muhittincamdali/LiquidGlass-Playground) (at `9b5a961`
+and `4735e01`) and [GlassmorphismUI](https://github.com/muhittincamdali/GlassmorphismUI) (at
+`838b774`), rewritten on top of `glassSurface` with tests. Both repositories are MIT licensed by
+the same author. All changes are additive; code written for 2.0.0 builds unchanged, and
+`swift package diagnose-api-breaking-changes v2.0.0` reports no breaking changes.
+
+### Added
+
+- `LiquidGlassToggleStyle` (`.toggleStyle(.liquidGlass)`): a switch with a glass track that keeps
+  `Toggle`'s VoiceOver and keyboard behavior and gives selection feedback where available.
+- `GlassSlider`: a slider on a glass track with steps counted from the lower bound, any
+  `FormatStyle` for the value, and VoiceOver adjustment by one step or a tenth of the range. Not
+  available on tvOS.
+- `glassGradient(_:direction:intensity:material:in:interactive:)`, `GlassGradient` and
+  `GlassGradientDirection`: glass with a gradient tint on both rendering paths.
+- `glassHighlight(_:color:in:)` and `GlassHighlight` (`shimmer`, `pulse`, `breathe`): an animated
+  light over glass that is not drawn when Reduce Motion is on.
+- `GlassTabBarAction` and a `GlassTabBar` initializer that takes an `action:`: a round button
+  after the tabs for the screen's primary action. The 2.0.0 initializer is unchanged.
+- `GlassTab.badge(_:)` with a count or a label: a red capsule over the tab's icon, read by
+  VoiceOver as the tab's value. A count of zero or less shows no badge.
+- `GlassPreset` with 14 named themes, and the matching `GlassTheme` members (`vapor`, `neon`,
+  `aqua`, `ice`, `ocean`, `forest`, `amber`, `sunset`, `rose`, `lavender`, `midnight`).
+- `GlassCodeExporter`, which writes colors, materials, shapes, themes and complete views as Swift
+  source that uses this package, including a `glassHighlight` when one is given. Three of its
+  outputs are compiled in the test target.
+- `GlassTheme.maximumShadowRadius` (100 pt).
+- On the fallback path, glass is outlined in the primary color when Increase Contrast is on.
+- Demo app: a Playground tab that tunes a preset with sliders and shows the exported code; the
+  gallery and tab bar screens show the new controls.
+- DocC articles "Adding Controls and Effects" and "Tuning and Exporting a Look".
+
+### Fixed
+
+- `GlassTheme` clamped `shadowRadius`, `shadowOpacity` and `strokeOpacity` only in its
+  initializer, so assigning a property later skipped the checks, and NaN was kept, which broke
+  equality and hashing. Values are now sanitized on assignment too, NaN becomes 0, and the shadow
+  radius is capped at `GlassTheme.maximumShadowRadius`.
+
 ## [2.0.0] - 2026-10-14
 
 This release rebuilds the package. In June 2026 most of the source was replaced by
@@ -87,6 +129,7 @@ first. With that folder added, the sources still do not compile: `GlassCard` rea
 `glassTheme` environment value that is never declared, and `GlassSheet` declares a generic
 parameter named `Content`, which shadows `ViewModifier.Content`.
 
-[Unreleased]: https://github.com/muhittincamdali/LiquidGlassKit/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/muhittincamdali/LiquidGlassKit/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/muhittincamdali/LiquidGlassKit/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/muhittincamdali/LiquidGlassKit/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/muhittincamdali/LiquidGlassKit/releases/tag/v1.0.0

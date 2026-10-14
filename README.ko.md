@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
+<!-- i18n-source: README.md@1fdc5fa59b8a5bbcccee03211df035b12b5c5f6f status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ko-light.svg" alt="LiquidGlassKit: SwiftUI용 Liquid Glass 표면과 컨트롤: OS 26에서는 네이티브 글래스, iOS 17까지는 Material 대체 렌더링."></picture></p>
@@ -9,7 +9,7 @@
 
 <p align="center">
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml/badge.svg" alt="CI 상태"></a>
-<a href="https://github.com/muhittincamdali/LiquidGlassKit/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg" alt="최신 버전: v2.0.0"></picture></a>
+<a href="https://github.com/muhittincamdali/LiquidGlassKit/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-version-light.svg" alt="최신 버전: v2.1.0"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-platforms-light.svg" alt="지원 플랫폼: iOS 17+ · macOS 14+ · tvOS 17+ · watchOS 10+ · visionOS 1+"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-language-light.svg" alt="언어 버전: Swift 6.0+"></picture></a>
 <a href="https://github.com/muhittincamdali/LiquidGlassKit/blob/main/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/badge-license-light.svg" alt="라이선스: MIT"></picture></a>
@@ -40,13 +40,18 @@ LiquidGlassKit은 Liquid Glass 표면과 컨트롤을 쓰면서도 Liquid Glass�
 - **모디파이어 하나, 렌더링 경로 둘** — `glassSurface`는 실행 시점에 네이티브 글래스와
   `Material` 기반 대체 렌더링(fallback) 중 하나를 고릅니다. 모든 곳에서 같은 모습을 원하면
   `glassRenderingMode(.fallback)`으로 대체 렌더링을 강제할 수 있습니다.
-- **바로 쓰는 컨트롤** — 버튼, 카드, 텍스트 필드, 검색 막대, 떠 있는 탭 막대, 내비게이션 막대,
-  하단 시트(bottom sheet)를 제공하며 모두 `glassSurface`로 그립니다.
-- **테마** — `GlassTheme`은 뷰 계층 전체의 머티리얼, 모양, 그림자, 가장자리 하이라이트를
-  정합니다. 각 컴포넌트에는 여전히 개별 머티리얼을 지정할 수 있습니다.
+- **바로 쓰는 컨트롤** — 버튼, 스위치 스타일, 슬라이더, 카드, 텍스트 필드, 검색 막대, 선택적
+  액션 버튼과 탭 배지를 갖춘 떠 있는 탭 막대, 내비게이션 막대, 하단 시트(bottom sheet)를
+  제공하며 모두 `glassSurface`로 그립니다.
+- **효과** — 그라디언트 색조 글래스와 애니메이션 shimmer, pulse, breathe 하이라이트를 두 경로
+  모두에서 사용할 수 있습니다.
+- **테마와 프리셋** — `GlassTheme`은 뷰 계층 전체의 머티리얼, 모양, 그림자, 가장자리
+  하이라이트를 정하고, `GlassPreset`은 미리 만든 테마 14개에 이름을 붙이며,
+  `GlassCodeExporter`는 실행 중에 조정한 테마를 다시 Swift 코드로 바꿉니다.
 - **손쉬운 사용** — '투명도 줄이기'(Reduce Transparency)가 켜져 있으면 대체 렌더링은 불투명한
-  배경을 그립니다. 장식용 아이콘은 VoiceOver에서 숨겨지고, 탭 막대는 선택된 탭을 알려 주며, 시트는
-  이스케이프 제스처로 닫힙니다.
+  배경을, '대비 증가'(Increase Contrast)가 켜져 있으면 더 진한 가장자리를 그립니다. '동작
+  줄이기'(Reduce Motion)에서는 하이라이트가 멈추고, 스위치와 슬라이더는 SwiftUI의 VoiceOver
+  동작을 그대로 유지하며, 탭 막대는 선택된 탭을 알려 주고, 시트는 이스케이프 제스처로 닫힙니다.
 - **이름 충돌 없음** — API가 SwiftUI 자체 이름(`glassEffect`, `GlassEffectContainer`,
   `GlassButtonStyle`)을 피하므로 두 모듈을 한 파일에서 import할 수 있습니다.
 - **테스트된 렌더링** — Swift Testing 테스트 스위트가 CI의 macOS와 iOS 시뮬레이터에서 실행되며,
@@ -63,7 +68,7 @@ Xcode에서 **File › Add Package Dependencies…**를 선택하고 저장소 U
 https://github.com/muhittincamdali/LiquidGlassKit.git
 ```
 
-의존성 규칙은 2.0.0부터 시작하는 **Up to Next Major Version**으로 두고 **Add Package**를
+의존성 규칙은 2.1.0부터 시작하는 **Up to Next Major Version**으로 두고 **Add Package**를
 클릭하세요. 다음 대화 상자에서 `LiquidGlassKit`을 추가할 앱 타깃을 선택하고 **Add Package**를
 한 번 더 클릭하세요.
 
@@ -112,7 +117,7 @@ https://github.com/muhittincamdali/LiquidGlassKit.git
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.1.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
@@ -197,8 +202,41 @@ struct RootView: View {
 ```
 
 `GlassTabBar`는 모든 `Hashable` 선택 값과 함께 동작하며, 빌더는 `if`와 `for`를 지원합니다.
-시트는 아래로 끌어내리거나, 어두워진 배경을 탭하거나, 손쉬운 사용의 이스케이프 제스처로
-닫힙니다. tvOS에서는 사용할 수 없습니다.
+탭은 `.badge(_:)`로 아이콘 위에 숫자나 짧은 레이블을 표시합니다. 예:
+`GlassTab("Profile", systemImage: "person", value: Screen.profile).badge(2)`. 시트는 아래로
+끌어내리거나, 어두워진 배경을 탭하거나, 손쉬운 사용의 이스케이프 제스처로 닫힙니다.
+tvOS에서는 사용할 수 없습니다.
+
+### 스위치, 슬라이더, 효과 추가하기
+
+```swift
+struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+```
+
+스위치 스타일은 `Toggle`의 손쉬운 사용 동작을 유지하고, VoiceOver 사용자는 슬라이더를 한
+단계씩 조정합니다. '동작 줄이기'가 켜져 있으면 하이라이트를 그리지 않습니다. `GlassSlider`는
+tvOS에서 사용할 수 없습니다.
 
 ### 모든 뷰에 테마를 적용하고 렌더링 경로 선택하기
 
@@ -212,6 +250,15 @@ struct ThemedApp: View {
 }
 ```
 
+`GlassPreset.all`의 프리셋 14개 중 하나로 시작해 조정한 뒤, 결과를 프로젝트에 붙여 넣을 수
+있는 뷰로 바꿔 보세요.
+
+```swift
+var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+theme.shadowRadius = 4
+let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+```
+
 ### API 개요
 
 | API | 하는 일 |
@@ -219,25 +266,33 @@ struct ThemedApp: View {
 | `glassSurface(_:in:interactive:)` | 어떤 뷰든 뒤에 글래스를 깝니다. OS 26에서는 네이티브 `glassEffect`, 그 외에는 `Material` 대체 렌더링. |
 | `GlassGroup` | OS 26에서 `GlassEffectContainer`로 감싸 가까운 글래스 모양이 서로 섞이게 합니다. 그 외에는 내용을 그대로 표시합니다. |
 | `GlassButton`, `.buttonStyle(.liquidGlass)` | 세 가지 크기의 캡슐형 글래스 버튼. 눌림, 비활성, 파괴적 동작 상태를 지원합니다. |
+| `.toggleStyle(.liquidGlass)` | 켜면 틴트 색으로 채워지는 글래스 트랙 스위치. `Toggle`의 손쉬운 사용 동작을 유지합니다. |
+| `GlassSlider` | 하한부터 단계를 세고 모든 `FormatStyle`을 받는 글래스 트랙 슬라이더. tvOS에는 없습니다. |
 | `GlassCard` | 글래스 위의 여백 있는 컨테이너. |
 | `GlassTextField` | 선택적 SF Symbol과 포커스 링이 있는 텍스트 필드. |
 | `GlassSearchBar` | 지우기 버튼과 Cancel 버튼이 있는 캡슐형 검색 필드. |
 | `GlassTabBar` | 모든 `Hashable` 선택 값에 대해 제네릭인 떠 있는 탭 막대. 빌더는 `if`와 `for`를 지원합니다. |
+| `GlassTabBarAction` | 탭 뒤에 놓이는, 화면의 주요 동작용 원형 버튼. |
+| `GlassTab.badge(_:)` | 탭 아이콘 위 빨간 캡슐 안의 숫자나 짧은 레이블. 숫자 0이면 숨겨집니다. |
 | `GlassNavigationBar` | 왼쪽과 오른쪽 항목을 둘 수 있는 떠 있는 제목 막대. |
 | `glassSheet(isPresented:material:content:)` | 떠 있는 하단 시트. 드래그, 바깥 탭, 손쉬운 사용의 이스케이프 제스처로 닫힙니다. tvOS에는 없습니다. |
+| `glassGradient(_:direction:intensity:material:in:interactive:)` | 두 렌더링 경로 모두에서 동작하는 그라디언트 색조 글래스. |
+| `glassHighlight(_:color:in:)` | 글래스 위의 애니메이션 shimmer, pulse, breathe 빛. '동작 줄이기'에서는 꺼집니다. |
 | `GlassTheme`, `GlassRenderingMode` | 기본 머티리얼·모양·그림자와 대체 렌더링 강제를 위한 환경 값. |
+| `GlassPreset` | 선택 목록과 설정 화면용 표시 이름이 있는 테마 14개. |
+| `GlassCodeExporter` | 테마, 머티리얼, 모양, 색을 이 패키지를 사용하는 Swift 코드로 씁니다. |
 
 ## 데모
 
 [`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo)는 컴포넌트 갤러리, 탭 막대, 시트,
-네이티브와 대체 렌더링 비교 화면이 있는 iOS 앱입니다. `LiquidGlassDemo.xcodeproj`를 열고 iPhone
-시뮬레이터를 선택한 뒤 실행하세요. 화면 구성과 실행 인수는
-[데모 README](Examples/LiquidGlassDemo/README.md)에 정리되어 있습니다. CI는 pull request마다, 그리고 main에 push할 때마다 이 앱을
-빌드합니다.
+네이티브와 대체 렌더링 비교 화면, 그리고 테마를 조정하고 코드를 보여 주는 플레이그라운드가 있는
+iOS 앱입니다. `LiquidGlassDemo.xcodeproj`를 열고 iPhone 시뮬레이터를 선택한 뒤 실행하세요. 화면
+구성과 실행 인수는 [데모 README](Examples/LiquidGlassDemo/README.md)에 정리되어 있습니다. CI는
+pull request마다, 그리고 main에 push할 때마다 이 앱을 빌드합니다.
 
-| 시트(라이트) | 탭 막대(다크) | 네이티브와 대체 렌더링(다크) |
-| --- | --- | --- |
-| ![글래스 시트, 라이트](docs/images/sheet-light.png) | ![탭 막대, 다크](docs/images/tabs-dark.png) | ![네이티브와 대체 렌더링, 다크](docs/images/compare-dark.png) |
+| 시트(라이트) | 탭 막대(다크) | 플레이그라운드(라이트) | 네이티브와 대체 렌더링(다크) |
+| --- | --- | --- | --- |
+| ![글래스 시트, 라이트](docs/images/sheet-light.png) | ![탭 막대, 다크](docs/images/tabs-dark.png) | ![플레이그라운드, 라이트](docs/images/playground-light.png) | ![네이티브와 대체 렌더링, 다크](docs/images/compare-dark.png) |
 
 <sub>스크린샷은 iOS 27 시뮬레이터의 데모 앱에서
 [`scripts/screenshots.sh`](scripts/screenshots.sh)로 촬영했습니다.</sub>
@@ -264,6 +319,10 @@ API 레퍼런스와 문서:
   — OS별로 사용자가 보게 되는 화면과 대체 렌더링을 강제하는 방법.
 - [Theming](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/theming)
   — 기본 제공 테마, 사용자 정의 테마, 컴포넌트별 머티리얼.
+- [Adding Controls and Effects](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/addingcontrolsandeffects)
+  — 글래스 스위치와 슬라이더, 그라디언트 글래스, 하이라이트, 탭 막대의 액션 버튼.
+- [Tuning and Exporting a Look](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/tuningandexportingalook)
+  — 프리셋을 고르고, 실행 중에 테마를 조정하고, Swift 코드로 복사합니다.
 
 ## 요구 사항
 
@@ -282,9 +341,10 @@ Xcode 26 이상이 필요합니다.
 ## 아키텍처
 
 - `Sources/LiquidGlassKit/Core`에는 값 타입 `GlassMaterial`, `GlassShape`, `GlassTheme`,
-  `GlassRenderingMode`가 있습니다.
+  `GlassPreset`, `GlassRenderingMode`와 `GlassCodeExporter`가 있습니다.
 - `Sources/LiquidGlassKit/Surface`에는 `glassSurface`와 `GlassGroup`이 있으며, SwiftUI의
-  글래스 API를 호출하는 곳은 여기뿐입니다.
+  글래스 API를 호출하는 곳은 여기뿐입니다. `glassSurface` 위에 만든 그라디언트와 하이라이트
+  모디파이어도 여기에 있습니다.
 - `Sources/LiquidGlassKit/Components`는 모든 컨트롤을 `glassSurface` 위에 만들기 때문에 테마와
   렌더링 모드가 모든 컨트롤에 적용됩니다.
 
@@ -308,12 +368,14 @@ xcodebuild test -scheme LiquidGlassKit \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-Swift Testing 테스트 스위트는 머티리얼과 모양 로직, 테마 값 제한, 렌더링 모드 결정, 탭 빌더,
-시트가 닫히는 임곗값을 다룹니다. 대체 경로의 오프스크린 렌더링은 모든 컴포넌트가 테마의 머티리얼로 글래스를
-그리는지, 명시한 머티리얼이 테마보다 우선하는지, 어두운 글래스 위의 레이블이 흰색이고 파괴적 동작의 레이블이
-빨간색인지, 시트가 표시되는 동안에만 배경을 어둡게 하는지, '투명도 줄이기'에서 불투명한 배경을 그리는지
-확인합니다. CI는 macOS, iOS 26 시뮬레이터, 대체 경로만 있는 iOS 18.6 시뮬레이터에서 테스트를
-실행하고, `Package.swift`의 모든 플랫폼용으로 라이브러리를 빌드합니다.
+Swift Testing 테스트 스위트는 머티리얼과 모양 로직, 테마와 그라디언트 값 제한(NaN 포함), 렌더링
+모드 결정, 탭 빌더, 시트가 닫히는 임곗값, 특이한 단계와 범위에서의 슬라이더 값 맞춤, 하이라이트
+타이밍, 프리셋 조회, 그리고 익스포터 출력을 다루며, 그 출력 중 세 가지 예시는 테스트 타깃에서
+컴파일됩니다. 대체 경로의 오프스크린 렌더링은 모든 컴포넌트가 테마의 머티리얼로 글래스를 그리는지,
+명시한 머티리얼이 테마보다 우선하는지, 어두운 글래스 위의 레이블이 흰색이고 파괴적 동작의 레이블이
+빨간색인지, 시트가 표시되는 동안에만 배경을 어둡게 하는지, '투명도 줄이기'에서 불투명한 배경을
+그리는지 확인합니다. CI는 macOS, iOS 26 시뮬레이터, 대체 경로만 있는 iOS 18.6 시뮬레이터에서
+테스트를 실행하고, `Package.swift`의 모든 플랫폼용으로 라이브러리를 빌드합니다.
 
 `ImageRenderer`는 블러를 캡처하지 못하고 네이티브 글래스도 일부만 캡처하므로, 테스트는 대체
 렌더링의 색조와 그려진 영역, 그리고 각 컴포넌트가 네이티브 경로에서 대체 경로와 다르게 그려지는지를
@@ -321,7 +383,7 @@ Swift Testing 테스트 스위트는 머티리얼과 모양 로직, 테마 값 �
 
 ## 로드맵
 
-2.0.0 이후 릴리스는 아직 계획되어 있지 않습니다. 버그 보고와 기능 요청은
+2.1.0 이후 릴리스는 아직 계획되어 있지 않습니다. 버그 보고와 기능 요청은
 [issues](https://github.com/muhittincamdali/LiquidGlassKit/issues)에서 관리합니다.
 
 ## 기여하기
