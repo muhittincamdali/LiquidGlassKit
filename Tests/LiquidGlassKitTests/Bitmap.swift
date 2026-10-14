@@ -41,6 +41,12 @@ struct Bitmap {
         stride(from: 0, to: bytes.count, by: 4).count { predicate(pixel(at: $0)) }
     }
 
+    /// Number of pixels that differ from the same pixel in `other`, an image of the same size.
+    func countDifferences(from other: Bitmap) -> Int {
+        precondition(width == other.width && height == other.height, "images differ in size")
+        return stride(from: 0, to: bytes.count, by: 4).count { pixel(at: $0) != other.pixel(at: $0) }
+    }
+
     private func pixel(at offset: Int) -> Pixel {
         Pixel(red: bytes[offset], green: bytes[offset + 1], blue: bytes[offset + 2], alpha: bytes[offset + 3])
     }

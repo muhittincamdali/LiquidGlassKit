@@ -4,12 +4,14 @@ import Testing
 
 /// Renders every public component offscreen on both rendering paths.
 ///
-/// `ImageRenderer` does not capture blur backdrops, and with native glass it
-/// draws nothing for a view inside `glassEffect` (on macOS 27 a `GlassCard`
-/// renders zero visible pixels). The pixel checks therefore run on the fallback
+/// `ImageRenderer` does not capture blur backdrops, and what it draws for
+/// native glass depends on the OS: on the iOS 26.5 and 27 simulators no glass
+/// tint at all, on macOS 27 the tint for some components and nothing, not even
+/// the text, for a `GlassCard`. The tint checks therefore run on the fallback
 /// path, where each glass surface draws a translucent tint: with a green theme,
 /// green pixels can only come from a component's glass, never from its text or
-/// icons. On the native path the tests check that the hierarchies build.
+/// icons. On the native path each component must render differently from its
+/// fallback render, so a native path that quietly draws the fallback fails.
 ///
 /// Views are drawn on an opaque canvas. When a view draws nothing,
 /// `ImageRenderer` can return a buffer that still holds an earlier render
@@ -79,13 +81,22 @@ struct RenderingTests {
         ]
     }
 
+    /// On the fallback path every component draws something. On the native path
+    /// (OS 26 or later) each render must differ from the same view's fallback
+    /// render; the two fallback renders of a view are pixel-identical, and on
+    /// macOS 27 and the iOS 26.5 and 27 simulators native and fallback renders
+    /// differ in at least 3,800 pixels per component.
     @Test(arguments: [GlassRenderingMode.fallback, .automatic])
     func everyComponentBuildsAndRenders(mode: GlassRenderingMode) throws {
         for (name, view) in themedComponents {
             let bitmap = try #require(render(view, mode: mode), "\(name) did not render")
-            if !Self.drawsNativeGlass(mode) {
+            guard Self.drawsNativeGlass(mode) else {
                 #expect(bitmap.count(where: Bitmap.differsFromWhite) > 0, "\(name) drew nothing")
+                continue
             }
+            let fallback = try #require(render(view, mode: .fallback), "\(name) did not render on the fallback path")
+            let changed = bitmap.countDifferences(from: fallback)
+            #expect(changed > Self.minimumGlassArea, "\(name) drew the fallback on the native path (\(changed) pixels differ)")
         }
     }
 

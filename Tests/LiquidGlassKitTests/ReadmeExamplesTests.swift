@@ -252,7 +252,9 @@ struct ReadmeExamplesTests {
     }
 
     /// Every example builds on both paths and draws on the fallback path (on a
-    /// white canvas; see ``RenderingTests`` for why).
+    /// white canvas; see ``RenderingTests`` for why). Some examples set their own
+    /// rendering mode, so the native path is not compared with the fallback here;
+    /// ``RenderingTests`` does that for every component.
     @Test(arguments: [GlassRenderingMode.fallback, .automatic])
     func examplesRender(mode: GlassRenderingMode) throws {
         for (index, example) in examples.enumerated() {
