@@ -4,7 +4,7 @@ import SwiftUI
 /// Demo app for LiquidGlassKit.
 ///
 /// Launch arguments (used by `scripts/screenshots.sh`):
-/// - `-screen gallery|tabs|sheet|compare` opens a specific screen.
+/// - `-screen gallery|tabs|sheet|compare|playground` opens a specific screen.
 /// - `-renderingMode automatic|fallback` forces a rendering path.
 /// - `-presentSheet` opens the glass sheet on launch.
 @main
@@ -20,7 +20,7 @@ struct LiquidGlassDemoApp: App {
 }
 
 enum DemoScreen: String, CaseIterable, Hashable {
-    case gallery, tabs, sheet, compare
+    case gallery, tabs, sheet, compare, playground
 }
 
 struct LaunchOptions {
@@ -64,6 +64,7 @@ struct RootView: View {
                 GlassTab("Tabs", systemImage: "menubar.rectangle", value: DemoScreen.tabs)
                 GlassTab("Sheet", systemImage: "rectangle.bottomhalf.inset.filled", value: DemoScreen.sheet)
                 GlassTab("Compare", systemImage: "square.split.2x1", value: DemoScreen.compare)
+                GlassTab("Playground", systemImage: "slider.horizontal.3", value: DemoScreen.playground)
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
@@ -80,6 +81,7 @@ struct RootView: View {
         case .tabs: TabsScreen()
         case .sheet: SheetScreen(isPresented: $isSheetPresented)
         case .compare: CompareScreen()
+        case .playground: PlaygroundScreen()
         }
     }
 }

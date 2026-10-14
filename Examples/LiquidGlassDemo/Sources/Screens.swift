@@ -4,6 +4,8 @@ import SwiftUI
 struct GalleryScreen: View {
     @State private var email = ""
     @State private var query = ""
+    @State private var notifications = true
+    @State private var volume = 0.6
 
     var body: some View {
         ScrollView {
@@ -29,6 +31,14 @@ struct GalleryScreen: View {
 
                 GlassTextField("Email", text: $email, systemImage: "envelope")
 
+                GlassCard {
+                    VStack(spacing: 14) {
+                        Toggle("Notifications", isOn: $notifications)
+                            .toggleStyle(.liquidGlass)
+                        GlassSlider("Volume", value: $volume, format: .percent.precision(.fractionLength(0)))
+                    }
+                }
+
                 GlassGroup(spacing: 12) {
                     HStack(spacing: 12) {
                         GlassButton("Play", systemImage: "play.fill") {}
@@ -43,6 +53,11 @@ struct GalleryScreen: View {
                 }
 
                 MaterialRow()
+
+                Label("Gradient glass", systemImage: "sparkles")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, minHeight: 64)
+                    .glassGradient([.cyan, .blue, .purple], in: .roundedRectangle(cornerRadius: 20))
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 100)
@@ -86,6 +101,15 @@ struct TabsScreen: View {
             GlassTabBar(selection: $section, material: .dark, showsLabels: false) {
                 GlassTab("Home", systemImage: "house", value: Section.home)
                 GlassTab("Search", systemImage: "magnifyingglass", value: Section.search)
+                GlassTab("Profile", systemImage: "person", value: Section.profile)
+            }
+            GlassTabBar(
+                selection: $section,
+                showsLabels: showsLabels,
+                action: GlassTabBarAction("New Post", systemImage: "plus") {}
+            ) {
+                GlassTab("Home", systemImage: "house", value: Section.home)
+                GlassTab("Inbox", systemImage: "tray", value: Section.inbox)
                 GlassTab("Profile", systemImage: "person", value: Section.profile)
             }
             Spacer()

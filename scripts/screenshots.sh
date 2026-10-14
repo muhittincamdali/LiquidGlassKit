@@ -57,7 +57,8 @@ capture() {
   local name="$1" appearance="$2"; shift 2
   xcrun simctl ui "$udid" appearance "$appearance"
   xcrun simctl terminate "$udid" "$BUNDLE_ID" 2>/dev/null || true
-  xcrun simctl launch "$udid" "$BUNDLE_ID" "$@" >/dev/null
+  # English formatting regardless of the simulator's region.
+  xcrun simctl launch "$udid" "$BUNDLE_ID" -AppleLanguages "(en)" -AppleLocale en_US "$@" >/dev/null
   sleep "$SETTLE_SECONDS"
   local file="$OUT/$name-$appearance.png"
   xcrun simctl io "$udid" screenshot --type=png "$file" >/dev/null
@@ -71,6 +72,8 @@ capture compare light -screen compare
 capture compare dark -screen compare
 capture sheet light -screen sheet -presentSheet
 capture tabs dark -screen tabs
+capture playground light -screen playground
+capture playground dark -screen playground
 
 xcrun simctl status_bar "$udid" clear
 xcrun simctl ui "$udid" appearance light

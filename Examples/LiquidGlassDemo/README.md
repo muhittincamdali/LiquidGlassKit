@@ -3,12 +3,13 @@
 An iOS app that shows every LiquidGlassKit component over a colorful background. It uses the
 package from this repository (`../..`), so it always runs the code you are looking at.
 
-| Screen  | What it shows                                                                |
-| ------- | ---------------------------------------------------------------------------- |
-| Gallery | Navigation bar, search bar, card, text field, buttons and all four materials |
-| Tabs    | Tab bars with different materials, with and without labels                   |
-| Sheet   | The glass bottom sheet; drag it down or tap outside to close it              |
-| Compare | The same views on the native path and on the fallback path, side by side     |
+| Screen     | What it shows                                                                                                    |
+| ---------- | ---------------------------------------------------------------------------------------------------------------- |
+| Gallery    | Navigation bar, search bar, card, text field, toggle, slider, buttons, all four materials and gradient glass     |
+| Tabs       | Tab bars with different materials, with and without labels, and one with an action button                        |
+| Sheet      | The glass bottom sheet; drag it down or tap outside to close it                                                  |
+| Compare    | The same views on the native path and on the fallback path, side by side                                         |
+| Playground | Pick a preset, tune corner radius, shadow, edge, rendering path and highlight, and copy the generated Swift code |
 
 ## Run it
 
@@ -33,11 +34,11 @@ CI builds the app the same way for every pull request and every push to main
 
 ## Launch arguments
 
-| Argument                                | Effect                          |
-| --------------------------------------- | ------------------------------- |
-| `-screen gallery\|tabs\|sheet\|compare` | Opens a specific screen         |
-| `-renderingMode automatic\|fallback`    | Forces a rendering path         |
-| `-presentSheet`                         | Opens the glass sheet on launch |
+| Argument                                            | Effect                          |
+| --------------------------------------------------- | ------------------------------- |
+| `-screen gallery\|tabs\|sheet\|compare\|playground` | Opens a specific screen         |
+| `-renderingMode automatic\|fallback`                | Forces a rendering path         |
+| `-presentSheet`                                     | Opens the glass sheet on launch |
 
 `scripts/screenshots.sh` uses `-screen` and `-presentSheet` to capture the README screenshots in
 the iOS Simulator.

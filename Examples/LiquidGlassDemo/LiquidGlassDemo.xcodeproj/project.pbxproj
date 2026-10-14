@@ -10,10 +10,12 @@
 		1EE497143657C860B77FFB88 /* LiquidGlassDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B3C9305513BEBD69CD9FB7 /* LiquidGlassDemoApp.swift */; };
 		27EE1685BC2F16746AA959B5 /* LiquidGlassKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8A5BE5CB19ED764CD4849FA4 /* LiquidGlassKit */; };
 		2D9EA3A77ABBC6EC036DAD1F /* Screens.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E950FC85B66FBD4FD2F44 /* Screens.swift */; };
+		AE883A20DE744D5C986B5D8D /* PlaygroundScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2566869D9B8F14FD939D789 /* PlaygroundScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2EF4D064318DF14C18C8AC14 /* LiquidGlassDemo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LiquidGlassDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2566869D9B8F14FD939D789 /* PlaygroundScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundScreen.swift; sourceTree = "<group>"; };
 		A4B3C9305513BEBD69CD9FB7 /* LiquidGlassDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidGlassDemoApp.swift; sourceTree = "<group>"; };
 		A52E950FC85B66FBD4FD2F44 /* Screens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screens.swift; sourceTree = "<group>"; };
 		D99D1F4F4CFED652F1A3FDD8 /* LiquidGlassKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LiquidGlassKit; path = ../..; sourceTree = SOURCE_ROOT; };
@@ -35,6 +37,7 @@
 			isa = PBXGroup;
 			children = (
 				A4B3C9305513BEBD69CD9FB7 /* LiquidGlassDemoApp.swift */,
+				A2566869D9B8F14FD939D789 /* PlaygroundScreen.swift */,
 				A52E950FC85B66FBD4FD2F44 /* Screens.swift */,
 			);
 			path = Sources;
@@ -126,6 +129,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EE497143657C860B77FFB88 /* LiquidGlassDemoApp.swift in Sources */,
+				AE883A20DE744D5C986B5D8D /* PlaygroundScreen.swift in Sources */,
 				2D9EA3A77ABBC6EC036DAD1F /* Screens.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,7 +150,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.muhittincamdali.LiquidGlassDemo;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 6.0;
@@ -286,7 +290,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.muhittincamdali.LiquidGlassDemo;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 6.0;
