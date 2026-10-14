@@ -387,9 +387,6 @@ struct ExporterDocumentationTests {
     /// The values quoted in the article and in GlassCodeExporter's documentation.
     @Test func quotedOutputsMatch() {
         let exporter = GlassCodeExporter()
-        exporter.themeArgument(for: .aqua)                        // ".aqua"
-        exporter.code(for: GlassTheme(material: .tinted(.teal)))  // "GlassTheme(material: .tinted(.teal))"
-        exporter.code(for: GlassShape.topRounded(24))             // ".topRounded(24)"
         #expect(exporter.themeArgument(for: .aqua) == ".aqua")
         #expect(exporter.code(for: GlassTheme(material: .tinted(.teal))) == "GlassTheme(material: .tinted(.teal))")
         #expect(exporter.code(for: GlassShape.topRounded(24)) == ".topRounded(24)")
