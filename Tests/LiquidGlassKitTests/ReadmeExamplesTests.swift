@@ -90,6 +90,48 @@ private struct ThemedApp: View {
 }
 #endif
 
+// MARK: - README: Add a switch, a slider and effects
+
+#if !os(tvOS)
+private struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+#endif
+
+// MARK: - README: Presets and exporting
+
+@Suite("README exporter example")
+struct ReadmeExporterExampleTests {
+    @Test func exportedViewKeepsTheAdjustedTheme() {
+        var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+        theme.shadowRadius = 4
+        let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+        #expect(theme.material == GlassTheme.ocean.material)
+        #expect(source.contains("struct PromoCard: View {"))
+        #expect(source.contains("shadowRadius: 4"))
+        #expect(!source.contains(".glassTheme(.ocean)"), "an adjusted preset is written as an initializer")
+    }
+}
+
 // MARK: - DocC: LiquidGlassKit landing page
 
 private struct NowPlaying: View {
@@ -390,6 +432,7 @@ struct ReadmeExamplesTests {
         views.append(AnyView(ThemedApp()))
         views.append(AnyView(LibraryScreen()))
         views.append(AnyView(LibraryScreenSnippets()))
+        views.append(AnyView(PlayerSettings()))
         views.append(AnyView(NotificationSettings()))
         views.append(AnyView(PlaybackSettings()))
         views.append(AnyView(ThemeTuner()))

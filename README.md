@@ -34,20 +34,25 @@ write the same code for every OS.
 
 ## Highlights
 
-- **One modifier, two paths** — `glassSurface` picks native glass or the `Material` fallback at
-  run time, and `glassRenderingMode(.fallback)` forces the fallback when you want one look
-  everywhere.
-- **Ready-made controls** — buttons, cards, text fields, a search bar, a floating tab bar, a
-  navigation bar and a bottom sheet, all drawn through `glassSurface`.
-- **Themes** — `GlassTheme` sets the material, shape, shadow and edge highlight for a whole view
-  hierarchy; each component can still take its own material.
-- **Accessibility** — the fallback draws an opaque background when Reduce Transparency is on,
-  decorative icons are hidden from VoiceOver, the tab bar reports the selected tab, and the sheet
-  closes with the escape gesture.
-- **No name clashes** — the API avoids SwiftUI's own names (`glassEffect`,
-  `GlassEffectContainer`, `GlassButtonStyle`), so both modules can be imported in one file.
-- **Tested rendering** — Swift Testing suites run on macOS and iOS simulators in CI; offscreen
-  renders check that every component draws its glass in the right material on the fallback path.
+-   **One modifier, two paths** — `glassSurface` picks native glass or the `Material` fallback at
+    run time, and `glassRenderingMode(.fallback)` forces the fallback when you want one look
+    everywhere.
+-   **Ready-made controls** — buttons, a switch style, a slider, cards, text fields, a search bar, a
+    floating tab bar with an optional action button, a navigation bar and a bottom sheet, all drawn
+    through `glassSurface`.
+-   **Effects** — gradient-tinted glass and animated shimmer, pulse and breathe highlights that
+    work on both paths.
+-   **Themes and presets** — `GlassTheme` sets the material, shape, shadow and edge highlight for a
+    whole view hierarchy, `GlassPreset` names 14 ready-made themes, and `GlassCodeExporter` turns a
+    theme tuned at run time back into Swift.
+-   **Accessibility** — the fallback draws an opaque background when Reduce Transparency is on and
+    a stronger edge when Increase Contrast is on, highlights stop with Reduce Motion, the switch
+    and slider keep SwiftUI's VoiceOver behavior, the tab bar reports the selected tab, and the
+    sheet closes with the escape gesture.
+-   **No name clashes** — the API avoids SwiftUI's own names (`glassEffect`,
+    `GlassEffectContainer`, `GlassButtonStyle`), so both modules can be imported in one file.
+-   **Tested rendering** — Swift Testing suites run on macOS and iOS simulators in CI; offscreen
+    renders check that every component draws its glass in the right material on the fallback path.
 
 ## Quick start
 
@@ -59,7 +64,7 @@ In Xcode, choose **File › Add Package Dependencies…** and enter the reposito
 https://github.com/muhittincamdali/LiquidGlassKit.git
 ```
 
-Keep the dependency rule **Up to Next Major Version** starting at 2.0.0 and click **Add
+Keep the dependency rule **Up to Next Major Version** starting at 2.1.0 and click **Add
 Package**. In the next dialog, choose your app target for `LiquidGlassKit` and click **Add
 Package** again.
 
@@ -108,7 +113,7 @@ Or add it to the `dependencies` in your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.1.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
@@ -196,6 +201,37 @@ struct RootView: View {
 sheet closes when dragged down, when the dimmed background is tapped, or with the accessibility
 escape gesture. It is not available on tvOS.
 
+### Add a switch, a slider and effects
+
+```swift
+struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+```
+
+The switch style keeps `Toggle`'s accessibility, and VoiceOver users adjust the slider by one
+step at a time. Highlights are not drawn when Reduce Motion is on. `GlassSlider` is not
+available on tvOS.
+
 ### Theme every view and choose the rendering path
 
 ```swift
@@ -208,31 +244,48 @@ struct ThemedApp: View {
 }
 ```
 
+Start from one of the 14 presets in `GlassPreset.all`, adjust it, and turn the result into a view
+you can paste into your project:
+
+```swift
+var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+theme.shadowRadius = 4
+let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+```
+
 ### API overview
 
-| API                                         | What it does                                                                                          |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `glassSurface(_:in:interactive:)`           | Puts glass behind any view. Native `glassEffect` on OS 26, `Material` fallback elsewhere.             |
-| `GlassGroup`                                | Wraps `GlassEffectContainer` on OS 26 so nearby glass shapes blend; a pass-through elsewhere.         |
-| `GlassButton`, `.buttonStyle(.liquidGlass)` | Capsule glass buttons in three sizes, with pressed, disabled and destructive states.                  |
-| `GlassCard`                                 | Padded container on glass.                                                                            |
-| `GlassTextField`                            | Text field with optional SF Symbol and a focus ring.                                                  |
-| `GlassSearchBar`                            | Capsule search field with clear and Cancel buttons.                                                   |
-| `GlassTabBar`                               | Floating tab bar, generic over any `Hashable` selection; builder supports `if` and `for`.             |
-| `GlassNavigationBar`                        | Floating title bar with leading and trailing items.                                                   |
-| `glassSheet(isPresented:material:content:)` | Floating bottom sheet; dismiss by drag, tap outside or the accessibility escape gesture. Not on tvOS. |
-| `GlassTheme`, `GlassRenderingMode`          | Environment values for default material/shape/shadow, and for forcing the fallback path.              |
+| API                                                             | What it does                                                                                          |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `glassSurface(_:in:interactive:)`                               | Puts glass behind any view. Native `glassEffect` on OS 26, `Material` fallback elsewhere.             |
+| `GlassGroup`                                                    | Wraps `GlassEffectContainer` on OS 26 so nearby glass shapes blend; a pass-through elsewhere.         |
+| `GlassButton`, `.buttonStyle(.liquidGlass)`                     | Capsule glass buttons in three sizes, with pressed, disabled and destructive states.                  |
+| `.toggleStyle(.liquidGlass)`                                    | Switch with a glass track that fills with the tint when on; keeps `Toggle` accessibility.             |
+| `GlassSlider`                                                   | Slider on a glass track with steps counted from the lower bound and any `FormatStyle`. Not on tvOS.   |
+| `GlassCard`                                                     | Padded container on glass.                                                                            |
+| `GlassTextField`                                                | Text field with optional SF Symbol and a focus ring.                                                  |
+| `GlassSearchBar`                                                | Capsule search field with clear and Cancel buttons.                                                   |
+| `GlassTabBar`                                                   | Floating tab bar, generic over any `Hashable` selection; builder supports `if` and `for`.             |
+| `GlassTabBarAction`                                             | Round button after the tabs for the screen's primary action.                                          |
+| `GlassNavigationBar`                                            | Floating title bar with leading and trailing items.                                                   |
+| `glassSheet(isPresented:material:content:)`                     | Floating bottom sheet; dismiss by drag, tap outside or the accessibility escape gesture. Not on tvOS. |
+| `glassGradient(_:direction:intensity:material:in:interactive:)` | Glass with a gradient tint, on both rendering paths.                                                  |
+| `glassHighlight(_:color:in:)`                                   | Animated shimmer, pulse or breathe light over glass; off with Reduce Motion.                          |
+| `GlassTheme`, `GlassRenderingMode`                              | Environment values for default material/shape/shadow, and for forcing the fallback path.              |
+| `GlassPreset`                                                   | 14 named themes with display names, for pickers and settings screens.                                 |
+| `GlassCodeExporter`                                             | Writes themes, materials, shapes and colors as Swift source that uses this package.                   |
 
 ## Demo
 
 [`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) is an iOS app with a component gallery,
-tab bars, a sheet and a native-vs-fallback comparison. Open `LiquidGlassDemo.xcodeproj`, choose
+tab bars, a sheet, a native-vs-fallback comparison and a playground that tunes a theme and shows
+its code. Open `LiquidGlassDemo.xcodeproj`, choose
 an iPhone simulator and run; the [demo's README](Examples/LiquidGlassDemo/README.md) lists its
 screens and launch arguments. CI builds it for every pull request and every push to main.
 
-| Sheet (light)                                      | Tab bars (dark)                              | Native vs fallback (dark)                                  |
-| -------------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------- |
-| ![Glass sheet, light](docs/images/sheet-light.png) | ![Tab bars, dark](docs/images/tabs-dark.png) | ![Native and fallback, dark](docs/images/compare-dark.png) |
+| Sheet (light)                                      | Tab bars (dark)                              | Playground (light)                                     | Native vs fallback (dark)                                  |
+| -------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------- |
+| ![Glass sheet, light](docs/images/sheet-light.png) | ![Tab bars, dark](docs/images/tabs-dark.png) | ![Playground, light](docs/images/playground-light.png) | ![Native and fallback, dark](docs/images/compare-dark.png) |
 
 <sub>Screenshots from the demo app on the iOS 27 simulator, captured with
 [`scripts/screenshots.sh`](scripts/screenshots.sh).</sub>
@@ -241,22 +294,26 @@ screens and launch arguments. CI builds it for every pull request and every push
 
 Reference documentation and articles:
 
-- [API reference](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/)
-  on GitHub Pages, built from the DocC catalog in
-  [`Sources/LiquidGlassKit/LiquidGlassKit.docc`](Sources/LiquidGlassKit/LiquidGlassKit.docc).
-  In Xcode, **Product › Build Documentation** opens the same pages offline.
-- Release notes: [CHANGELOG.md](CHANGELOG.md).
+-   [API reference](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/)
+    on GitHub Pages, built from the DocC catalog in
+    [`Sources/LiquidGlassKit/LiquidGlassKit.docc`](Sources/LiquidGlassKit/LiquidGlassKit.docc).
+    In Xcode, **Product › Build Documentation** opens the same pages offline.
+-   Release notes: [CHANGELOG.md](CHANGELOG.md).
 
 ## Guides
 
-- [Getting Started](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/gettingstarted)
-  — add the package step by step and put the first glass surfaces on screen.
-- [Building a Screen with a Floating Tab Bar](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/buildingafloatingtabbarscreen)
-  — a title bar, search field, cards, tab bar and sheet over scrolling content, in five steps.
-- [Rendering Paths](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/renderingpaths)
-  — what users on each OS see, and how to force the fallback.
-- [Theming](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/theming)
-  — presets, custom themes and per-component materials.
+-   [Getting Started](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/gettingstarted)
+    — add the package step by step and put the first glass surfaces on screen.
+-   [Building a Screen with a Floating Tab Bar](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/buildingafloatingtabbarscreen)
+    — a title bar, search field, cards, tab bar and sheet over scrolling content, in five steps.
+-   [Rendering Paths](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/renderingpaths)
+    — what users on each OS see, and how to force the fallback.
+-   [Theming](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/theming)
+    — presets, custom themes and per-component materials.
+-   [Adding Controls and Effects](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/addingcontrolsandeffects)
+    — the glass switch and slider, gradient glass, highlights and the tab bar action button.
+-   [Tuning and Exporting a Look](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/tuningandexportingalook)
+    — pick a preset, adjust a theme at run time and copy it as Swift.
 
 ## Requirements
 
@@ -274,12 +331,12 @@ is compiled against the OS 26 SDK.
 
 ## Architecture
 
-- `Sources/LiquidGlassKit/Core` holds the value types: `GlassMaterial`, `GlassShape`,
-  `GlassTheme` and `GlassRenderingMode`.
-- `Sources/LiquidGlassKit/Surface` holds `glassSurface` and `GlassGroup`, the only places that
-  call SwiftUI's glass API.
-- `Sources/LiquidGlassKit/Components` builds every control on top of `glassSurface`, so the theme
-  and the rendering mode apply to all of them.
+-   `Sources/LiquidGlassKit/Core` holds the value types: `GlassMaterial`, `GlassShape`,
+    `GlassTheme`, `GlassPreset` and `GlassRenderingMode`, and `GlassCodeExporter`.
+-   `Sources/LiquidGlassKit/Surface` holds `glassSurface` and `GlassGroup`, the only places that
+    call SwiftUI's glass API, and the gradient and highlight modifiers built on `glassSurface`.
+-   `Sources/LiquidGlassKit/Components` builds every control on top of `glassSurface`, so the theme
+    and the rendering mode apply to all of them.
 
 `glassSurface` resolves the `GlassRenderingMode` from the environment against
 `GlassRenderingMode.isNativeGlassAvailable`, an `#available(iOS 26, macOS 26, tvOS 26,
@@ -301,8 +358,10 @@ xcodebuild test -scheme LiquidGlassKit \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-The Swift Testing suites cover material and shape logic, theme clamping, rendering mode
-resolution, the tab builder and the sheet's dismissal thresholds. Offscreen renders on the
+The Swift Testing suites cover material and shape logic, theme and gradient clamping (including
+NaN), rendering mode resolution, the tab builder, the sheet's dismissal thresholds, slider
+snapping for unusual steps and ranges, highlight timing, preset lookup, and the exporter's
+output, two samples of which are compiled in the test target. Offscreen renders on the
 fallback path check that every component draws its glass in the theme's material, that an
 explicit material overrides the theme, that labels on dark glass are white and destructive
 labels red, that the sheet dims the background only while presented, and that Reduce
@@ -316,7 +375,7 @@ than on the fallback path; they do not check the final glass look.
 
 ## Roadmap
 
-No release after 2.0.0 is scheduled yet. Bug reports and feature requests are tracked in
+No release after 2.1.0 is scheduled yet. Bug reports and feature requests are tracked in
 [issues](https://github.com/muhittincamdali/LiquidGlassKit/issues).
 
 ## Contributing
