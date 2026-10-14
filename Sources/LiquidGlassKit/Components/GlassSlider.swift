@@ -80,7 +80,7 @@ public struct GlassSlider: View {
     private let track: GlassSliderTrack
     private let material: GlassMaterial?
     private let showsValue: Bool
-    private let format: FloatingPointFormatStyle<Double>
+    let formattedValue: (Double) -> String
     private let onEditingChanged: (Bool) -> Void
 
     @State private var isDragging = false
@@ -94,7 +94,38 @@ public struct GlassSlider: View {
     ///     A step that is not positive and finite is ignored.
     ///   - material: The track's glass material, or `nil` to use the theme's material.
     ///   - showsValue: Shows the formatted value next to the title.
-    ///   - format: How the value is formatted on screen and for VoiceOver.
+    ///   - format: How the value is formatted on screen and for VoiceOver, such as
+    ///     `.percent` or `.number.precision(.fractionLength(1))`.
+    ///   - onEditingChanged: Called with `true` when a drag starts and `false` when it ends.
+    public init<Format: FormatStyle>(
+        _ title: String,
+        value: Binding<Double>,
+        in range: ClosedRange<Double> = 0...1,
+        step: Double? = nil,
+        material: GlassMaterial? = nil,
+        showsValue: Bool = true,
+        format: Format,
+        onEditingChanged: @escaping (Bool) -> Void = { _ in }
+    ) where Format.FormatInput == Double, Format.FormatOutput == String {
+        self._value = value
+        self.title = title
+        self.track = GlassSliderTrack(range: range, step: step)
+        self.material = material
+        self.showsValue = showsValue
+        self.formattedValue = { format.format($0) }
+        self.onEditingChanged = onEditingChanged
+    }
+
+    /// Creates a slider that shows its value with up to two fraction digits.
+    ///
+    /// - Parameters:
+    ///   - title: Shown above the track and read by VoiceOver.
+    ///   - value: The selected value.
+    ///   - range: The values the slider can select.
+    ///   - step: The distance between valid values, measured from the lower bound, or `nil` for any value.
+    ///     A step that is not positive and finite is ignored.
+    ///   - material: The track's glass material, or `nil` to use the theme's material.
+    ///   - showsValue: Shows the formatted value next to the title.
     ///   - onEditingChanged: Called with `true` when a drag starts and `false` when it ends.
     public init(
         _ title: String,
@@ -103,16 +134,18 @@ public struct GlassSlider: View {
         step: Double? = nil,
         material: GlassMaterial? = nil,
         showsValue: Bool = true,
-        format: FloatingPointFormatStyle<Double> = .number.precision(.fractionLength(0...2)),
         onEditingChanged: @escaping (Bool) -> Void = { _ in }
     ) {
-        self._value = value
-        self.title = title
-        self.track = GlassSliderTrack(range: range, step: step)
-        self.material = material
-        self.showsValue = showsValue
-        self.format = format
-        self.onEditingChanged = onEditingChanged
+        self.init(
+            title,
+            value: value,
+            in: range,
+            step: step,
+            material: material,
+            showsValue: showsValue,
+            format: .number.precision(.fractionLength(0...2)),
+            onEditingChanged: onEditingChanged
+        )
     }
 
     public var body: some View {
@@ -123,7 +156,7 @@ public struct GlassSlider: View {
                     .foregroundStyle(.secondary)
                 Spacer(minLength: 8)
                 if showsValue {
-                    Text(value.formatted(format))
+                    Text(formattedValue(value))
                         .font(.subheadline.monospacedDigit())
                 }
             }
@@ -131,7 +164,7 @@ public struct GlassSlider: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
-        .accessibilityValue(value.formatted(format))
+        .accessibilityValue(formattedValue(value))
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment: update(track.value(adjusting: value, up: true))

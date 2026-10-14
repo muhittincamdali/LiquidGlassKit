@@ -122,6 +122,16 @@ struct GlassSliderRenderingTests {
         #expect(abs(share - value) < 0.12, "green fill covers \(share) of the width for value \(value)")
     }
 
+    /// Any `FormatStyle` from `Double` to `String` works, so percentages need no
+    /// conversion; without a format the value has at most two fraction digits.
+    @Test func valuesUseTheGivenFormat() {
+        let percent = GlassSlider("Edge", value: .constant(0), format: .percent.locale(Locale(identifier: "en_US")))
+        #expect(percent.formattedValue(0.35) == "35%")
+        let plain = GlassSlider("Count", value: .constant(0))
+        #expect(plain.formattedValue(3) == "3")
+        #expect(plain.formattedValue(2.0004) == "2")
+    }
+
     @Test func trackUsesTheThemeMaterial() throws {
         let slider = GlassSlider("Level", value: .constant(0), showsValue: false)
             .tint(.red)
