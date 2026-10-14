@@ -67,15 +67,24 @@ struct RenderingTests {
         #expect(Int(blue.blue) - Int(blue.red) > Self.tintMargin, "blue tint should dominate: \(blue)")
     }
 
-    private func fallbackCenterPixel(_ material: GlassMaterial) throws -> Pixel {
+    @Test func reduceTransparencyDrawsAnOpaqueUntintedBackground() throws {
+        let red = try fallbackCenterPixel(.tinted(.red), reduceTransparency: true)
+        let blue = try fallbackCenterPixel(.tinted(.blue), reduceTransparency: true)
+        #expect(red.alpha == 255, "background should be opaque: \(red)")
+        #expect(red == blue, "tint should be ignored: \(red) vs \(blue)")
+        #expect(red != (try fallbackCenterPixel(.tinted(.red))), "should differ from the tinted blur")
+    }
+
+    private func fallbackCenterPixel(_ material: GlassMaterial, reduceTransparency: Bool = false) throws -> Pixel {
         let surface = Color.clear
             .frame(width: Self.size.width, height: Self.size.height)
             .glassSurface(material, in: .roundedRectangle(cornerRadius: 0))
+            .environment(\._accessibilityReduceTransparency, reduceTransparency)
         let image = try #require(render(AnyView(surface), mode: .fallback))
         return try #require(Self.centerPixel(of: image))
     }
 
-    private struct Pixel {
+    private struct Pixel: Equatable {
         let red: UInt8
         let blue: UInt8
         let alpha: UInt8
