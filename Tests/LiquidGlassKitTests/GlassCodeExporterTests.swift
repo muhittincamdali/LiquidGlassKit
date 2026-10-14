@@ -92,18 +92,33 @@ struct GlassCodeExporterTests {
         #expect(body.prefix(while: { $0 == " " }).count == expected)
     }
 
-    /// The expected text is also compiled below as `ExportedBadge` and
-    /// `ExportedCard`, so the exporter's output is known to build.
+    /// The expected text is also compiled below as `ExportedBadge`,
+    /// `ExportedCard` and `ExportedShimmer`, so the exporter's output is known to build.
     @Test func viewCodeMatchesTheCompiledSamples() {
         #expect(exporter.viewCode(named: "ExportedBadge", theme: .aqua, renderingMode: .fallback) == Self.badgeSource)
         let card = GlassTheme(material: .tinted(.blue), shape: .capsule, shadowRadius: 4)
         #expect(GlassCodeExporter(indentWidth: 2).viewCode(named: "ExportedCard", theme: card) == Self.cardSource)
+        #expect(exporter.viewCode(named: "ExportedShimmer", theme: .ocean, highlight: .shimmer) == Self.shimmerSource)
+    }
+
+    /// The playground previews its highlight, so the copied code must contain it,
+    /// between the surface and the theme it takes its outline from.
+    @Test(arguments: GlassHighlight.allCases)
+    func viewCodeAddsTheHighlight(highlight: GlassHighlight) throws {
+        let lines = exporter.viewCode(named: "Lit", theme: .standard, highlight: highlight)
+            .split(separator: "\n")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+        let surface = try #require(lines.firstIndex(of: ".glassSurface()"))
+        let theme = try #require(lines.firstIndex { $0.hasPrefix(".glassTheme(") })
+        #expect(lines[surface + 1] == ".glassHighlight(.\(highlight.rawValue))")
+        #expect(surface + 1 < theme)
+        #expect(!exporter.viewCode(named: "Lit", theme: .standard).contains("glassHighlight"))
     }
 
     /// Guards the samples against drifting apart from the compiled copies in this file.
     @Test func compiledSamplesMatchTheExpectedText() throws {
         let file = try String(contentsOfFile: #filePath, encoding: .utf8)
-        for source in [Self.badgeSource, Self.cardSource] {
+        for source in [Self.badgeSource, Self.cardSource, Self.shimmerSource] {
             let body = source.components(separatedBy: "import SwiftUI\n\n")[1]
             #expect(file.contains("private " + body), "compiled copy differs from:\n\(body)")
         }
@@ -139,6 +154,22 @@ struct GlassCodeExporterTests {
         }
 
         """
+
+    static let shimmerSource = """
+        import LiquidGlassKit
+        import SwiftUI
+
+        struct ExportedShimmer: View {
+            var body: some View {
+                Text("Hello, glass")
+                    .padding()
+                    .glassSurface()
+                    .glassHighlight(.shimmer)
+                    .glassTheme(.ocean)
+            }
+        }
+
+        """
 }
 
 // MARK: - Exporter output, compiled
@@ -160,4 +191,14 @@ private struct ExportedCard: View {
       .glassSurface()
       .glassTheme(GlassTheme(material: .tinted(.blue), shape: .capsule, shadowRadius: 4))
   }
+}
+
+private struct ExportedShimmer: View {
+    var body: some View {
+        Text("Hello, glass")
+            .padding()
+            .glassSurface()
+            .glassHighlight(.shimmer)
+            .glassTheme(.ocean)
+    }
 }

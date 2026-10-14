@@ -16,7 +16,7 @@ import SwiftUI
 /// resolved in a default (light) environment and written as sRGB components,
 /// so a dynamic color exports its light appearance.
 public struct GlassCodeExporter: Sendable {
-    /// Spaces per indentation level in ``viewCode(named:theme:renderingMode:)``,
+    /// Spaces per indentation level in ``viewCode(named:theme:renderingMode:highlight:)``,
     /// kept between 0 and ``maximumIndentWidth``.
     public var indentWidth: Int {
         didSet { indentWidth = indentWidth.clamped(to: 0...Self.maximumIndentWidth) }
@@ -108,13 +108,19 @@ public struct GlassCodeExporter: Sendable {
     ///     name that starts with a digit or is a Swift keyword gets a `Glass` prefix.
     ///   - theme: The theme the view installs.
     ///   - renderingMode: Adds `.glassRenderingMode(.fallback)` when it is ``GlassRenderingMode/fallback``.
+    ///   - highlight: Adds `.glassHighlight(_:color:in:)` with this effect after
+    ///     `.glassSurface()`, or nothing when it is `nil`. The highlight takes its
+    ///     outline from the theme, like the surface under it.
     public func viewCode(
         named name: String,
         theme: GlassTheme,
-        renderingMode: GlassRenderingMode = .automatic
+        renderingMode: GlassRenderingMode = .automatic,
+        highlight: GlassHighlight? = nil
     ) -> String {
         let indent = String(repeating: " ", count: indentWidth)
-        var modifiers = [".padding()", ".glassSurface()", ".glassTheme(\(themeArgument(for: theme)))"]
+        var modifiers = [".padding()", ".glassSurface()"]
+        if let highlight { modifiers.append(".glassHighlight(.\(highlight.rawValue))") }
+        modifiers.append(".glassTheme(\(themeArgument(for: theme)))")
         if renderingMode == .fallback { modifiers.append(".glassRenderingMode(.fallback)") }
         let lines = [
             "import LiquidGlassKit",

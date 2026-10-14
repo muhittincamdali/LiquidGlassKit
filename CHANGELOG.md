@@ -32,7 +32,8 @@ the same author. All changes are additive; code written for 2.0.0 builds unchang
 - `GlassPreset` with 14 named themes, and the matching `GlassTheme` members (`vapor`, `neon`,
   `aqua`, `ice`, `ocean`, `forest`, `amber`, `sunset`, `rose`, `lavender`, `midnight`).
 - `GlassCodeExporter`, which writes colors, materials, shapes, themes and complete views as Swift
-  source that uses this package. Two of its outputs are compiled in the test target.
+  source that uses this package, including a `glassHighlight` when one is given. Three of its
+  outputs are compiled in the test target.
 - `GlassTheme.maximumShadowRadius` (100 pt).
 - On the fallback path, glass is outlined in the primary color when Increase Contrast is on.
 - Demo app: a Playground tab that tunes a preset with sliders and shows the exported code; the

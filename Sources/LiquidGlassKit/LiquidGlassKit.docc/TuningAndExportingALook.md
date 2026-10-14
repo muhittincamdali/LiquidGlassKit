@@ -85,8 +85,8 @@ exporter.code(for: GlassTheme(material: .tinted(.teal)))  // "GlassTheme(materia
 exporter.code(for: GlassShape.topRounded(24))             // ".topRounded(24)"
 ```
 
-``GlassCodeExporter/viewCode(named:theme:renderingMode:)`` writes a complete view that compiles
-as is. Names that are not valid Swift identifiers are cleaned up, and the indentation width is
+``GlassCodeExporter/viewCode(named:theme:renderingMode:highlight:)`` writes a complete view that
+compiles as is, with a ``GlassHighlight`` when you pass one. Names that are not valid Swift identifiers are cleaned up, and the indentation width is
 limited to ``GlassCodeExporter/maximumIndentWidth``.
 
 ```swift
