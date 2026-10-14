@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
+<!-- i18n-source: README.md@1fdc5fa59b8a5bbcccee03211df035b12b5c5f6f status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-ja-light.svg" alt="LiquidGlassKit: SwiftUI 用 Liquid Glass サーフェスとコントロール。OS 26 はネイティブ、iOS 17 以降の旧 OS は Material で描画。"></picture></p>
@@ -34,9 +34,10 @@ LiquidGlassKit は、Liquid Glass のサーフェスとコントロールを使�
 ## 主な特長
 
 - **1 つのモディファイア、2 つの描画方法** — `glassSurface` は実行時にネイティブのガラスか `Material` によるフォールバックを選びます。どこでも同じ見た目にしたい場合は `glassRenderingMode(.fallback)` でフォールバックを強制できます。
-- **すぐに使えるコントロール** — ボタン、カード、テキストフィールド、検索バー、フローティングタブバー、ナビゲーションバー、ボトムシート。すべて `glassSurface` で描画されます。
-- **テーマ** — `GlassTheme` はビュー階層全体のマテリアル、形状、影、縁のハイライトを設定します。各コンポーネントには個別のマテリアルも指定できます。
-- **アクセシビリティ** — 「透明度を下げる」（Reduce Transparency）がオンのとき、フォールバックは不透明な背景を描画します。装飾用アイコンは VoiceOver から隠され、タブバーは選択中のタブを伝え、シートはエスケープジェスチャで閉じます。
+- **すぐに使えるコントロール** — ボタン、スイッチのスタイル、スライダー、カード、テキストフィールド、検索バー、任意のアクションボタンとタブのバッジを備えたフローティングタブバー、ナビゲーションバー、ボトムシート。すべて `glassSurface` で描画されます。
+- **エフェクト** — グラデーションで色付けしたガラスと、アニメーションする shimmer・pulse・breathe のハイライト。どちらの描画方法でも動作します。
+- **テーマとプリセット** — `GlassTheme` はビュー階層全体のマテリアル、形状、影、縁のハイライトを設定し、`GlassPreset` は 14 個の既製テーマに名前を付け、`GlassCodeExporter` は実行時に調整したテーマを Swift のコードに書き戻します。
+- **アクセシビリティ** — 「透明度を下げる」（Reduce Transparency）がオンのときフォールバックは不透明な背景を、「コントラストを上げる」（Increase Contrast）がオンのときはより強い縁を描画します。「視差効果を減らす」（Reduce Motion）ではハイライトが止まり、スイッチとスライダーは SwiftUI の VoiceOver の動作を保ち、タブバーは選択中のタブを伝え、シートはエスケープジェスチャで閉じます。
 - **名前の衝突なし** — API は SwiftUI 自身の名前（`glassEffect`、`GlassEffectContainer`、`GlassButtonStyle`）を避けているため、両方のモジュールを同じファイルで import できます。
 - **描画をテスト** — Swift Testing のテストスイートが CI 上の macOS と iOS シミュレータで実行され、オフスクリーン描画によって、フォールバックで各コンポーネントが正しいマテリアルでガラスを描くことを確認します。
 
@@ -50,7 +51,7 @@ Xcode で **File › Add Package Dependencies…** を選び、リポジトリ�
 https://github.com/muhittincamdali/LiquidGlassKit.git
 ```
 
-依存関係のルールは **Up to Next Major Version**（2.0.0 から）のままにして **Add Package** をクリックします。次のダイアログで `LiquidGlassKit` を追加するアプリのターゲットを選び、もう一度 **Add Package** をクリックします。
+依存関係のルールは **Up to Next Major Version**（2.1.0 から）のままにして **Add Package** をクリックします。次のダイアログで `LiquidGlassKit` を追加するアプリのターゲットを選び、もう一度 **Add Package** をクリックします。
 
 **2. モジュールをインポートする**
 
@@ -96,7 +97,7 @@ https://github.com/muhittincamdali/LiquidGlassKit.git
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.1.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
@@ -177,7 +178,36 @@ struct RootView: View {
 }
 ```
 
-`GlassTabBar` は任意の `Hashable` な選択値で動作し、ビルダーは `if` と `for` に対応しています。シートは下にドラッグする、暗くなった背景をタップする、またはアクセシビリティのエスケープジェスチャで閉じます。tvOS では使用できません。
+`GlassTabBar` は任意の `Hashable` な選択値で動作し、ビルダーは `if` と `for` に対応しています。タブは `.badge(_:)` でアイコンの上に数字や短いラベルを表示できます（例: `GlassTab("Profile", systemImage: "person", value: Screen.profile).badge(2)`）。シートは下にドラッグする、暗くなった背景をタップする、またはアクセシビリティのエスケープジェスチャで閉じます。tvOS では使用できません。
+
+### スイッチ、スライダー、エフェクトを追加する
+
+```swift
+struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+```
+
+スイッチのスタイルは `Toggle` のアクセシビリティを保ち、VoiceOver のユーザーはスライダーを 1 ステップずつ調整できます。「視差効果を減らす」がオンのときはハイライトを描画しません。`GlassSlider` は tvOS では使用できません。
 
 ### すべてのビューにテーマを適用し、描画方法を選ぶ
 
@@ -191,6 +221,14 @@ struct ThemedApp: View {
 }
 ```
 
+`GlassPreset.all` にある 14 個のプリセットのいずれかから始めて調整し、その結果をプロジェクトに貼り付けられるビューに変換できます。
+
+```swift
+var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+theme.shadowRadius = 4
+let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+```
+
 ### API の概要
 
 | API | 役割 |
@@ -198,21 +236,29 @@ struct ThemedApp: View {
 | `glassSurface(_:in:interactive:)` | 任意のビューの背後にガラスを置きます。OS 26 ではネイティブの `glassEffect`、それ以外では `Material` によるフォールバック。 |
 | `GlassGroup` | OS 26 では `GlassEffectContainer` で包み、近くのガラスの形状を融合させます。それ以外ではそのまま内容を表示します。 |
 | `GlassButton`, `.buttonStyle(.liquidGlass)` | 3 つのサイズのカプセル型ガラスボタン。押下中、無効、破壊的操作の状態に対応。 |
+| `.toggleStyle(.liquidGlass)` | オンのときティントで満たされるガラスのトラックを持つスイッチ。`Toggle` のアクセシビリティを保ちます。 |
+| `GlassSlider` | 下限から数えるステップと任意の `FormatStyle` に対応した、ガラスのトラックのスライダー。tvOS にはありません。 |
 | `GlassCard` | ガラス上の余白付きコンテナ。 |
 | `GlassTextField` | 任意の SF Symbol とフォーカスリング付きのテキストフィールド。 |
 | `GlassSearchBar` | クリアボタンと Cancel ボタン付きのカプセル型検索フィールド。 |
 | `GlassTabBar` | 任意の `Hashable` な選択値に対応するジェネリックなフローティングタブバー。ビルダーは `if` と `for` に対応。 |
+| `GlassTabBarAction` | タブの後ろに置く、画面の主要な操作のための丸いボタン。 |
+| `GlassTab.badge(_:)` | タブのアイコンの上に赤いカプセルで表示する数字または短いラベル。数字が 0 のときは表示しません。 |
 | `GlassNavigationBar` | 左右にアイテムを置けるフローティングのタイトルバー。 |
 | `glassSheet(isPresented:material:content:)` | フローティングのボトムシート。ドラッグ、外側のタップ、アクセシビリティのエスケープジェスチャで閉じます。tvOS にはありません。 |
+| `glassGradient(_:direction:intensity:material:in:interactive:)` | どちらの描画方法でも動作する、グラデーションで色付けしたガラス。 |
+| `glassHighlight(_:color:in:)` | ガラスの上でアニメーションする shimmer・pulse・breathe の光。「視差効果を減らす」ではオフになります。 |
 | `GlassTheme`, `GlassRenderingMode` | 既定のマテリアル・形状・影、およびフォールバックの強制に使う環境値。 |
+| `GlassPreset` | ピッカーや設定画面向けの表示名を持つ 14 個のテーマ。 |
+| `GlassCodeExporter` | テーマ、マテリアル、形状、色を、このパッケージを使う Swift のコードとして書き出します。 |
 
 ## デモ
 
-[`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) は、コンポーネントギャラリー、タブバー、シート、ネイティブとフォールバックの比較を備えた iOS アプリです。`LiquidGlassDemo.xcodeproj` を開き、iPhone シミュレータを選んで実行してください。画面と起動引数は [デモの README](Examples/LiquidGlassDemo/README.md) に記載しています。CI は pull request ごと、および main への push ごとにこのアプリをビルドします。
+[`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) は、コンポーネントギャラリー、タブバー、シート、ネイティブとフォールバックの比較、そしてテーマを調整してコードを表示するプレイグラウンドを備えた iOS アプリです。`LiquidGlassDemo.xcodeproj` を開き、iPhone シミュレータを選んで実行してください。画面と起動引数は [デモの README](Examples/LiquidGlassDemo/README.md) に記載しています。CI は pull request ごと、および main への push ごとにこのアプリをビルドします。
 
-| シート（ライト） | タブバー（ダーク） | ネイティブとフォールバック（ダーク） |
-| --- | --- | --- |
-| ![ガラスのシート、ライト](docs/images/sheet-light.png) | ![タブバー、ダーク](docs/images/tabs-dark.png) | ![ネイティブとフォールバック、ダーク](docs/images/compare-dark.png) |
+| シート（ライト） | タブバー（ダーク） | プレイグラウンド（ライト） | ネイティブとフォールバック（ダーク） |
+| --- | --- | --- | --- |
+| ![ガラスのシート、ライト](docs/images/sheet-light.png) | ![タブバー、ダーク](docs/images/tabs-dark.png) | ![プレイグラウンド、ライト](docs/images/playground-light.png) | ![ネイティブとフォールバック、ダーク](docs/images/compare-dark.png) |
 
 <sub>スクリーンショットは iOS 27 シミュレータ上のデモアプリで、[`scripts/screenshots.sh`](scripts/screenshots.sh) を使って撮影しました。</sub>
 
@@ -231,6 +277,8 @@ API リファレンスと解説記事：
 - [Building a Screen with a Floating Tab Bar](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/buildingafloatingtabbarscreen) — スクロールするコンテンツの上にタイトルバー、検索フィールド、カード、タブバー、シートを 5 つの手順で配置します。
 - [Rendering Paths](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/renderingpaths) — 各 OS のユーザーに何が表示されるか、フォールバックを強制する方法。
 - [Theming](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/theming) — プリセット、独自のテーマ、コンポーネントごとのマテリアル。
+- [Adding Controls and Effects](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/addingcontrolsandeffects) — ガラスのスイッチとスライダー、グラデーションのガラス、ハイライト、タブバーのアクションボタン。
+- [Tuning and Exporting a Look](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/tuningandexportingalook) — プリセットを選び、実行時にテーマを調整し、Swift のコードとしてコピーします。
 
 ## 動作要件
 
@@ -247,8 +295,8 @@ API リファレンスと解説記事：
 
 ## アーキテクチャ
 
-- `Sources/LiquidGlassKit/Core` には値型 `GlassMaterial`、`GlassShape`、`GlassTheme`、`GlassRenderingMode` があります。
-- `Sources/LiquidGlassKit/Surface` には `glassSurface` と `GlassGroup` があり、SwiftUI のガラス API を呼び出すのはここだけです。
+- `Sources/LiquidGlassKit/Core` には値型 `GlassMaterial`、`GlassShape`、`GlassTheme`、`GlassPreset`、`GlassRenderingMode` と `GlassCodeExporter` があります。
+- `Sources/LiquidGlassKit/Surface` には `glassSurface` と `GlassGroup` があり、SwiftUI のガラス API を呼び出すのはここだけです。`glassSurface` の上に作られたグラデーションとハイライトのモディファイアもここにあります。
 - `Sources/LiquidGlassKit/Components` はすべてのコントロールを `glassSurface` の上に構築しているため、テーマと描画モードがすべてに適用されます。
 
 `glassSurface` は環境の `GlassRenderingMode` を `GlassRenderingMode.isNativeGlassAvailable` と照らし合わせて解決します。これは `#available(iOS 26, macOS 26, tvOS 26, watchOS 26, *)` によるチェックで、SwiftUI が `glassEffect` を使用不可としている visionOS では常に `false` になります。各マテリアルには両方の描画方法での対応があります。
@@ -268,13 +316,13 @@ xcodebuild test -scheme LiquidGlassKit \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-Swift Testing のテストスイートは、マテリアルと形状のロジック、テーマの値の制限、描画モードの解決、タブのビルダー、シートを閉じるしきい値をカバーしています。フォールバックでのオフスクリーン描画では、各コンポーネントがテーマのマテリアルでガラスを描くこと、明示したマテリアルがテーマより優先されること、ダークなガラス上のラベルが白く、破壊的な操作のラベルが赤いこと、シートが表示中だけ背景を暗くすること、「透明度を下げる」で不透明な背景になることを確認します。CI はテストを macOS、iOS 26 シミュレータ、フォールバックしかない iOS 18.6 シミュレータで実行し、`Package.swift` にあるすべてのプラットフォーム向けにライブラリをビルドします。
+Swift Testing のテストスイートは、マテリアルと形状のロジック、テーマとグラデーションの値の制限（NaN を含む）、描画モードの解決、タブのビルダー、シートを閉じるしきい値、変わったステップや範囲でのスライダーの値の丸め、ハイライトのタイミング、プリセットの検索、エクスポーターの出力をカバーしており、その出力のうち 3 つのサンプルはテストターゲットでコンパイルされます。フォールバックでのオフスクリーン描画では、各コンポーネントがテーマのマテリアルでガラスを描くこと、明示したマテリアルがテーマより優先されること、ダークなガラス上のラベルが白く、破壊的な操作のラベルが赤いこと、シートが表示中だけ背景を暗くすること、「透明度を下げる」で不透明な背景になることを確認します。CI はテストを macOS、iOS 26 シミュレータ、フォールバックしかない iOS 18.6 シミュレータで実行し、`Package.swift` にあるすべてのプラットフォーム向けにライブラリをビルドします。
 
 `ImageRenderer` はぼかしをキャプチャせず、ネイティブのガラスも一部しかキャプチャしないため、テストではフォールバックの色合いと描画範囲、そして各コンポーネントのネイティブ側の描画がフォールバック側の描画と異なることを確認しています。ガラスの最終的な見た目は確認していません。
 
 ## ロードマップ
 
-2.0.0 以降のリリースはまだ予定していません。バグ報告と機能の要望は [issues](https://github.com/muhittincamdali/LiquidGlassKit/issues) で管理しています。
+2.1.0 以降のリリースはまだ予定していません。バグ報告と機能の要望は [issues](https://github.com/muhittincamdali/LiquidGlassKit/issues) で管理しています。
 
 ## コントリビューション
 

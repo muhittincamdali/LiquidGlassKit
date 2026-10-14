@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3ac8fd6d907a24d0353968251b18deffaeaeb2a8 status=reviewed -->
+<!-- i18n-source: README.md@1fdc5fa59b8a5bbcccee03211df035b12b5c5f6f status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/LiquidGlassKit/main/.github/brand/banner-zh-CN-light.svg" alt="LiquidGlassKit: 适用于 SwiftUI 的 Liquid Glass 表面与控件：OS 26 上使用原生玻璃效果，低至 iOS 17 的系统使用 Material 回退。"></picture></p>
@@ -34,9 +34,10 @@ LiquidGlassKit 是一个 SwiftUI 软件包，面向想使用 Liquid Glass 表面
 ## 亮点
 
 - **一个修饰符，两条渲染路径** — `glassSurface` 在运行时选择原生玻璃或基于 `Material` 的回退方案（fallback）；如果希望所有系统上外观一致，可以用 `glassRenderingMode(.fallback)` 强制使用回退方案。
-- **现成的控件** — 按钮、卡片、文本框、搜索栏、悬浮标签栏、导航栏和底部面板（bottom sheet），全部通过 `glassSurface` 绘制。
-- **主题** — `GlassTheme` 为整个视图层级设置材质、形状、阴影和边缘高光；每个组件仍可以使用自己的材质。
-- **辅助功能** — 打开“降低透明度”（Reduce Transparency）时，回退方案绘制不透明背景；装饰性图标对 VoiceOver 隐藏，标签栏会报告当前选中的标签，底部面板可以用退出手势关闭。
+- **现成的控件** — 按钮、开关样式、滑块、卡片、文本框、搜索栏、带可选操作按钮和标签角标的悬浮标签栏、导航栏和底部面板（bottom sheet），全部通过 `glassSurface` 绘制。
+- **效果** — 渐变着色的玻璃，以及带动画的 shimmer、pulse 和 breathe 高光，两条路径上都能使用。
+- **主题与预设** — `GlassTheme` 为整个视图层级设置材质、形状、阴影和边缘高光，`GlassPreset` 为 14 个现成主题命名，`GlassCodeExporter` 把运行时调好的主题重新写成 Swift 代码。
+- **辅助功能** — 打开“降低透明度”（Reduce Transparency）时，回退方案绘制不透明背景，打开“增强对比度”（Increase Contrast）时绘制更明显的边缘；“减弱动态效果”（Reduce Motion）会停止高光，开关和滑块保留 SwiftUI 的 VoiceOver 行为，标签栏会报告当前选中的标签，底部面板可以用退出手势关闭。
 - **没有命名冲突** — API 避开了 SwiftUI 自己的名称（`glassEffect`、`GlassEffectContainer`、`GlassButtonStyle`），因此两个模块可以在同一个文件中导入。
 - **经过测试的渲染** — Swift Testing 测试套件在 CI 中的 macOS 和 iOS 模拟器上运行；离屏渲染会在回退路径上检查每个组件都用正确的材质绘制了玻璃。
 
@@ -50,7 +51,7 @@ LiquidGlassKit 是一个 SwiftUI 软件包，面向想使用 Liquid Glass 表面
 https://github.com/muhittincamdali/LiquidGlassKit.git
 ```
 
-将依赖规则保持为 **Up to Next Major Version**，起始版本 2.0.0，然后点击 **Add Package**。在下一个对话框中，为 `LiquidGlassKit` 选择你的 App target，再次点击 **Add Package**。
+将依赖规则保持为 **Up to Next Major Version**，起始版本 2.1.0，然后点击 **Add Package**。在下一个对话框中，为 `LiquidGlassKit` 选择你的 App target，再次点击 **Add Package**。
 
 **2. 导入模块**
 
@@ -96,7 +97,7 @@ https://github.com/muhittincamdali/LiquidGlassKit.git
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.1.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
@@ -177,7 +178,36 @@ struct RootView: View {
 }
 ```
 
-`GlassTabBar` 支持任意 `Hashable` 类型的选择值，它的 builder 支持 `if` 和 `for`。底部面板可以通过向下拖动、轻点变暗的背景或辅助功能的退出手势关闭。tvOS 上不提供底部面板。
+`GlassTabBar` 支持任意 `Hashable` 类型的选择值，它的 builder 支持 `if` 和 `for`。标签可以用 `.badge(_:)` 在图标上方显示数字或简短文字，例如 `GlassTab("Profile", systemImage: "person", value: Screen.profile).badge(2)`。底部面板可以通过向下拖动、轻点变暗的背景或辅助功能的退出手势关闭。tvOS 上不提供底部面板。
+
+### 添加开关、滑块和效果
+
+```swift
+struct PlayerSettings: View {
+    @State private var shuffle = false
+    @State private var volume = 0.6
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassCard {
+                VStack(spacing: 14) {
+                    Toggle("Shuffle", isOn: $shuffle)
+                        .toggleStyle(.liquidGlass)
+                    GlassSlider("Volume", value: $volume, format: .percent)
+                }
+            }
+            Label("Golden hour", systemImage: "sun.horizon")
+                .padding()
+                .glassGradient([.orange, .pink], direction: .horizontal, in: .capsule)
+            GlassButton("Upgrade", systemImage: "sparkles", material: .tinted(.purple)) {}
+                .glassHighlight(.shimmer, in: .capsule)
+        }
+        .padding()
+    }
+}
+```
+
+开关样式保留了 `Toggle` 的辅助功能，VoiceOver 用户每次将滑块调整一步。打开“减弱动态效果”时不绘制高光。`GlassSlider` 在 tvOS 上不可用。
 
 ### 为所有视图设置主题并选择渲染路径
 
@@ -191,6 +221,14 @@ struct ThemedApp: View {
 }
 ```
 
+从 `GlassPreset.all` 中的 14 个预设之一开始，调整后把结果转换成可以粘贴到项目中的视图：
+
+```swift
+var theme = GlassPreset.named("Ocean")?.theme ?? .standard
+theme.shadowRadius = 4
+let source = GlassCodeExporter().viewCode(named: "PromoCard", theme: theme)
+```
+
 ### API 概览
 
 | API | 作用 |
@@ -198,21 +236,29 @@ struct ThemedApp: View {
 | `glassSurface(_:in:interactive:)` | 在任意视图后面放置玻璃。OS 26 上使用原生 `glassEffect`，其他系统上使用 `Material` 回退。 |
 | `GlassGroup` | 在 OS 26 上用 `GlassEffectContainer` 包裹内容，让相邻的玻璃形状融合；在其他系统上原样显示内容。 |
 | `GlassButton`, `.buttonStyle(.liquidGlass)` | 三种尺寸的胶囊形玻璃按钮，支持按下、禁用和破坏性操作状态。 |
+| `.toggleStyle(.liquidGlass)` | 带玻璃轨道的开关，打开时以着色填充；保留 `Toggle` 的辅助功能。 |
+| `GlassSlider` | 玻璃轨道上的滑块，步长从下限开始计算，支持任意 `FormatStyle`。tvOS 上不可用。 |
 | `GlassCard` | 带内边距的玻璃容器。 |
 | `GlassTextField` | 带可选 SF Symbol 和焦点环的文本框。 |
 | `GlassSearchBar` | 带清除按钮和 Cancel 按钮的胶囊形搜索框。 |
 | `GlassTabBar` | 悬浮标签栏，对任意 `Hashable` 选择值泛型化；builder 支持 `if` 和 `for`。 |
+| `GlassTabBarAction` | 位于标签之后、用于当前页面主要操作的圆形按钮。 |
+| `GlassTab.badge(_:)` | 标签图标上方红色胶囊中的数字或简短文字；数字为 0 时隐藏。 |
 | `GlassNavigationBar` | 左右两侧可放置项目的悬浮标题栏。 |
 | `glassSheet(isPresented:material:content:)` | 悬浮的底部面板；可通过拖动、轻点外部或辅助功能退出手势关闭。tvOS 上不可用。 |
+| `glassGradient(_:direction:intensity:material:in:interactive:)` | 渐变着色的玻璃，两条渲染路径都支持。 |
+| `glassHighlight(_:color:in:)` | 玻璃上带动画的 shimmer、pulse 或 breathe 光效；“减弱动态效果”时关闭。 |
 | `GlassTheme`, `GlassRenderingMode` | 用于默认材质、形状、阴影以及强制回退的环境值。 |
+| `GlassPreset` | 14 个带显示名称的命名主题，适用于选择器和设置页面。 |
+| `GlassCodeExporter` | 把主题、材质、形状和颜色写成使用本软件包的 Swift 代码。 |
 
 ## 演示
 
-[`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) 是一个 iOS App，包含组件库、标签栏、底部面板以及原生与回退的对比。打开 `LiquidGlassDemo.xcodeproj`，选择一个 iPhone 模拟器并运行；[演示 App 的 README](Examples/LiquidGlassDemo/README.md) 列出了各个页面和启动参数。CI 会在每个 pull request 以及每次 push 到 main 时构建它。
+[`Examples/LiquidGlassDemo`](Examples/LiquidGlassDemo) 是一个 iOS App，包含组件库、标签栏、底部面板、原生与回退的对比，以及一个可以调整主题并显示其代码的 Playground。打开 `LiquidGlassDemo.xcodeproj`，选择一个 iPhone 模拟器并运行；[演示 App 的 README](Examples/LiquidGlassDemo/README.md) 列出了各个页面和启动参数。CI 会在每个 pull request 以及每次 push 到 main 时构建它。
 
-| 底部面板（浅色） | 标签栏（深色） | 原生与回退（深色） |
-| --- | --- | --- |
-| ![玻璃底部面板，浅色](docs/images/sheet-light.png) | ![标签栏，深色](docs/images/tabs-dark.png) | ![原生与回退，深色](docs/images/compare-dark.png) |
+| 底部面板（浅色） | 标签栏（深色） | Playground（浅色） | 原生与回退（深色） |
+| --- | --- | --- | --- |
+| ![玻璃底部面板，浅色](docs/images/sheet-light.png) | ![标签栏，深色](docs/images/tabs-dark.png) | ![Playground，浅色](docs/images/playground-light.png) | ![原生与回退，深色](docs/images/compare-dark.png) |
 
 <sub>截图来自 iOS 27 模拟器中的演示 App，使用 [`scripts/screenshots.sh`](scripts/screenshots.sh) 截取。</sub>
 
@@ -231,6 +277,8 @@ API 参考文档与文章：
 - [Building a Screen with a Floating Tab Bar](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/buildingafloatingtabbarscreen) — 分五步在滚动内容上放置标题栏、搜索框、卡片、标签栏和底部面板。
 - [Rendering Paths](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/renderingpaths) — 各系统上的用户会看到什么，以及如何强制使用回退方案。
 - [Theming](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/theming) — 预设主题、自定义主题和按组件设置的材质。
+- [Adding Controls and Effects](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/addingcontrolsandeffects) — 玻璃开关和滑块、渐变玻璃、高光以及标签栏的操作按钮。
+- [Tuning and Exporting a Look](https://muhittincamdali.github.io/LiquidGlassKit/documentation/liquidglasskit/tuningandexportingalook) — 选择一个预设，在运行时调整主题，并复制为 Swift 代码。
 
 ## 系统要求
 
@@ -247,8 +295,8 @@ API 参考文档与文章：
 
 ## 架构
 
-- `Sources/LiquidGlassKit/Core` 包含值类型：`GlassMaterial`、`GlassShape`、`GlassTheme` 和 `GlassRenderingMode`。
-- `Sources/LiquidGlassKit/Surface` 包含 `glassSurface` 和 `GlassGroup`，只有这里调用 SwiftUI 的玻璃 API。
+- `Sources/LiquidGlassKit/Core` 包含值类型 `GlassMaterial`、`GlassShape`、`GlassTheme`、`GlassPreset` 和 `GlassRenderingMode`，以及 `GlassCodeExporter`。
+- `Sources/LiquidGlassKit/Surface` 包含 `glassSurface` 和 `GlassGroup`，只有这里调用 SwiftUI 的玻璃 API；基于 `glassSurface` 的渐变和高光修饰符也在这里。
 - `Sources/LiquidGlassKit/Components` 中的每个控件都构建在 `glassSurface` 之上，因此主题和渲染模式对所有控件都生效。
 
 `glassSurface` 会把环境中的 `GlassRenderingMode` 与 `GlassRenderingMode.isNativeGlassAvailable` 对照来决定渲染路径。后者是一个 `#available(iOS 26, macOS 26, tvOS 26, watchOS 26, *)` 检查，在 visionOS 上始终为 `false`，因为 SwiftUI 在 visionOS 上将 `glassEffect` 标记为不可用。每种材质在两条路径上都有对应：
@@ -268,13 +316,13 @@ xcodebuild test -scheme LiquidGlassKit \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-Swift Testing 测试套件覆盖材质和形状逻辑、主题数值的限制、渲染模式的判定、标签 builder 以及底部面板的关闭阈值。回退路径上的离屏渲染会检查：每个组件都用主题的材质绘制玻璃，显式指定的材质优先于主题，深色玻璃上的标签为白色，破坏性操作的标签为红色，底部面板只在显示时让背景变暗，以及“降低透明度”时绘制不透明背景。CI 在 macOS、iOS 26 模拟器和只有回退路径的 iOS 18.6 模拟器上运行测试，并为 `Package.swift` 中的每个平台构建该库。
+Swift Testing 测试套件覆盖材质和形状逻辑、主题和渐变数值的限制（包括 NaN）、渲染模式的判定、标签 builder、底部面板的关闭阈值、特殊步长和范围下滑块的取值对齐、高光的时间节奏、预设查找以及导出器的输出，其中三个输出示例会在测试目标中编译。回退路径上的离屏渲染会检查：每个组件都用主题的材质绘制玻璃，显式指定的材质优先于主题，深色玻璃上的标签为白色，破坏性操作的标签为红色，底部面板只在显示时让背景变暗，以及“降低透明度”时绘制不透明背景。CI 在 macOS、iOS 26 模拟器和只有回退路径的 iOS 18.6 模拟器上运行测试，并为 `Package.swift` 中的每个平台构建该库。
 
 `ImageRenderer` 无法捕获模糊效果，也只能部分捕获原生玻璃，因此测试检查的是回退方案的色调和覆盖范围，以及每个组件在原生路径上的渲染结果与回退路径不同；不检查玻璃的最终外观。
 
 ## 路线图
 
-2.0.0 之后的版本尚无计划。错误报告和功能请求在 [issues](https://github.com/muhittincamdali/LiquidGlassKit/issues) 中跟踪。
+2.1.0 之后的版本尚无计划。错误报告和功能请求在 [issues](https://github.com/muhittincamdali/LiquidGlassKit/issues) 中跟踪。
 
 ## 参与贡献
 
