@@ -70,13 +70,40 @@ struct GlassSliderTrackTests {
 
     /// The width of these ranges is not finite, so fractions would be NaN and
     /// the thumb's offset invalid; the track treats them as unmovable.
-    @Test(arguments: [0...Double.infinity, -Double.infinity...0, -Double.greatestFiniteMagnitude...Double.greatestFiniteMagnitude])
+    static let rangesWithoutAFiniteWidth = [
+        0...Double.infinity, -Double.infinity...0, -Double.greatestFiniteMagnitude...Double.greatestFiniteMagnitude
+    ]
+
+    @Test(arguments: rangesWithoutAFiniteWidth)
     func rangesWithoutAFiniteWidthDoNotMove(range: ClosedRange<Double>) {
         let track = GlassSliderTrack(range: range, step: 1)
         #expect(!track.isMovable)
         #expect(track.fraction(of: 0) == 0)
         #expect(!track.snapped(0).isNaN)
         #expect(!track.value(adjusting: 0, up: true).isNaN)
+    }
+
+    /// A slider over a range that cannot move ignores drags and VoiceOver
+    /// adjustments, even when its binding holds a value the track would snap
+    /// to the bound: a drag over `5...5` proposes 5 for a binding of 3.
+    @Test(arguments: [5.0...5.0, 0...Double.infinity])
+    func immovableRangesLeaveTheBindingAlone(range: ClosedRange<Double>) {
+        let track = GlassSliderTrack(range: range, step: nil)
+        let current = 3.0
+        let dragged = track.value(atLocation: 150, width: 200, inset: 13)
+        let adjusted = track.value(adjusting: current, up: true)
+        #expect(dragged != current && adjusted != current, "the proposals must differ to exercise the guard")
+        #expect(track.update(from: current, to: dragged) == nil)
+        #expect(track.update(from: current, to: adjusted) == nil)
+    }
+
+    @Test func movableRangesStoreOnlyFiniteChanges() {
+        let track = GlassSliderTrack(range: 0...10, step: 1)
+        #expect(track.update(from: 3, to: track.value(atLocation: 150, width: 200, inset: 13)) == 8)
+        #expect(track.update(from: 3, to: track.value(adjusting: 3, up: false)) == 2)
+        #expect(track.update(from: 3, to: 3) == nil)
+        #expect(track.update(from: 3, to: .nan) == nil)
+        #expect(track.update(from: 3, to: .infinity) == nil)
     }
 
     /// The thumb's center travels from `inset` to `width - inset`, so touches on

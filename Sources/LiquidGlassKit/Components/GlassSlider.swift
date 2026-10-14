@@ -45,6 +45,16 @@ struct GlassSliderTrack: Equatable {
         return snapped(value + (up ? increment : -increment))
     }
 
+    /// The value a drag or accessibility adjustment should store in place of
+    /// `current`, or `nil` to leave the binding alone: when the range cannot
+    /// move, when `proposed` is not finite, or when nothing changes. A binding
+    /// that holds a value outside an immovable range, such as 3 for `5...5`,
+    /// keeps it rather than jumping to the bound.
+    func update(from current: Double, to proposed: Double) -> Double? {
+        guard isMovable, proposed.isFinite, proposed != current else { return nil }
+        return proposed
+    }
+
     /// `value` clamped to the range and, with a positive finite step, rounded to
     /// the nearest step from the lower bound that is still inside the range.
     func snapped(_ value: Double) -> Double {
@@ -217,8 +227,8 @@ public struct GlassSlider: View {
     }
 
     private func update(_ newValue: Double) {
-        guard track.isMovable, newValue.isFinite, newValue != value else { return }
-        value = newValue
+        guard let accepted = track.update(from: value, to: newValue) else { return }
+        value = accepted
     }
 
     static let trackHeight: CGFloat = 8
