@@ -43,3 +43,7 @@ fastlane/test_output
 *.xcuserstate
 *.xcscmblueprint
 *.idea/
+
+# Repository kit: apply.mjs --png writes the social preview here; the tracked copy is
+# docs/images/social-preview.png.
+.github/brand/social-preview.png

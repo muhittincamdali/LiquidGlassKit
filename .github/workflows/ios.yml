@@ -1,0 +1,77 @@
+# iOS checks that the shared Swift workflow (ci.yml) does not cover: the test suite on an iOS
+# simulator with native glass and on one without it, and a build of the demo app.
+name: iOS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    name: Test (iOS ${{ matrix.os }} simulator)
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Native glass path: the image's default Xcode and its newest iOS runtime.
+          - runner: macos-26
+            xcode: ""
+            os: latest
+            device: iPhone 17 Pro
+          # Fallback path: iOS 18 has no glassEffect. Xcode 26.3 is the newest Xcode on
+          # macos-15, which is the image that still has an iOS 18 runtime.
+          - runner: macos-15
+            xcode: "26.3"
+            os: "18.6"
+            device: iPhone 16
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Select Xcode
+        if: matrix.xcode != ''
+        env:
+          XCODE_VERSION: ${{ matrix.xcode }}
+        run: sudo xcode-select --switch "/Applications/Xcode_${XCODE_VERSION}.app"
+
+      - name: Test
+        env:
+          DESTINATION: platform=iOS Simulator,name=${{ matrix.device }},OS=${{ matrix.os }}
+        run: |
+          set -o pipefail
+          xcodebuild -version
+          xcodebuild test -scheme LiquidGlassKit -destination "$DESTINATION" \
+            CODE_SIGNING_ALLOWED=NO -quiet
+
+  demo:
+    name: Build the demo app
+    runs-on: macos-26
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project Examples/LiquidGlassDemo/LiquidGlassDemo.xcodeproj \
+            -scheme LiquidGlassDemo \
+            -destination "generic/platform=iOS Simulator" \
+            CODE_SIGNING_ALLOWED=NO -quiet

@@ -1,27 +1,20 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
     name: "LiquidGlassKit",
     platforms: [
-        .iOS(.v15),
-        .macOS(.v12),
-        .tvOS(.v15),
-        .watchOS(.v8),
+        .iOS(.v17),
+        .macOS(.v14),
+        .tvOS(.v17),
+        .watchOS(.v10),
         .visionOS(.v1)
     ],
     products: [
-        .library(name: "LiquidGlassKit", targets: ["LiquidGlassKit"]),
+        .library(name: "LiquidGlassKit", targets: ["LiquidGlassKit"])
     ],
     targets: [
-        .target(
-            name: "LiquidGlassKit",
-            path: "Sources/LiquidGlassKit",
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
-                .define("LIQUID_GLASS_KIT")
-            ]
-        ),
+        .target(name: "LiquidGlassKit"),
         .testTarget(
             name: "LiquidGlassKitTests",
             dependencies: ["LiquidGlassKit"]

@@ -1,80 +1,58 @@
-# Contributing to SwiftRouter
+# Contributing to LiquidGlassKit
 
-First off, thank you for considering contributing to SwiftRouter! It's people like you that make SwiftRouter such a great tool.
+Thanks for your interest. Bug reports, fixes and focused improvements are welcome. This file adds
+the steps specific to this package to the
+[shared contributing guide](https://github.com/muhittincamdali/.github/blob/main/CONTRIBUTING.md);
+by taking part you agree to the
+[code of conduct](https://github.com/muhittincamdali/.github/blob/main/CODE_OF_CONDUCT.md).
+Report security problems privately, as the
+[security policy](https://github.com/muhittincamdali/.github/blob/main/SECURITY.md) describes.
 
-## Code of Conduct
+## Reporting bugs
 
-This project and everyone participating in it is governed by our Code of Conduct. By participating, you are expected to uphold this code.
+Open an issue with:
 
-## How Can I Contribute?
+- the OS and version you ran on (for example iOS 18.4 simulator or macOS 26.1),
+- the Xcode version,
+- which rendering path was active (`GlassRenderingMode.isNativeGlassAvailable`, or the mode you forced),
+- a minimal SwiftUI snippet that shows the problem, and a screenshot if it is visual.
 
-### Reporting Bugs
+For a new API or a behavior change, open an issue first so we can agree on the approach.
 
-Before creating bug reports, please check the existing issues as you might find out that you don't need to create one. When you are creating a bug report, please include as many details as possible:
+## Development setup
 
-- **Use a clear and descriptive title**
-- **Describe the exact steps which reproduce the problem**
-- **Provide specific examples to demonstrate the steps**
-- **Describe the behavior you observed after following the steps**
-- **Explain which behavior you expected to see instead and why**
-- **Include Swift version and OS version**
-
-### Suggesting Enhancements
-
-Enhancement suggestions are tracked as GitHub issues. When creating an enhancement suggestion, please include:
-
-- **Use a clear and descriptive title**
-- **Provide a step-by-step description of the suggested enhancement**
-- **Provide specific examples to demonstrate the steps**
-- **Describe the current behavior and explain which behavior you expected to see instead**
-- **Explain why this enhancement would be useful**
-
-### Pull Requests
-
-1. Fork the repo and create your branch from `main`
-2. If you've added code that should be tested, add tests
-3. If you've changed APIs, update the documentation
-4. Ensure the test suite passes
-5. Make sure your code follows the existing style (SwiftLint)
-6. Issue that pull request!
-
-## Development Setup
+You need Xcode 26 or later: the native path is compiled against the OS 26 SDK.
 
 ```bash
-# Clone your fork
-git clone https://github.com/YOUR_USERNAME/SwiftRouter.git
-
-# Navigate to the project
-cd SwiftRouter
-
-# Open in Xcode
-open Package.swift
-
-# Run tests
-swift test
+git clone https://github.com/muhittincamdali/LiquidGlassKit.git
+cd LiquidGlassKit
+swift test                                   # macOS
+xcodebuild test -scheme LiquidGlassKit \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
 
-## Style Guide
+The demo app lives in `Examples/LiquidGlassDemo`. Open `LiquidGlassDemo.xcodeproj`, or regenerate it
+with `xcodegen generate --spec project.yml` after changing `project.yml`.
 
-- Follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)
-- Use SwiftLint for code style consistency
-- Write meaningful commit messages following [Conventional Commits](https://www.conventionalcommits.org/)
-- Document public APIs with DocC-compatible comments
+## Pull requests
 
-## Commit Messages
+1. Branch from `main`.
+2. Keep the change focused; add or update tests for behavior changes. The rendering tests check
+   pixels on the fallback path, so a visual change usually needs a test there too.
+3. Make sure `swift test` and the iOS simulator tests pass. CI runs them, builds the library for
+   every platform in `Package.swift` and builds the demo app.
+4. Document new public API with DocC comments. If you change a README or DocC example, update
+   `Tests/LiquidGlassKitTests/ReadmeExamplesTests.swift` so it keeps compiling.
+5. If a change is visual, regenerate the screenshots with `scripts/screenshots.sh`.
+6. Add an entry under "Unreleased" in `CHANGELOG.md`.
 
-We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+`README.md` is the source for the translated `README.<lang>.md` files. You do not have to update
+the translations; CI marks them as behind and they are updated in a follow-up. If you do edit
+one, keep code blocks and links identical to the English file.
 
-- `feat:` A new feature
-- `fix:` A bug fix
-- `docs:` Documentation only changes
-- `style:` Code style changes (formatting, semicolons, etc)
-- `refactor:` Code change that neither fixes a bug nor adds a feature
-- `test:` Adding missing tests
-- `chore:` Changes to the build process or auxiliary tools
-
-Example: `feat(deeplink): add universal link support`
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
+(`feat:`, `fix:`, `docs:`, `test:`, `ci:`, `refactor:`, `chore:`).
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+By contributing you agree that your contributions are licensed under the MIT License.
