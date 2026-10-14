@@ -5,7 +5,7 @@ import SwiftUI
 ///
 /// Launch arguments (used by `scripts/screenshots.sh`):
 /// - `-screen gallery|tabs|sheet|compare` opens a specific screen.
-/// - `-renderingMode automatic|native|fallback` forces a rendering path.
+/// - `-renderingMode automatic|fallback` forces a rendering path.
 /// - `-presentSheet` opens the glass sheet on launch.
 @main
 struct LiquidGlassDemoApp: App {
