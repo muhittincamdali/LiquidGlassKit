@@ -1,3 +1,4 @@
+# Managed by the repository kit (muhittincamdali/.github). Edit the inputs, keep the structure.
 name: CI
 
 on:
@@ -6,78 +7,12 @@ on:
   pull_request:
   workflow_dispatch:
 
-permissions:
-  contents: read
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+permissions: {}
 
 jobs:
-  test-macos:
-    name: Test (macOS)
-    runs-on: macos-26
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Toolchain
-        run: xcodebuild -version && swift --version
-      - name: Build
-        run: swift build
-      - name: Test
-        run: swift test
-
-  test-ios:
-    name: Test (iOS ${{ matrix.os }} Simulator)
-    runs-on: ${{ matrix.runner }}
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # Native glass path.
-          - runner: macos-26
-            xcode: "26.6"
-            os: "26.5"
-            device: iPhone 17 Pro
-            demo: true
-          # Fallback path on a system without native glass.
-          - runner: macos-15
-            xcode: "26.3"
-            os: "18.6"
-            device: iPhone 16
-            demo: false
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Select Xcode ${{ matrix.xcode }}
-        run: |
-          sudo xcode-select -s "/Applications/Xcode_${{ matrix.xcode }}.app"
-          xcodebuild -version
-      - name: Test
-        run: |
-          xcodebuild test \
-            -scheme LiquidGlassKit \
-            -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=${{ matrix.os }}"
-      - name: Build demo app
-        if: matrix.demo
-        run: |
-          xcodebuild build \
-            -project Examples/LiquidGlassDemo/LiquidGlassDemo.xcodeproj \
-            -scheme LiquidGlassDemo \
-            -destination "generic/platform=iOS Simulator"
-
-  build-platforms:
-    name: Build (${{ matrix.platform }})
-    runs-on: macos-26
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [tvOS, watchOS, visionOS]
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Build
-        run: |
-          xcodebuild build \
-            -scheme LiquidGlassKit \
-            -destination "generic/platform=${{ matrix.platform }} Simulator"
+  swift:
+    permissions:
+      contents: read
+    uses: muhittincamdali/.github/.github/workflows/swift-ci.yml@5d3c4432dae8895b16ce3caa2f78398966953212 # v1
+    with:
+      platforms: '["iOS","macOS","tvOS","watchOS","visionOS"]'
