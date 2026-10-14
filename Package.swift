@@ -14,6 +14,10 @@ let package = Package(
         .library(name: "LiquidGlassKit", targets: ["LiquidGlassKit"])
     ],
     targets: [
-        .target(name: "LiquidGlassKit")
+        .target(name: "LiquidGlassKit"),
+        .testTarget(
+            name: "LiquidGlassKitTests",
+            dependencies: ["LiquidGlassKit"]
+        )
     ]
 )
