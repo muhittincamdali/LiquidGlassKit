@@ -29,7 +29,8 @@ with `xcodegen generate --spec project.yml` after changing `project.yml`.
 1. Branch from `main`.
 2. Keep the change focused; add or update tests for behavior changes.
 3. Make sure `swift test` and the iOS build pass. CI runs both.
-4. Document new public API with DocC comments.
+4. Document new public API with DocC comments. If you change a README example, update
+   `Tests/LiquidGlassKitTests/ReadmeExamplesTests.swift` so it keeps compiling.
 5. If a change is visual, regenerate the screenshots with `scripts/screenshots.sh`.
 
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)

@@ -139,6 +139,9 @@ struct ThemedApp: View {
 }
 ```
 
+The Swift examples in this section are compiled as part of the test suite
+(`Tests/LiquidGlassKitTests/ReadmeExamplesTests.swift`).
+
 ## How it works
 
 `glassSurface` resolves a `GlassRenderingMode` against
