@@ -26,10 +26,12 @@ versions as a reference, so that they build with Swift 6 and do what their docum
 - `LiquidGlassButtonStyle` (`.buttonStyle(.liquidGlass)`) and `GlassButtonSize`. Labels on
   `.dark` glass are white.
 - `GlassSheetDismissal`, the extracted drag-to-dismiss rule.
-- Swift Testing suites (36 tests in 9 suites): material equality, fallback `Material` and
+- Swift Testing suites (39 tests in 9 suites): material equality, fallback `Material` and
   native `Glass` mapping, shape geometry, theme clamping, rendering-mode resolution, tab
-  builder, sheet dismissal, fallback tint and Reduce Transparency rendering, offscreen
-  rendering of every component, and compiled README/DocC examples.
+  builder, sheet dismissal, and compiled README/DocC examples. Offscreen renders on the
+  fallback path check the pixels: every component draws its glass in the theme's tint, an
+  explicit material overrides the theme, labels on dark glass are white, the sheet dims the
+  background only while presented, and Reduce Transparency draws an opaque background.
 - DocC catalog with Getting Started, Rendering Paths and Theming articles.
 - iOS demo app (`Examples/LiquidGlassDemo`) and `scripts/screenshots.sh`, which captures the
   README screenshots in the iOS Simulator.
@@ -73,8 +75,11 @@ versions as a reference, so that they build with Swift 6 and do what their docum
 
 ## [1.0.0] - 2026-02-03
 
-Initial tag. It does not build with Swift 6.4: `GlassSheet` declares a generic parameter named
-`Content`, which shadows `ViewModifier.Content`.
+Initial tag. It does not build. The manifest points the test target at
+`Tests/LiquidGlassKitTests`, a folder the tag does not contain, so package resolution fails
+first. With that folder added, the sources still do not compile: `GlassCard` reads a
+`glassTheme` environment value that is never declared, and `GlassSheet` declares a generic
+parameter named `Content`, which shadows `ViewModifier.Content`.
 
 [Unreleased]: https://github.com/muhittincamdali/LiquidGlassKit/compare/v2.0.0...HEAD
 [2.0.0]: https://github.com/muhittincamdali/LiquidGlassKit/compare/v1.0.0...v2.0.0
