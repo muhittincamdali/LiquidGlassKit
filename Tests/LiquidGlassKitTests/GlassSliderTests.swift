@@ -38,8 +38,8 @@ struct GlassSliderTrackTests {
         #expect(track.value(atFraction: 1) == 9)
     }
 
-    @Test(arguments: [0.0, -1.0])
-    func nonPositiveStepsAreIgnored(step: Double) {
+    @Test(arguments: [0.0, -1.0, .infinity, -.infinity, .nan])
+    func stepsThatAreNotPositiveAndFiniteAreIgnored(step: Double) {
         let track = GlassSliderTrack(range: 0...1, step: step)
         #expect(track.snapped(0.37) == 0.37)
     }
@@ -50,6 +50,33 @@ struct GlassSliderTrackTests {
         #expect(track.fraction(of: 5) == 0)
         #expect(track.value(atFraction: 0.8) == 5)
         #expect(track.value(adjusting: 5, up: true) == 5)
+    }
+
+    /// An infinite step used to make 0 * infinity, so every value snapped to NaN.
+    @Test func anInfiniteStepNeverProducesNaN() {
+        let track = GlassSliderTrack(range: 0...10, step: .infinity)
+        #expect(track.snapped(3) == 3)
+        #expect(track.value(adjusting: 3, up: true) == 4, "a tenth of the range, as without a step")
+        #expect(track.value(atFraction: 0.5) == 5)
+    }
+
+    /// With a step far smaller than the range, the step count overflowed to
+    /// infinity and snapping returned infinity, outside the range.
+    @Test func aTinyStepOnAHugeRangeStaysInside() {
+        let track = GlassSliderTrack(range: 0...1e300, step: 1e-300)
+        #expect(track.snapped(5e299) == 5e299)
+        #expect(track.value(atFraction: 1) == 1e300)
+    }
+
+    /// The width of these ranges is not finite, so fractions would be NaN and
+    /// the thumb's offset invalid; the track treats them as unmovable.
+    @Test(arguments: [0...Double.infinity, -Double.infinity...0, -Double.greatestFiniteMagnitude...Double.greatestFiniteMagnitude])
+    func rangesWithoutAFiniteWidthDoNotMove(range: ClosedRange<Double>) {
+        let track = GlassSliderTrack(range: range, step: 1)
+        #expect(!track.isMovable)
+        #expect(track.fraction(of: 0) == 0)
+        #expect(!track.snapped(0).isNaN)
+        #expect(!track.value(adjusting: 0, up: true).isNaN)
     }
 
     /// The thumb's center travels from `inset` to `width - inset`, so touches on

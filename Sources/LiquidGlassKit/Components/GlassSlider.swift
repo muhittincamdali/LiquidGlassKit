@@ -9,8 +9,13 @@ struct GlassSliderTrack: Equatable {
     let range: ClosedRange<Double>
     let step: Double?
 
-    /// Whether the range has room to move. A slider over `5...5` stays at 5.
-    var isMovable: Bool { range.upperBound > range.lowerBound }
+    /// Whether the range has room to move. A slider over `5...5` stays at 5, and
+    /// one over a range whose width is not finite, such as `0...Double.infinity`,
+    /// does not move either, because positions on it cannot be computed.
+    var isMovable: Bool {
+        let width = range.upperBound - range.lowerBound
+        return width.isFinite && width > 0
+    }
 
     /// The position of `value` along the track, from 0 (lower bound) to 1 (upper bound).
     func fraction(of value: Double) -> Double {
@@ -36,19 +41,21 @@ struct GlassSliderTrack: Equatable {
     /// The value one accessibility increment or decrement away: one step, or a
     /// tenth of the range without a step.
     func value(adjusting value: Double, up: Bool) -> Double {
-        let increment = step.flatMap { $0 > 0 ? $0 : nil } ?? (range.upperBound - range.lowerBound) / 10
+        let increment = step.flatMap { $0 > 0 && $0.isFinite ? $0 : nil } ?? (range.upperBound - range.lowerBound) / 10
         return snapped(value + (up ? increment : -increment))
     }
 
-    /// `value` clamped to the range and, with a positive step, rounded to the
-    /// nearest step from the lower bound that is still inside the range.
+    /// `value` clamped to the range and, with a positive finite step, rounded to
+    /// the nearest step from the lower bound that is still inside the range.
     func snapped(_ value: Double) -> Double {
         guard value.isFinite else { return range.lowerBound }
         let clamped = value.clamped(to: range)
-        guard let step, step > 0 else { return clamped }
+        guard let step, step > 0, step.isFinite, isMovable else { return clamped }
         let steps = ((clamped - range.lowerBound) / step).rounded()
         let candidate = range.lowerBound + steps * step
-        return candidate > range.upperBound ? candidate - step : candidate
+        // A step far smaller than the range overflows the step count.
+        guard candidate.isFinite else { return clamped }
+        return (candidate > range.upperBound ? candidate - step : candidate).clamped(to: range)
     }
 }
 
@@ -84,6 +91,7 @@ public struct GlassSlider: View {
     ///   - value: The selected value.
     ///   - range: The values the slider can select.
     ///   - step: The distance between valid values, measured from the lower bound, or `nil` for any value.
+    ///     A step that is not positive and finite is ignored.
     ///   - material: The track's glass material, or `nil` to use the theme's material.
     ///   - showsValue: Shows the formatted value next to the title.
     ///   - format: How the value is formatted on screen and for VoiceOver.
@@ -176,7 +184,7 @@ public struct GlassSlider: View {
     }
 
     private func update(_ newValue: Double) {
-        guard newValue != value else { return }
+        guard track.isMovable, newValue.isFinite, newValue != value else { return }
         value = newValue
     }
 
