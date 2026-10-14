@@ -55,14 +55,24 @@ struct RenderingTests {
     }
     #endif
 
+    /// Without the tint overlay the untinted blur renders almost neutral gray
+    /// (red and blue within a few units), so a clear margin is required.
+    private static let tintMargin = 20
+
     @Test func fallbackDrawsTheTintBehindTheContent() throws {
+        let red = try fallbackCenterPixel(.tinted(.red))
+        let blue = try fallbackCenterPixel(.tinted(.blue))
+        #expect(red.alpha > 0, "tint overlay should be visible")
+        #expect(Int(red.red) - Int(red.blue) > Self.tintMargin, "red tint should dominate: \(red)")
+        #expect(Int(blue.blue) - Int(blue.red) > Self.tintMargin, "blue tint should dominate: \(blue)")
+    }
+
+    private func fallbackCenterPixel(_ material: GlassMaterial) throws -> Pixel {
         let surface = Color.clear
             .frame(width: Self.size.width, height: Self.size.height)
-            .glassSurface(.tinted(.red), in: .roundedRectangle(cornerRadius: 0))
+            .glassSurface(material, in: .roundedRectangle(cornerRadius: 0))
         let image = try #require(render(AnyView(surface), mode: .fallback))
-        let pixel = try #require(Self.centerPixel(of: image))
-        #expect(pixel.alpha > 0, "tint overlay should be visible")
-        #expect(pixel.red > pixel.blue, "tint overlay should be red")
+        return try #require(Self.centerPixel(of: image))
     }
 
     private struct Pixel {
