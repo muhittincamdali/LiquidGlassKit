@@ -160,10 +160,21 @@ struct ReadmeExamplesTests {
         return views
     }
 
-    @Test func examplesRender() {
-        for example in examples {
-            let renderer = ImageRenderer(content: example.frame(width: 390, height: 600))
-            #expect(renderer.cgImage != nil)
+    /// Every example builds on both paths and draws on the fallback path (on a
+    /// white canvas; see ``RenderingTests`` for why).
+    @Test(arguments: [GlassRenderingMode.fallback, .automatic])
+    func examplesRender(mode: GlassRenderingMode) throws {
+        for (index, example) in examples.enumerated() {
+            let renderer = ImageRenderer(
+                content: example
+                    .glassRenderingMode(mode)
+                    .frame(width: 390, height: 600)
+                    .background(.white)
+            )
+            let image = try #require(renderer.cgImage, "example \(index) did not render")
+            if mode == .fallback {
+                #expect(Bitmap(image).count(where: Bitmap.differsFromWhite) > 0, "example \(index) drew nothing")
+            }
         }
     }
 }

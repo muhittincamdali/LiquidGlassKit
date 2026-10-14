@@ -6,10 +6,16 @@ import Testing
 ///
 /// `ImageRenderer` does not capture blur backdrops, and with native glass it
 /// draws nothing for a view inside `glassEffect` (on macOS 27 a `GlassCard`
-/// renders zero visible pixels). These tests therefore check that every component draws
-/// something on the fallback path, that the native-path hierarchies build, and
-/// that the fallback tint and the Reduce Transparency background are drawn as
-/// intended.
+/// renders zero visible pixels). The pixel checks therefore run on the fallback
+/// path, where each glass surface draws a translucent tint: with a green theme,
+/// green pixels can only come from a component's glass, never from its text or
+/// icons. On the native path the tests check that the hierarchies build.
+///
+/// Views are drawn on an opaque canvas. When a view draws nothing,
+/// `ImageRenderer` can return a buffer that still holds an earlier render
+/// (seen on macOS 27 when the suite runs in one process), so "draws nothing"
+/// and "draws something" are measured against the canvas color instead of
+/// transparency.
 ///
 /// On iOS, rendering `GlassTextField` and `GlassSearchBar` this way logs
 /// "Accessing FocusState's value outside of the body of a View": an offscreen
@@ -19,21 +25,33 @@ import Testing
 struct RenderingTests {
     private static let size = CGSize(width: 320, height: 120)
 
-    private func render(_ view: AnyView, mode: GlassRenderingMode) -> CGImage? {
+    /// Without the tint overlay the untinted blur renders almost neutral gray
+    /// (red and blue within a few units), so a clear margin is required.
+    private static let tintMargin = 20
+
+    /// Smallest glass area, in pixels, that counts as "the component drew its
+    /// glass". The smallest surface here, the unpadded "Grouped" capsule, tints
+    /// about 500 pixels at scale 1.
+    private static let minimumGlassArea = 250
+
+    private func render(_ view: some View, mode: GlassRenderingMode, canvas: Color? = .white) -> Bitmap? {
         let renderer = ImageRenderer(
             content: view
                 .glassRenderingMode(mode)
+                .environment(\.colorScheme, .light)
                 .frame(width: Self.size.width, height: Self.size.height)
+                .background(canvas ?? .clear)
         )
         renderer.scale = 1
-        return renderer.cgImage
+        return renderer.cgImage.map(Bitmap.init)
     }
 
-    private var components: [(String, AnyView)] {
+    /// Components that take their material from the theme.
+    private var themedComponents: [(String, AnyView)] {
         [
             ("card", AnyView(GlassCard { Text("Card") })),
             ("button", AnyView(GlassButton("Button", systemImage: "star") {})),
-            ("styled button", AnyView(Button("Styled") {}.buttonStyle(.liquidGlass(.dark, size: .large)))),
+            ("styled button", AnyView(Button("Styled") {}.buttonStyle(.liquidGlass))),
             ("text field", AnyView(GlassTextField("Email", text: .constant("a@b.c"), systemImage: "envelope"))),
             ("search bar", AnyView(GlassSearchBar(text: .constant("query")))),
             ("tab bar", AnyView(GlassTabBar(selection: .constant(1)) {
@@ -45,27 +63,90 @@ struct RenderingTests {
         ]
     }
 
+    /// The same components with an explicit material, which must win over the theme.
+    private func components(material: GlassMaterial) -> [(String, AnyView)] {
+        [
+            ("card", AnyView(GlassCard(material: material) { Text("Card") })),
+            ("button", AnyView(GlassButton("Button", material: material) {})),
+            ("styled button", AnyView(Button("Styled") {}.buttonStyle(.liquidGlass(material)))),
+            ("text field", AnyView(GlassTextField("Email", text: .constant(""), material: material))),
+            ("search bar", AnyView(GlassSearchBar(text: .constant(""), material: material))),
+            ("tab bar", AnyView(GlassTabBar(selection: .constant(1), material: material) {
+                GlassTab("One", systemImage: "1.circle", value: 1)
+            })),
+            ("navigation bar", AnyView(GlassNavigationBar(title: "Title", material: material))),
+            ("group", AnyView(GlassGroup { Text("Grouped").glassSurface(material, in: .capsule) }))
+        ]
+    }
+
     @Test(arguments: [GlassRenderingMode.fallback, .automatic])
-    func everyComponentRenders(mode: GlassRenderingMode) throws {
-        for (name, view) in components {
-            let image = try #require(render(view, mode: mode), "\(name) did not render")
+    func everyComponentBuildsAndRenders(mode: GlassRenderingMode) throws {
+        for (name, view) in themedComponents {
+            let bitmap = try #require(render(view, mode: mode), "\(name) did not render")
             if !Self.drawsNativeGlass(mode) {
-                #expect(Self.visiblePixelCount(of: image) > 0, "\(name) drew nothing")
+                #expect(bitmap.count(where: Bitmap.differsFromWhite) > 0, "\(name) drew nothing")
             }
         }
     }
 
+    @Test func everyComponentDrawsItsGlassWithTheThemeMaterial() throws {
+        for (name, view) in themedComponents {
+            let themed = view.glassTheme(GlassTheme(material: .tinted(.green)))
+            let bitmap = try #require(render(themed, mode: .fallback))
+            let green = bitmap.count(where: Self.isGreenGlass)
+            #expect(green > Self.minimumGlassArea, "\(name) drew \(green) green glass pixels")
+        }
+    }
+
+    @Test func anExplicitMaterialOverridesTheTheme() throws {
+        for (name, view) in components(material: .tinted(.blue)) {
+            let themed = view.glassTheme(GlassTheme(material: .tinted(.green)))
+            let bitmap = try #require(render(themed, mode: .fallback))
+            let blue = bitmap.count(where: Self.isBlueGlass)
+            let green = bitmap.count(where: Self.isGreenGlass)
+            #expect(blue > Self.minimumGlassArea, "\(name) drew \(blue) blue glass pixels")
+            #expect(green == 0, "\(name) drew \(green) pixels in the theme's green")
+        }
+    }
+
+    /// Regression test: dark glass buttons once drew their label in the primary
+    /// color, which is black in light mode.
+    @Test func buttonLabelsOnDarkGlassAreWhite() throws {
+        let explicit = Button("Label") {}.buttonStyle(.liquidGlass(.dark, size: .large))
+        let themed = Button("Label") {}.buttonStyle(.liquidGlass(size: .large)).glassTheme(.dark)
+        let frosted = Button("Label") {}.buttonStyle(.liquidGlass(.frosted, size: .large))
+        // A mid-gray canvas, so that neither white nor black label pixels match it.
+        let canvas = Color(white: 0.5)
+
+        let isWhite: (Bitmap.Pixel) -> Bool = { min($0.red, $0.green, $0.blue) > 230 }
+        let isBlack: (Bitmap.Pixel) -> Bool = { max($0.red, $0.green, $0.blue) < 40 }
+
+        for (name, view) in [("explicit .dark", AnyView(explicit)), ("theme .dark", AnyView(themed))] {
+            let bitmap = try #require(render(view, mode: .fallback, canvas: canvas))
+            #expect(bitmap.count(where: isWhite) > 20, "\(name): no white label pixels")
+            #expect(bitmap.count(where: isBlack) == 0, "\(name): label drawn in black")
+        }
+        let control = try #require(render(frosted, mode: .fallback, canvas: canvas))
+        #expect(control.count(where: isBlack) > 20, "frosted label should stay in the primary color")
+    }
+
     #if !os(tvOS)
-    @Test func presentedSheetRenders() throws {
-        let view = Color.clear.glassSheet(isPresented: .constant(true)) { Text("Sheet") }
-        let image = try #require(render(AnyView(view), mode: .fallback))
-        #expect(image.width == Int(Self.size.width))
+    @Test(arguments: [false, true])
+    func sheetDrawsOnlyWhilePresented(isPresented: Bool) throws {
+        let view = Color.clear
+            .glassSheet(isPresented: .constant(isPresented)) { Text("Sheet") }
+            .glassTheme(GlassTheme(material: .tinted(.green)))
+        let bitmap = try #require(render(view, mode: .fallback))
+        guard isPresented else {
+            #expect(bitmap.count(where: Bitmap.differsFromWhite) == 0, "a dismissed sheet should draw nothing")
+            return
+        }
+        let corner = bitmap.pixel(x: 1, y: 1)
+        #expect(corner.red < 230, "the dimming layer should darken the top corner: \(corner)")
+        let green = bitmap.count(where: Self.isGreenGlass)
+        #expect(green > Self.minimumGlassArea, "sheet drew \(green) green glass pixels")
     }
     #endif
-
-    /// Without the tint overlay the untinted blur renders almost neutral gray
-    /// (red and blue within a few units), so a clear margin is required.
-    private static let tintMargin = 20
 
     @Test func fallbackDrawsTheTintBehindTheContent() throws {
         let red = try fallbackCenterPixel(.tinted(.red))
@@ -83,53 +164,32 @@ struct RenderingTests {
         #expect(red != (try fallbackCenterPixel(.tinted(.red))), "should differ from the tinted blur")
     }
 
-    private func fallbackCenterPixel(_ material: GlassMaterial, reduceTransparency: Bool = false) throws -> Pixel {
+    /// A surface that fills the whole frame, rendered without a canvas so that
+    /// its own opacity can be read.
+    private func fallbackCenterPixel(
+        _ material: GlassMaterial,
+        reduceTransparency: Bool = false
+    ) throws -> Bitmap.Pixel {
         let surface = Color.clear
             .frame(width: Self.size.width, height: Self.size.height)
             .glassSurface(material, in: .roundedRectangle(cornerRadius: 0))
             .environment(\._accessibilityReduceTransparency, reduceTransparency)
-        let image = try #require(render(AnyView(surface), mode: .fallback))
-        return try #require(Self.centerPixel(of: image))
+        let bitmap = try #require(render(surface, mode: .fallback, canvas: nil))
+        return bitmap.pixel(x: bitmap.width / 2, y: bitmap.height / 2)
     }
 
-    private struct Pixel: Equatable {
-        let red: UInt8
-        let blue: UInt8
-        let alpha: UInt8
+    // Green and blue tints, because on macOS `ImageRenderer` draws text fields as a
+    // red and yellow placeholder. Measured on the white canvas: a green tint renders
+    // about (192, 224, 192), a blue one about (176, 208, 224), untinted glass is gray.
+    private static func isGreenGlass(_ pixel: Bitmap.Pixel) -> Bool {
+        Int(pixel.green) - Int(pixel.red) > tintMargin && Int(pixel.green) - Int(pixel.blue) > tintMargin
+    }
+
+    private static func isBlueGlass(_ pixel: Bitmap.Pixel) -> Bool {
+        Int(pixel.blue) - Int(pixel.red) > tintMargin
     }
 
     private static func drawsNativeGlass(_ mode: GlassRenderingMode) -> Bool {
         mode.resolved(nativeAvailable: GlassRenderingMode.isNativeGlassAvailable) == .native
-    }
-
-    private static func visiblePixelCount(of image: CGImage) -> Int {
-        let width = image.width
-        let height = image.height
-        var bytes = [UInt8](repeating: 0, count: width * height * 4)
-        bytes.withUnsafeMutableBytes { buffer in
-            let context = CGContext(
-                data: buffer.baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * 4,
-                space: CGColorSpaceCreateDeviceRGB(),
-                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
-            )
-            context?.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
-        }
-        return stride(from: 3, to: bytes.count, by: 4).count { bytes[$0] > 0 }
-    }
-
-    private static func centerPixel(of image: CGImage) -> Pixel? {
-        var bytes = [UInt8](repeating: 0, count: 4)
-        let drawn: Bool = bytes.withUnsafeMutableBytes { buffer in
-            guard let context = CGContext(
-                data: buffer.baseAddress, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4,
-                space: CGColorSpaceCreateDeviceRGB(),
-                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
-            ) else { return false }
-            let x = -CGFloat(image.width / 2)
-            let y = -CGFloat(image.height / 2)
-            context.draw(image, in: CGRect(x: x, y: y, width: CGFloat(image.width), height: CGFloat(image.height)))
-            return true
-        }
-        return drawn ? Pixel(red: bytes[0], blue: bytes[2], alpha: bytes[3]) : nil
     }
 }
