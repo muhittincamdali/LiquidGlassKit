@@ -1,107 +1,53 @@
-name: Bug Report
-description: File a bug report to help us improve
-title: "[Bug]: "
-labels: ["bug", "triage"]
+name: Bug report
+description: Something renders or behaves incorrectly
+labels: ["bug"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
-
   - type: textarea
     id: description
     attributes:
-      label: Bug Description
-      description: A clear and concise description of what the bug is.
-      placeholder: Tell us what happened
-    validations:
-      required: true
-
-  - type: textarea
-    id: reproduction
-    attributes:
-      label: Steps to Reproduce
-      description: Steps to reproduce the behavior
-      placeholder: |
-        1. Define route with...
-        2. Navigate to...
-        3. See unexpected behavior
-    validations:
-      required: true
-
-  - type: textarea
-    id: expected
-    attributes:
-      label: Expected Behavior
-      description: A clear and concise description of what you expected to happen.
+      label: What happened?
+      description: What you saw and what you expected instead. Screenshots help for visual issues.
     validations:
       required: true
 
   - type: textarea
     id: code
     attributes:
-      label: Code Sample
-      description: If applicable, add a minimal code sample to reproduce the issue
+      label: Minimal code sample
       render: swift
+    validations:
+      required: true
 
   - type: dropdown
-    id: navigation-type
+    id: component
     attributes:
-      label: Navigation Type
+      label: Component
       multiple: true
       options:
-        - Push Navigation
-        - Modal Presentation
-        - Tab Navigation
-        - Deep Link
-        - Sheet/Popover
-    validations:
-      required: true
+        - glassSurface / GlassGroup
+        - GlassButton / LiquidGlassButtonStyle
+        - GlassCard
+        - GlassTextField
+        - GlassSearchBar
+        - GlassTabBar
+        - GlassNavigationBar
+        - GlassSheet
+        - GlassTheme / GlassRenderingMode
+        - Other
 
   - type: dropdown
-    id: swift-version
+    id: path
     attributes:
-      label: Swift Version
+      label: Rendering path
       options:
-        - "5.9"
-        - "5.10"
-        - "6.0"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: platform
-    attributes:
-      label: Platform
-      multiple: true
-      options:
-        - iOS
-        - macOS
-        - tvOS
-        - watchOS
-        - visionOS
-    validations:
-      required: true
+        - Native (OS 26 or later)
+        - Fallback (earlier OS, visionOS, or forced)
+        - Not sure
 
   - type: input
-    id: os-version
+    id: environment
     attributes:
-      label: OS Version
-      placeholder: "e.g., iOS 17.0, macOS 14.0"
+      label: Environment
+      placeholder: "iOS 18.4 simulator, Xcode 26.1, LiquidGlassKit 1.1.0"
     validations:
       required: true
-
-  - type: textarea
-    id: logs
-    attributes:
-      label: Relevant Log Output
-      description: Please copy and paste any relevant log output
-      render: shell
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Checklist
-      options:
-        - label: I have searched existing issues to ensure this bug hasn't been reported
-          required: true
