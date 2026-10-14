@@ -16,11 +16,17 @@ import SwiftUI
 /// resolved in a default (light) environment and written as sRGB components,
 /// so a dynamic color exports its light appearance.
 public struct GlassCodeExporter: Sendable {
-    /// Spaces per indentation level in ``viewCode(named:theme:renderingMode:)``.
-    public var indentWidth: Int
+    /// Spaces per indentation level in ``viewCode(named:theme:renderingMode:)``,
+    /// kept between 0 and ``maximumIndentWidth``.
+    public var indentWidth: Int {
+        didSet { indentWidth = indentWidth.clamped(to: 0...Self.maximumIndentWidth) }
+    }
+
+    /// The widest indentation level the exporter writes.
+    public static let maximumIndentWidth = 8
 
     public init(indentWidth: Int = 4) {
-        self.indentWidth = max(0, indentWidth)
+        self.indentWidth = indentWidth.clamped(to: 0...Self.maximumIndentWidth)
     }
 
     /// A Swift expression for `color`, such as `.blue` or `Color(red: 0.2, green: 0.4, blue: 1)`.
@@ -98,7 +104,8 @@ public struct GlassCodeExporter: Sendable {
     ///
     /// - Parameters:
     ///   - name: The struct name. Characters that cannot appear in a Swift
-    ///     identifier are dropped; an empty result becomes `GlassPreview`.
+    ///     identifier are dropped; an empty result becomes `GlassPreview`, and a
+    ///     name that starts with a digit or is a Swift keyword gets a `Glass` prefix.
     ///   - theme: The theme the view installs.
     ///   - renderingMode: Adds `.glassRenderingMode(.fallback)` when it is ``GlassRenderingMode/fallback``.
     public func viewCode(
@@ -145,11 +152,32 @@ public struct GlassCodeExporter: Sendable {
         number(Double(max(0, value)))
     }
 
+    /// A Swift type name made from `name`.
+    ///
+    /// Keeps the Unicode scalars that may continue an identifier (XID_Continue,
+    /// which includes `_`), prefixes `Glass` when the first one may not start an
+    /// identifier (a digit or a combining mark) or the result is a keyword, and
+    /// falls back to `GlassPreview` when nothing usable is left.
     static func identifier(from name: String) -> String {
-        let allowed = name.unicodeScalars.filter { CharacterSet.alphanumerics.contains($0) || $0 == "_" }
-        var identifier = String(String.UnicodeScalarView(allowed))
-        if identifier.isEmpty { return "GlassPreview" }
-        if identifier.first?.isNumber == true { identifier = "Glass" + identifier }
+        let scalars = name.unicodeScalars.filter(\.properties.isXIDContinue)
+        let identifier = String(String.UnicodeScalarView(scalars))
+        guard let first = identifier.unicodeScalars.first, identifier.contains(where: { $0 != "_" }) else {
+            return "GlassPreview"
+        }
+        if !(first.properties.isXIDStart || first == "_") || reservedWords.contains(identifier) {
+            return "Glass" + identifier.prefix(1).uppercased() + identifier.dropFirst()
+        }
         return identifier
     }
+
+    /// Words that cannot name a struct without backticks.
+    static let reservedWords: Set<String> = [
+        "Any", "Protocol", "Self", "Type", "actor", "any", "as", "associatedtype", "async", "await",
+        "break", "case", "catch", "class", "continue", "default", "defer", "deinit", "do", "else",
+        "enum", "extension", "fallthrough", "false", "fileprivate", "for", "func", "guard", "if",
+        "import", "in", "init", "inout", "internal", "is", "let", "nil", "open", "operator",
+        "precedencegroup", "private", "protocol", "public", "repeat", "rethrows", "return", "self",
+        "some", "static", "struct", "subscript", "super", "switch", "throw", "throws", "true", "try",
+        "typealias", "var", "where", "while"
+    ]
 }

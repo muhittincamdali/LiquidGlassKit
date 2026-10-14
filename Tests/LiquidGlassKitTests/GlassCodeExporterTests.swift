@@ -64,9 +64,26 @@ struct GlassCodeExporterTests {
         #expect(GlassCodeExporter.number(value) == expected)
     }
 
-    @Test(arguments: [("Badge", "Badge"), ("My Card!", "MyCard"), ("3D", "Glass3D"), ("", "GlassPreview"), ("é_1", "é_1")])
+    @Test(arguments: [("Badge", "Badge"), ("My Card!", "MyCard"), ("3D", "Glass3D"), ("", "GlassPreview"), ("é_1", "é_1"),
+        ("class", "GlassClass"), ("Self", "GlassSelf"), ("_", "GlassPreview"), ("__", "GlassPreview"),
+        ("_private", "_private"), ("\u{301}Accent", "Glass\u{301}Accent"), ("٣Arabic", "Glass٣Arabic"),
+        ("a-b c", "abc"), ("🙂Smile", "Smile")])
     func viewNamesBecomeIdentifiers(name: String, expected: String) {
         #expect(GlassCodeExporter.identifier(from: name) == expected)
+    }
+
+    /// A negative width used to reach String(repeating:count:) and trap; a huge
+    /// one allocated a line per level of that size.
+    @Test(arguments: [(-1, 0), (Int.min, 0), (3, 3), (Int.max, GlassCodeExporter.maximumIndentWidth)])
+    func indentWidthIsClamped(width: Int, expected: Int) throws {
+        var exporter = GlassCodeExporter(indentWidth: width)
+        #expect(exporter.indentWidth == expected)
+        exporter.indentWidth = 4
+        exporter.indentWidth = width
+        #expect(exporter.indentWidth == expected, "assignment must clamp like the initializer")
+        let lines = exporter.viewCode(named: "Clamped", theme: .standard).split(separator: "\n")
+        let body = try #require(lines.first { $0.hasSuffix("var body: some View {") })
+        #expect(body.prefix(while: { $0 == " " }).count == expected)
     }
 
     /// The expected text is also compiled below as `ExportedBadge` and
