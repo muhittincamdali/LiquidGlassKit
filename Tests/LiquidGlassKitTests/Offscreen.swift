@@ -37,4 +37,20 @@ extension Bitmap {
     static func isBlue(_ pixel: Pixel) -> Bool {
         Int(pixel.blue) - Int(pixel.red) > tintMargin
     }
+
+    /// Red dominates both other channels.
+    static func isRed(_ pixel: Pixel) -> Bool {
+        Int(pixel.red) - Int(max(pixel.green, pixel.blue)) > tintMargin
+    }
+
+    /// Number of pixels in the columns `columns` that match `predicate`.
+    func count(columns: Range<Int>, where predicate: (Pixel) -> Bool) -> Int {
+        var matches = 0
+        for y in 0..<height {
+            for x in columns where predicate(pixel(x: x, y: y)) {
+                matches += 1
+            }
+        }
+        return matches
+    }
 }
