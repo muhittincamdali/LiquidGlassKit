@@ -1,565 +1,193 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/Swift-6.0-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 6.0"/>
-  <img src="https://img.shields.io/badge/Platform-iOS%20|%20macOS%20|%20visionOS-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="Platform"/>
-  <img src="https://img.shields.io/badge/Standard-Unified%20Core-5856D6?style=for-the-badge" alt="Standard"/>
-</p>
+# LiquidGlassKit
 
----
+[![CI](https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml/badge.svg)](https://github.com/muhittincamdali/LiquidGlassKit/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/muhittincamdali/LiquidGlassKit)](LICENSE)
 
-> **🛡️ PART OF THE 2026 UNIFIED CORE**
-> This repository is a verified component of 'The Endless March' initiative. Purified for Swift 6, zero-dependency, and engineered for maximum hardware saturation.
-> 
-> *Flagship Engines:* [SwiftNetwork](https://github.com/muhittincamdali/SwiftNetwork) | [SwiftAI](https://github.com/muhittincamdali/SwiftAI) | [LiquidGlassKit](https://github.com/muhittincamdali/LiquidGlassKit)
+Liquid Glass style surfaces and controls for SwiftUI. On iOS, macOS, tvOS and watchOS 26 they
+use SwiftUI's native `glassEffect`; on earlier systems (back to iOS 17) and on visionOS they
+fall back to a `Material` blur with a tint, an edge highlight and a shadow. Your code is the
+same on every OS.
 
----
+| Gallery (light)                                  | Gallery (dark)                                 | Native vs fallback                                    |
+| ------------------------------------------------ | ---------------------------------------------- | ----------------------------------------------------- |
+| ![Gallery, light](docs/images/gallery-light.png) | ![Gallery, dark](docs/images/gallery-dark.png) | ![Native and fallback](docs/images/compare-light.png) |
 
-```
-    ██╗     ██╗ ██████╗ ██╗   ██╗██╗██████╗  ██████╗ ██╗      █████╗ ███████╗███████╗
-    ██║     ██║██╔═══██╗██║   ██║██║██╔══██╗██╔════╝ ██║     ██╔══██╗██╔════╝██╔════╝
-    ██║     ██║██║   ██║██║   ██║██║██║  ██║██║  ███╗██║     ███████║███████╗███████╗
-    ██║     ██║██║▄▄ ██║██║   ██║██║██║  ██║██║   ██║██║     ██╔══██║╚════██║╚════██║
-    ███████╗██║╚██████╔╝╚██████╔╝██║██████╔╝╚██████╔╝███████╗██║  ██║███████║███████║
-    ╚══════╝╚═╝ ╚══▀▀═╝  ╚═════╝ ╚═╝╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝
-    
-    ██╗  ██╗██╗████████╗
-    ██║ ██╔╝██║╚══██╔══╝      🧊 The Complete Liquid Glass Component Library
-    █████╔╝ ██║   ██║             for iOS 26 and Beyond
-    ██╔═██╗ ██║   ██║         
-    ██║  ██╗██║   ██║         Production-ready • Type-safe • Beautiful
-    ╚═╝  ╚═╝╚═╝   ╚═╝         
-```
+<sub>Screenshots from the demo app on the iOS 27 simulator, captured with
+`scripts/screenshots.sh`. More: [sheet](docs/images/sheet-light.png),
+[tab bars](docs/images/tabs-dark.png), [comparison in dark mode](docs/images/compare-dark.png).</sub>
 
-<p align="center">
-  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-6.0-F05138?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 6.0"></a>
-  <a href="https://developer.apple.com/ios/"><img src="https://img.shields.io/badge/iOS-26.0+-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="iOS 26.0+"></a>
-  <a href="https://swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-Compatible-orange?style=for-the-badge&logo=swift&logoColor=white" alt="SPM"></a>
-  <a href="https://cocoapods.org/pods/LiquidGlassKit"><img src="https://img.shields.io/badge/CocoaPods-Compatible-EE3322?style=for-the-badge&logo=cocoapods&logoColor=white" alt="CocoaPods"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License"></a>
-</p>
+## What is included
 
-<p align="center">
-  <a href="https://github.com/muhittincamdali/LiquidGlassKit/actions"><img src="https://img.shields.io/github/actions/workflow/status/muhittincamdali/LiquidGlassKit/ci.yml?style=flat-square&label=CI" alt="CI"></a>
-  <img src="https://img.shields.io/badge/coverage-92%25-brightgreen?style=flat-square" alt="Coverage">
-  <img src="https://img.shields.io/badge/components-25+-blue?style=flat-square" alt="Components">
-  <img src="https://img.shields.io/badge/documentation-100%25-brightgreen?style=flat-square" alt="Documentation">
-</p>
+| API                                         | What it does                                                                                          |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `glassSurface(_:in:interactive:)`           | Puts glass behind any view. Native `glassEffect` on OS 26, `Material` fallback elsewhere.             |
+| `GlassGroup`                                | Wraps `GlassEffectContainer` on OS 26 so nearby glass shapes blend; a pass-through elsewhere.         |
+| `GlassButton`, `.buttonStyle(.liquidGlass)` | Capsule glass buttons in three sizes, with pressed, disabled and destructive states.                  |
+| `GlassCard`                                 | Padded container on glass.                                                                            |
+| `GlassTextField`                            | Text field with optional SF Symbol and a focus ring.                                                  |
+| `GlassSearchBar`                            | Capsule search field with clear and Cancel buttons.                                                   |
+| `GlassTabBar`                               | Floating tab bar, generic over any `Hashable` selection; builder supports `if` and `for`.             |
+| `GlassNavigationBar`                        | Floating title bar with leading and trailing items.                                                   |
+| `glassSheet(isPresented:content:)`          | Floating bottom sheet; dismiss by drag, tap outside or the accessibility escape gesture. Not on tvOS. |
+| `GlassTheme`, `GlassRenderingMode`          | Environment values for default material/shape/shadow, and for forcing the native or fallback path.    |
 
-<p align="center">
-  <a href="#-installation">Installation</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-components">Components</a> •
-  <a href="#-customization">Customization</a> •
-  <a href="#-documentation">Docs</a>
-</p>
+Materials: `.clear`, `.frosted`, `.tinted(Color)`, `.dark`. Shapes: rounded rectangle,
+capsule, circle, per-corner radii.
 
----
+The fallback path draws an opaque background when _Reduce Transparency_ is on. Decorative
+icons are hidden from VoiceOver, and the tab bar exposes the selected tab.
 
-## 📋 Table of Contents
+## Requirements
 
-- [What is Liquid Glass?](#-what-is-liquid-glass)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Components](#-components)
-- [Glass Styles](#-glass-styles)
-- [Customization](#-customization)
-- [Animations](#-animations)
-- [Backward Compatibility](#-backward-compatibility)
-- [Architecture](#-architecture)
-- [Performance](#-performance)
-- [Best Practices](#-best-practices)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Star History](#-star-history)
+- Xcode 26 or later (Swift 6). The native path is compiled against the OS 26 SDK.
+- Deployment targets: iOS 17, macOS 14, tvOS 17, watchOS 10, visionOS 1.
 
----
+## Installation
 
-## 🚀 The World-Class Component Library
-LiquidGlassKit is not just a modifier. It is the absolute **#1 SwiftUI Design Library** in the world, providing over 50 ready-to-use screens and components.
-
-- **The LiquidGlass Modifier:** 1 line of code to apply the world-class visual signature (`.liquidGlass()`).
-- **Pre-Built Screens:** Drop-in `LiquidGlassLoginScreen`, `LiquidGlassDashboard`, and more.
-- **Pre-Built Components:** High-conversion `LiquidGlassButton`, `LiquidGlassCard`, etc.
-- **Zero-Dependency:** 100% native SwiftUI. No bulky third-party visual frameworks.
-- **Hardware Accelerated:** Deep integration with `.ultraThinMaterial` and native shadows.
-
-## 🧊 What is Liquid Glass?
-
-Liquid Glass is **iOS 26's revolutionary UI paradigm** — fluid, translucent, adaptive surfaces that respond to content and context. It replaces traditional blur effects and materials with dynamic, physics-based glass that feels alive.
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│   ┌──────────────────────────────────────────────────┐     │
-│   │          🧊 LIQUID GLASS                         │     │
-│   │                                                  │     │
-│   │   • Adaptive opacity based on background        │     │
-│   │   • Physics-based refraction effects            │     │
-│   │   • Seamless light/dark mode transitions        │     │
-│   │   • Responds to touch and motion                │     │
-│   │                                                  │     │
-│   └──────────────────────────────────────────────────┘     │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**LiquidGlassKit** provides **25+ production-ready components** that implement this paradigm.
-
----
-
-## 📦 Installation
-
-### Swift Package Manager (Recommended)
+Swift Package Manager, in Xcode via **File > Add Package Dependencies…** with
+`https://github.com/muhittincamdali/LiquidGlassKit.git`, or in `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "1.0.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
+],
+targets: [
+    .target(name: "MyApp", dependencies: ["LiquidGlassKit"])
 ]
 ```
 
-### CocoaPods
+## Usage
 
-```ruby
-pod 'LiquidGlassKit', '~> 1.0'
-```
+Glass needs something behind it, so place these views over an image, a gradient or
+scrolling content.
 
-### Manual
-
-Clone and drag `Sources/LiquidGlassKit` into your project.
-
----
-
-## 🚀 Quick Start
+### Any view on glass
 
 ```swift
-import SwiftUI
 import LiquidGlassKit
+import SwiftUI
 
-struct ContentView: View {
+struct NowPlayingBadge: View {
     var body: some View {
-        ZStack {
-            // Background image
-            Image("background")
-                .resizable()
-                .ignoresSafeArea()
-            
-            // Glass card
-            LiquidGlassCard {
-                VStack(spacing: 16) {
-                    Image(systemName: "sparkles")
-                        .font(.largeTitle)
-                    Text("Welcome to Liquid Glass")
-                        .font(.headline)
-                    Text("Beautiful, adaptive UI")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                .padding()
+        Label("Now Playing", systemImage: "music.note")
+            .padding()
+            .glassSurface(.tinted(.purple), in: .capsule)
+    }
+}
+```
+
+### Controls
+
+```swift
+struct SignInForm: View {
+    @State private var email = ""
+    @State private var query = ""
+
+    var body: some View {
+        VStack(spacing: 16) {
+            GlassSearchBar(text: $query, prompt: "Search")
+            GlassTextField("Email", text: $email, systemImage: "envelope")
+            GlassCard {
+                Text("We will send you a sign-in link.")
             }
-            .frame(width: 300, height: 200)
+            HStack {
+                Button("Cancel", role: .cancel) {}
+                    .buttonStyle(.liquidGlass(size: .compact))
+                GlassButton("Continue", systemImage: "arrow.right", material: .tinted(.blue)) {}
+            }
+        }
+        .padding()
+    }
+}
+```
+
+### Tab bar and sheet
+
+```swift
+enum Screen: Hashable { case home, search, profile }
+
+struct RootView: View {
+    @State private var screen = Screen.home
+    @State private var showsSheet = false
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            Color.indigo.ignoresSafeArea()
+            GlassTabBar(selection: $screen) {
+                GlassTab("Home", systemImage: "house", value: Screen.home)
+                GlassTab("Search", systemImage: "magnifyingglass", value: Screen.search)
+                GlassTab("Profile", systemImage: "person", value: Screen.profile)
+            }
+            .padding()
+        }
+        .glassSheet(isPresented: $showsSheet) {
+            Text("Sheet content").padding()
         }
     }
 }
 ```
 
----
-
-## 🧩 Components
-
-### Cards
+### Theme and rendering path
 
 ```swift
-// Basic Glass Card
-LiquidGlassCard {
-    Text("Content")
-}
-
-// Elevated Card (with shadow)
-LiquidGlassCard(elevation: .medium) {
-    Text("Floating content")
-}
-
-// Bordered Card
-LiquidGlassCard(bordered: true) {
-    Text("With border")
-}
-```
-
-### Buttons
-
-```swift
-// Basic Glass Button
-LiquidGlassButton("Tap Me") {
-    print("Tapped!")
-}
-
-// Icon Button
-LiquidGlassButton(systemImage: "heart.fill") {
-    toggleFavorite()
-}
-
-// Full-width Button
-LiquidGlassButton("Continue", style: .prominent) {
-    nextStep()
-}
-.frame(maxWidth: .infinity)
-```
-
-### Navigation
-
-```swift
-// Glass Navigation Bar
-LiquidGlassNavigationBar(
-    title: "Settings",
-    leading: Button("Back") { dismiss() },
-    trailing: Button(systemImage: "gear") { }
-)
-
-// Glass Tab Bar
-LiquidGlassTabBar(selection: $selectedTab) {
-    Tab("Home", systemImage: "house")
-    Tab("Search", systemImage: "magnifyingglass")
-    Tab("Profile", systemImage: "person")
-}
-```
-
-### Input Controls
-
-```swift
-// Glass Text Field
-LiquidGlassTextField("Email", text: $email)
-    .keyboardType(.emailAddress)
-
-// Glass Search Bar
-LiquidGlassSearchBar(text: $searchQuery)
-    .placeholder("Search...")
-
-// Glass Picker
-LiquidGlassPicker("Category", selection: $category) {
-    ForEach(categories) { category in
-        Text(category.name)
+struct ThemedApp: View {
+    var body: some View {
+        RootView()
+            .glassTheme(GlassTheme(material: .tinted(.indigo), shape: .roundedRectangle(cornerRadius: 12)))
+            .glassRenderingMode(.automatic) // or .fallback to use the Material look everywhere
     }
 }
 ```
 
-### Lists & Collections
+## How it works
 
-```swift
-// Glass List
-LiquidGlassList {
-    ForEach(items) { item in
-        LiquidGlassRow {
-            Label(item.title, systemImage: item.icon)
-        }
-    }
-}
+`glassSurface` resolves a `GlassRenderingMode` against
+`GlassRenderingMode.isNativeGlassAvailable` (an `#available(iOS 26, macOS 26, tvOS 26,
+watchOS 26, *)` check; always `false` on visionOS, where SwiftUI marks `glassEffect`
+unavailable).
 
-// Glass Grid
-LiquidGlassGrid(columns: 2) {
-    ForEach(photos) { photo in
-        LiquidGlassCell {
-            Image(photo.url)
-        }
-    }
-}
+| `GlassMaterial` | Native path                 | Fallback path                         |
+| --------------- | --------------------------- | ------------------------------------- |
+| `.clear`        | `Glass.clear`               | `.ultraThinMaterial`                  |
+| `.frosted`      | `Glass.regular`             | `.thinMaterial`                       |
+| `.tinted(c)`    | `Glass.regular.tint(c)`     | `.regularMaterial` + color overlay    |
+| `.dark`         | `Glass.regular.tint(black)` | `.ultraThickMaterial` + black overlay |
+
+Every component draws through `glassSurface`, so the theme and rendering mode apply to all of
+them. API names avoid SwiftUI's own (`glassEffect`, `GlassEffectContainer`,
+`GlassButtonStyle`), so both modules can be imported in the same file.
+
+Full API documentation is in the DocC catalog (`Sources/LiquidGlassKit/LiquidGlassKit.docc`);
+build it with **Product > Build Documentation** in Xcode.
+
+## Testing
+
+```bash
+swift test                                                   # macOS
+xcodebuild test -scheme LiquidGlassKit \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # iOS Simulator
 ```
 
-### Overlays & Sheets
+The suite uses Swift Testing and covers material and shape logic, theme clamping, rendering
+mode resolution, the tab builder, sheet dismissal thresholds, and an offscreen render of every
+component on both paths. CI runs it on macOS and the iOS Simulator and builds the library for
+tvOS, watchOS and visionOS.
 
-```swift
-// Glass Sheet
-.liquidGlassSheet(isPresented: $showSheet) {
-    SheetContent()
-}
+Limitations: `ImageRenderer` cannot capture blur, so the render tests check layout and the
+fallback tint, not the final glass look. CI runs on OS 26 or later; the fallback path is
+exercised there by forcing `.fallback` (as in the comparison screenshot), not on an iOS 17–25
+runtime.
 
-// Glass Alert
-.liquidGlassAlert(isPresented: $showAlert) {
-    LiquidGlassAlertContent(
-        title: "Confirm",
-        message: "Are you sure?",
-        primaryButton: .default("Yes") { confirm() },
-        secondaryButton: .cancel()
-    )
-}
+## Demo app
 
-// Glass Toast
-.liquidGlassToast(isPresented: $showToast, message: "Saved!")
-```
+`Examples/LiquidGlassDemo` is an iOS app with a component gallery, tab bars, a sheet and a
+native-vs-fallback comparison. Open `LiquidGlassDemo.xcodeproj` and run. The project is
+generated from `project.yml` with [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
----
+## Contributing
 
-## 🎨 Glass Styles
+See [CONTRIBUTING.md](CONTRIBUTING.md). Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 
-| Style | Description | Use Case |
-|-------|-------------|----------|
-| `.clear` | Transparent with subtle blur | Overlays, minimal UI |
-| `.frosted` | Heavy frost effect | Cards, prominent elements |
-| `.tinted(color)` | Color-tinted glass | Themed sections |
-| `.chromatic` | Rainbow refraction | Hero elements, special effects |
-| `.adaptive` | Adjusts to background | General purpose |
-| `.material` | iOS material-like | Backward compatibility |
+## License
 
-```swift
-// Apply styles
-LiquidGlassCard {
-    content
-}
-.glassStyle(.frosted)
-
-LiquidGlassCard {
-    content
-}
-.glassStyle(.tinted(.blue))
-
-LiquidGlassCard {
-    content
-}
-.glassStyle(.chromatic)
-```
-
----
-
-## ⚙️ Customization
-
-### Opacity & Blur
-
-```swift
-LiquidGlassCard {
-    content
-}
-.glassOpacity(0.3)      // 0.0 to 1.0
-.glassBlur(20)          // Blur radius in points
-.glassSaturation(1.2)   // Color saturation multiplier
-```
-
-### Borders & Shadows
-
-```swift
-LiquidGlassCard {
-    content
-}
-.glassBorder(color: .white.opacity(0.3), width: 1)
-.glassShadow(radius: 20, color: .black.opacity(0.2))
-.glassCornerRadius(16)
-```
-
-### Tint & Gradient
-
-```swift
-LiquidGlassCard {
-    content
-}
-.glassTint(.blue.opacity(0.1))
-.glassGradient(
-    colors: [.purple.opacity(0.2), .blue.opacity(0.2)],
-    startPoint: .topLeading,
-    endPoint: .bottomTrailing
-)
-```
-
----
-
-## ✨ Animations
-
-### Built-in Animations
-
-```swift
-// Ripple effect on tap
-LiquidGlassCard {
-    content
-}
-.glassRipple(on: $isTapped)
-
-// Glow animation
-LiquidGlassCard {
-    content
-}
-.glassGlow(intensity: 0.5, animated: true)
-
-// Breathing animation
-LiquidGlassCard {
-    content
-}
-.glassBreathe(duration: 2.0)
-```
-
-### Interactive Effects
-
-```swift
-// Respond to device motion
-LiquidGlassCard {
-    content
-}
-.glassParallax(intensity: 0.3)
-
-// Respond to touch
-LiquidGlassCard {
-    content
-}
-.glassTouchResponse()
-```
-
----
-
-## 📱 Backward Compatibility
-
-LiquidGlassKit automatically provides fallbacks for older iOS versions:
-
-```swift
-// This works on iOS 15+
-LiquidGlassCard {
-    content
-}
-.fallbackStyle(.material(.ultraThin))  // Used on iOS < 26
-
-// Conditional feature usage
-if LiquidGlass.isAvailable {
-    // Full Liquid Glass features
-} else {
-    // Graceful degradation
-}
-```
-
-### Availability Check
-
-```swift
-// Check feature availability
-LiquidGlass.isAvailable           // iOS 26+
-LiquidGlass.supportsChromatic     // iOS 26.1+
-LiquidGlass.supportsParallax      // iOS 26+ with Motion
-```
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-graph TD
-    A[LiquidGlassKit] --> B[Core]
-    A --> C[Components]
-    A --> D[Styles]
-    A --> E[Animations]
-    
-    B --> B1[GlassRenderer]
-    B --> B2[BlurEngine]
-    B --> B3[ColorEngine]
-    
-    C --> C1[Cards]
-    C --> C2[Buttons]
-    C --> C3[Navigation]
-    C --> C4[Input]
-    C --> C5[Lists]
-    
-    D --> D1[StylePresets]
-    D --> D2[CustomStyles]
-    
-    E --> E1[Transitions]
-    E --> E2[Interactive]
-```
-
----
-
-## ⚡ Performance
-
-LiquidGlassKit is optimized for smooth 60fps performance:
-
-| Metric | Value |
-|--------|-------|
-| Memory overhead | < 5 MB |
-| GPU utilization | < 10% |
-| Battery impact | Minimal |
-| First render | < 16ms |
-
-### Best Practices
-
-```swift
-// ✅ Do: Use semantic styles
-.glassStyle(.frosted)
-
-// ❌ Don't: Over-customize
-.glassBlur(50).glassOpacity(0.9).glassSaturation(2.0)
-
-// ✅ Do: Limit nested glass
-LiquidGlassCard { content }
-
-// ❌ Don't: Nest excessively
-LiquidGlassCard { LiquidGlassCard { LiquidGlassCard { } } }
-```
-
----
-
-## 💡 Best Practices
-
-### 1. Use Appropriate Styles
-
-```swift
-// Hero content → prominent style
-LiquidGlassCard(style: .prominent) { heroContent }
-
-// Secondary content → subtle style
-LiquidGlassCard(style: .subtle) { supportingContent }
-```
-
-### 2. Consider Background Content
-
-```swift
-// Busy background → higher opacity
-.glassOpacity(0.5)
-
-// Simple background → lower opacity
-.glassOpacity(0.2)
-```
-
-### 3. Maintain Hierarchy
-
-```swift
-VStack {
-    // Primary action → prominent
-    LiquidGlassButton("Continue", style: .prominent)
-    
-    // Secondary action → subtle
-    LiquidGlassButton("Cancel", style: .subtle)
-}
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-1. Fork the repository
-2. Create your branch (`git checkout -b feature/amazing`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-LiquidGlassKit is released under the MIT License. See [LICENSE](LICENSE) for details.
-
----
-
-## 📈 Star History
-
-<a href="https://star-history.com/#muhittincamdali/LiquidGlassKit&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=muhittincamdali/LiquidGlassKit&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=muhittincamdali/LiquidGlassKit&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=muhittincamdali/LiquidGlassKit&type=Date" />
- </picture>
-</a>
-
----
-
-<div align="center">
-
-**Made with 🧊 by [Muhittin Camdali](https://github.com/muhittincamdali)**
-
-[⬆ Back to top](#liquidglasskit)
-
-</div>
-
-## 🚀 Killer Feature: The 2026 Standard
-This repository has been upgraded to the absolute global #1 standard in its category.
+MIT. See [LICENSE](LICENSE).
