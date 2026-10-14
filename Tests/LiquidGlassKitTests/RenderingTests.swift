@@ -4,9 +4,16 @@ import Testing
 
 /// Renders every public component offscreen on both rendering paths.
 ///
-/// `ImageRenderer` does not capture blur backdrops, so these tests check that
-/// the view hierarchy builds and lays out at the expected size, and that the
-/// fallback tint is actually drawn.
+/// `ImageRenderer` does not capture blur backdrops, and with native glass it
+/// draws nothing for a view inside `glassEffect` (on macOS 27 a `GlassCard`
+/// renders zero visible pixels). These tests therefore check that every component draws
+/// something on the fallback path, that the native-path hierarchies build, and
+/// that the fallback tint and the Reduce Transparency background are drawn as
+/// intended.
+///
+/// On iOS, rendering `GlassTextField` and `GlassSearchBar` this way logs
+/// "Accessing FocusState's value outside of the body of a View": an offscreen
+/// `ImageRenderer` has no focus system. The demo app does not log it.
 @MainActor
 @Suite("Rendering")
 struct RenderingTests {
@@ -42,8 +49,9 @@ struct RenderingTests {
     func everyComponentRenders(mode: GlassRenderingMode) throws {
         for (name, view) in components {
             let image = try #require(render(view, mode: mode), "\(name) did not render")
-            #expect(image.width == Int(Self.size.width), "\(name)")
-            #expect(image.height == Int(Self.size.height), "\(name)")
+            if !Self.drawsNativeGlass(mode) {
+                #expect(Self.visiblePixelCount(of: image) > 0, "\(name) drew nothing")
+            }
         }
     }
 
@@ -88,6 +96,25 @@ struct RenderingTests {
         let red: UInt8
         let blue: UInt8
         let alpha: UInt8
+    }
+
+    private static func drawsNativeGlass(_ mode: GlassRenderingMode) -> Bool {
+        mode.resolved(nativeAvailable: GlassRenderingMode.isNativeGlassAvailable) == .native
+    }
+
+    private static func visiblePixelCount(of image: CGImage) -> Int {
+        let width = image.width
+        let height = image.height
+        var bytes = [UInt8](repeating: 0, count: width * height * 4)
+        bytes.withUnsafeMutableBytes { buffer in
+            let context = CGContext(
+                data: buffer.baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+            )
+            context?.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+        }
+        return stride(from: 3, to: bytes.count, by: 4).count { bytes[$0] > 0 }
     }
 
     private static func centerPixel(of image: CGImage) -> Pixel? {

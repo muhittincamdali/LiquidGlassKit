@@ -176,8 +176,9 @@ mode resolution, the tab builder, sheet dismissal thresholds, and an offscreen r
 component on both paths. CI runs it on macOS and the iOS Simulator and builds the library for
 tvOS, watchOS and visionOS.
 
-Limitations: `ImageRenderer` cannot capture blur, so the render tests check layout and the
-fallback tint, not the final glass look. CI runs on OS 26 or later; the fallback path is
+Limitations: `ImageRenderer` captures neither blur nor native glass, so the render tests
+check that each component draws on the fallback path, that the native-path views build, and
+the fallback tint; they do not check the final glass look. CI runs on OS 26 or later; the fallback path is
 exercised there by forcing `.fallback` (as in the comparison screenshot), not on an iOS 17–25
 runtime.
 
