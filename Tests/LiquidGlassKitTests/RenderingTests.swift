@@ -67,7 +67,7 @@ struct RenderingTests {
 
     /// The same components with an explicit material, which must win over the theme.
     private func components(material: GlassMaterial) -> [(String, AnyView)] {
-        [
+        var components: [(String, AnyView)] = [
             ("card", AnyView(GlassCard(material: material) { Text("Card") })),
             ("button", AnyView(GlassButton("Button", material: material) {})),
             ("styled button", AnyView(Button("Styled") {}.buttonStyle(.liquidGlass(material)))),
@@ -79,6 +79,12 @@ struct RenderingTests {
             ("navigation bar", AnyView(GlassNavigationBar(title: "Title", material: material))),
             ("group", AnyView(GlassGroup { Text("Grouped").glassSurface(material, in: .capsule) }))
         ]
+        #if !os(tvOS)
+        components.append(
+            ("sheet", AnyView(Color.clear.glassSheet(isPresented: .constant(true), material: material) { Text("Sheet") }))
+        )
+        #endif
+        return components
     }
 
     /// On the fallback path every component draws something. On the native path
