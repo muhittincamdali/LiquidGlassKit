@@ -32,7 +32,8 @@ versions as a reference, so that they build with Swift 6 and do what their docum
   fallback path check the pixels: every component draws its glass in the theme's tint, an
   explicit material overrides the theme, labels on dark glass are white, the sheet dims the
   background only while presented, and Reduce Transparency draws an opaque background.
-- DocC catalog with Getting Started, Rendering Paths and Theming articles.
+- DocC catalog with Getting Started, Building a Screen with a Floating Tab Bar, Rendering
+  Paths and Theming articles.
 - iOS demo app (`Examples/LiquidGlassDemo`) and `scripts/screenshots.sh`, which captures the
   README screenshots in the iOS Simulator.
 

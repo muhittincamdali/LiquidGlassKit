@@ -140,6 +140,77 @@ private struct ThemingSnippets: View {
     }
 }
 
+// MARK: - DocC: Building a Screen with a Floating Tab Bar
+
+#if !os(tvOS)
+private enum LibrarySection: Hashable {
+    case albums, artists, playlists
+}
+
+private struct LibraryScreen: View {
+    @State private var section = LibrarySection.albums
+    @State private var query = ""
+    @State private var showsNowPlaying = false
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            ScrollView {
+                VStack(spacing: 16) {
+                    GlassNavigationBar(title: "Library", subtitle: "128 albums") {
+                        Button("Back", systemImage: "chevron.left") {}
+                    } trailing: {
+                        Button("Now Playing", systemImage: "music.note") {
+                            showsNowPlaying = true
+                        }
+                    }
+                    GlassSearchBar(text: $query, prompt: "Search the library")
+                    ForEach(1...12, id: \.self) { index in
+                        GlassCard {
+                            Label("Album \(index)", systemImage: "square.stack")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 100)
+            }
+            .background {
+                LinearGradient(colors: [.indigo, .purple, .pink], startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
+            }
+
+            GlassTabBar(selection: $section) {
+                GlassTab("Albums", systemImage: "square.stack", value: LibrarySection.albums)
+                GlassTab("Artists", systemImage: "music.mic", value: LibrarySection.artists)
+                GlassTab("Playlists", systemImage: "music.note.list", value: LibrarySection.playlists)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 8)
+        }
+        .glassSheet(isPresented: $showsNowPlaying) {
+            VStack(spacing: 12) {
+                Text("Midnight City").font(.headline)
+                GlassGroup(spacing: 12) {
+                    HStack(spacing: 12) {
+                        GlassButton("Previous", systemImage: "backward.fill") {}
+                        GlassButton("Play", systemImage: "play.fill", material: .tinted(.blue)) {}
+                        GlassButton("Next", systemImage: "forward.fill") {}
+                    }
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+private struct LibraryScreenSnippets: View {
+    var body: some View {
+        LibraryScreen()
+            .glassRenderingMode(.fallback)
+    }
+}
+#endif
+
 // MARK: - Render each example once
 
 @MainActor
@@ -156,6 +227,8 @@ struct ReadmeExamplesTests {
         ]
         #if !os(tvOS)
         views.append(AnyView(ThemedApp()))
+        views.append(AnyView(LibraryScreen()))
+        views.append(AnyView(LibraryScreenSnippets()))
         #endif
         return views
     }

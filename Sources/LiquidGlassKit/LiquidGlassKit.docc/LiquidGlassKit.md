@@ -35,6 +35,7 @@ struct NowPlaying: View {
 ### Essentials
 
 - <doc:GettingStarted>
+- <doc:BuildingAFloatingTabBarScreen>
 - <doc:RenderingPaths>
 - <doc:Theming>
 

@@ -4,8 +4,17 @@ Add the package and put your first glass surfaces on screen.
 
 ## Add the package
 
-In Xcode choose **File > Add Package Dependencies…** and enter
-`https://github.com/muhittincamdali/LiquidGlassKit.git`, or add it to `Package.swift`:
+In an Xcode project:
+
+1. Choose **File › Add Package Dependencies…**.
+2. Paste `https://github.com/muhittincamdali/LiquidGlassKit.git` into the search field in the
+   top-right corner of the dialog.
+3. Leave **Dependency Rule** at **Up to Next Major Version** and check that it starts at
+   `2.0.0`, then click **Add Package**.
+4. In the next dialog, choose your app target in the **Add to Target** column for the
+   `LiquidGlassKit` product, and click **Add Package** again.
+
+In a Swift package, add it to `Package.swift` instead:
 
 ```swift
 dependencies: [
@@ -57,7 +66,9 @@ struct SettingsView: View {
 }
 ```
 
-## Run the demo
+## Next steps
 
-`Examples/LiquidGlassDemo` contains an iOS app that shows every component and a side-by-side
-comparison of the native and fallback rendering paths.
+- <doc:BuildingAFloatingTabBarScreen> puts these pieces together into a full screen.
+- <doc:RenderingPaths> explains what users on each OS see.
+- `Examples/LiquidGlassDemo` contains an iOS app that shows every component and a side-by-side
+  comparison of the native and fallback rendering paths.
