@@ -146,7 +146,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.muhittincamdali.LiquidGlassDemo;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 6.0;
@@ -286,7 +286,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.muhittincamdali.LiquidGlassDemo;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 6.0;

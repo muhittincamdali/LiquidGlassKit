@@ -9,7 +9,7 @@ In Xcode choose **File > Add Package Dependencies…** and enter
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "1.1.0")
+    .package(url: "https://github.com/muhittincamdali/LiquidGlassKit.git", from: "2.0.0")
 ]
 ```
 

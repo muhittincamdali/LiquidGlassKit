@@ -48,6 +48,6 @@ body:
     id: environment
     attributes:
       label: Environment
-      placeholder: "iOS 18.4 simulator, Xcode 26.1, LiquidGlassKit 1.1.0"
+      placeholder: "iOS 18.4 simulator, Xcode 26.1, LiquidGlassKit 2.0.0"
     validations:
       required: true
