@@ -147,6 +147,18 @@ struct RenderingTests {
         #expect(control.count(where: isBlack) > 20, "frosted label should stay in the primary color")
     }
 
+    @Test func destructiveButtonLabelsAreRed() throws {
+        let destructive = GlassButton("Delete", material: .frosted, size: .large, role: .destructive) {}
+        let plain = GlassButton("Delete", material: .frosted, size: .large) {}
+        let canvas = Color(white: 0.5)
+        let isRed: (Bitmap.Pixel) -> Bool = { Int($0.red) - Int(max($0.green, $0.blue)) > 60 }
+
+        let red = try #require(render(destructive, mode: .fallback, canvas: canvas)).count(where: isRed)
+        let control = try #require(render(plain, mode: .fallback, canvas: canvas)).count(where: isRed)
+        #expect(red > 20, "destructive label drew \(red) red pixels")
+        #expect(control == 0, "a button without a role drew \(control) red pixels")
+    }
+
     #if !os(tvOS)
     @Test(arguments: [false, true])
     func sheetDrawsOnlyWhilePresented(isPresented: Bool) throws {
