@@ -27,9 +27,7 @@ import Testing
 struct RenderingTests {
     private static let size = CGSize(width: 320, height: 120)
 
-    /// Without the tint overlay the untinted blur renders almost neutral gray
-    /// (red and blue within a few units), so a clear margin is required.
-    private static let tintMargin = 20
+    private static let tintMargin = Bitmap.tintMargin
 
     /// Smallest glass area, in pixels, that counts as "the component drew its
     /// glass". The smallest surface here, the unpadded "Grouped" capsule, tints
@@ -37,15 +35,7 @@ struct RenderingTests {
     private static let minimumGlassArea = 250
 
     private func render(_ view: some View, mode: GlassRenderingMode, canvas: Color? = .white) -> Bitmap? {
-        let renderer = ImageRenderer(
-            content: view
-                .glassRenderingMode(mode)
-                .environment(\.colorScheme, .light)
-                .frame(width: Self.size.width, height: Self.size.height)
-                .background(canvas ?? .clear)
-        )
-        renderer.scale = 1
-        return renderer.cgImage.map(Bitmap.init)
+        Bitmap.render(view, size: Self.size, mode: mode, canvas: canvas)
     }
 
     /// Components that take their material from the theme.
@@ -208,15 +198,10 @@ struct RenderingTests {
     }
 
     // Green and blue tints, because on macOS `ImageRenderer` draws text fields as a
-    // red and yellow placeholder. Measured on the white canvas: a green tint renders
-    // about (192, 224, 192), a blue one about (176, 208, 224), untinted glass is gray.
-    private static func isGreenGlass(_ pixel: Bitmap.Pixel) -> Bool {
-        Int(pixel.green) - Int(pixel.red) > tintMargin && Int(pixel.green) - Int(pixel.blue) > tintMargin
-    }
+    // red and yellow placeholder.
+    private static func isGreenGlass(_ pixel: Bitmap.Pixel) -> Bool { Bitmap.isGreen(pixel) }
 
-    private static func isBlueGlass(_ pixel: Bitmap.Pixel) -> Bool {
-        Int(pixel.blue) - Int(pixel.red) > tintMargin
-    }
+    private static func isBlueGlass(_ pixel: Bitmap.Pixel) -> Bool { Bitmap.isBlue(pixel) }
 
     private static func drawsNativeGlass(_ mode: GlassRenderingMode) -> Bool {
         mode.resolved(nativeAvailable: GlassRenderingMode.isNativeGlassAvailable) == .native
