@@ -5,7 +5,8 @@ import UIKit
 /// Tunes a ``GlassTheme`` at run time and shows the Swift code that recreates it.
 ///
 /// Start from a built-in preset, adjust the corner radius, shadow and edge, switch
-/// between the native and fallback paths, and copy the generated view.
+/// between the native and fallback paths, pick a highlight, and copy the generated
+/// view, which includes every one of these choices.
 struct PlaygroundScreen: View {
     @State private var preset = GlassPreset.all[0]
     @State private var cornerRadius = 20.0
@@ -43,7 +44,7 @@ struct PlaygroundScreen: View {
     private var renderingMode: GlassRenderingMode { usesFallback ? .fallback : .automatic }
 
     private var code: String {
-        exporter.viewCode(named: "MyGlassView", theme: theme, renderingMode: renderingMode)
+        exporter.viewCode(named: "MyGlassView", theme: theme, renderingMode: renderingMode, highlight: highlight)
     }
 
     private var preview: some View {
